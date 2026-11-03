@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Josiah Hudock - Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#121212',
+                        cardBg: '#1e1e1e',
+                        borderCol: '#2d2d2d',
+                        accent: '#d4d4d4',
+                        muted: '#888888'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Georgia', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom smooth scroll and transitions */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-neutral-700 selection:text-white">
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-6 py-16 flex-grow w-full">
+        
+        <!-- Header Section -->
+        <header class="border-b border-borderCol pb-8 mb-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-serif tracking-tight text-white mb-2">Josiah Hudock</h1>
+                    <p class="text-lg text-accent font-light">Math MS Student, Musician</p>
+                </div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                    <div class="text-sm text-muted flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-neutral-400"></i>
+                        <span>Athens, Ohio</span>
+                    </div>
+                    <!-- Contact Copy Email Button -->
+                    <button onclick="copyEmail()" id="copy-email-btn" class="bg-neutral-800 hover:bg-neutral-700 border border-borderCol text-xs font-mono text-white px-3.5 py-2 rounded transition-colors flex items-center gap-2">
+                        <i class="fa-regular fa-envelope text-neutral-400"></i>
+                        <span id="copy-btn-text">Copy Email Address</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- About Me Section -->
+        <section class="mb-12">
+            <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">About me</h2>
+            <div class="bg-cardBg border border-borderCol p-6 rounded-lg text-neutral-300 leading-relaxed">
+                <p>I am currently pursuing an MS in mathematics at Ohio University where I am working as a Graduate Teaching Assistant. I am very interested in abstract beautiful things like math and music. I plan to pursue a PhD in math starting Fall 2027. I am also a performing musician, always open to gigs & creative opportunities. 
+                </p>
+            </div>
+        </section>
+
+        <!-- Education History Section -->
+        <section class="mb-12">
+            <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Education History</h2>
+            <div class="space-y-4">
+                <!-- Ohio University -->
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h3 class="text-lg font-medium text-white">Ohio University</h3>
+                        <p class="text-accent text-sm">MS in Mathematics</p>
+                        <p class="text-xs text-muted mt-1">GPA: 4.0</p>
+                    </div>
+                </div>
+
+                <!-- Washington & Jefferson College -->
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <h3 class="text-lg font-medium text-white">Washington & Jefferson College</h3>
+                        <p class="text-accent text-sm">BA, Mathematics / Music</p>
+                        <p class="text-xs text-muted mt-1">GPA: 4.0 &bull; May 2025</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-borderCol mb-8">
+            <button onclick="switchTab('math')" id="tab-math" class="px-6 py-3 font-medium text-sm border-b-2 border-white text-white transition-colors focus:outline-none">
+                Math
+            </button>
+            <button onclick="switchTab('music')" id="tab-music" class="px-6 py-3 font-medium text-sm border-b-2 border-transparent text-muted hover:text-white transition-colors focus:outline-none">
+                Music
+            </button>
+        </div>
+
+        <!-- Math Tab Content -->
+        <div id="content-math" class="space-y-12 animate-fadeIn">
+            <!-- Research Interests -->
+            <section>
+                <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Research Interests</h2>
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg text-neutral-300 leading-relaxed space-y-3">
+                    <p>My primary research interests are as follows:</p>
+                    <ul class="list-disc list-inside space-y-1.5 text-accent pl-2">
+                        <li>Set-theoretic topology: compactifications, metrization, continua.</li>
+                        <li>Low-dimensional topology, Knot Theory</li>
+                        <li>Geometric Group Theory</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Teaching Experience -->
+            <section>
+                <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Teaching Experience</h2>
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg space-y-2">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-lg font-medium text-white">Ohio University</h3>
+                        <span class="text-xs font-mono text-muted">Athens, OH</span>
+                    </div>
+                    <p class="text-accent text-sm">Instructor of Record</p>
+                    <p class="text-sm text-neutral-300 mt-2">
+                        Currently serving as Instructor of Record for undergraduate mathematics courses. I have taught Survey of Calculus, Precalculus, and College Algebra.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Download CV Button
+            <section class="pt-4">
+                <button onclick="downloadCV()" class="bg-white hover:bg-neutral-200 text-neutral-900 font-medium text-sm px-5 py-3 rounded transition-colors flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Curriculum Vitae (CV)</span>
+                </button>
+            </section>
+        </div> -->
+                    <!-- Download CV Button -->
+                    <section class="pt-4">
+                        <a href="cv.pdf" download class="bg-white hover:bg-neutral-200 text-neutral-900 font-medium text-sm px-5 py-3 rounded transition-colors flex items-center gap-2 shadow-sm inline-flex">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download Curriculum Vitae (CV)</span>
+                        </a>
+                    </section>
+                </div>
+
+        <!-- Music Tab Content (Hidden by default) -->
+        <div id="content-music" class="space-y-12 hidden animate-fadeIn">
+            <!-- Instruments & Technical Experience -->
+            <section>
+                <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Instruments & Technical Experience</h2>
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg text-neutral-300 leading-relaxed space-y-3">
+                    <p>
+                        My primary instruments are <strong class="text-white">drums</strong> and <strong class="text-white">guitar</strong>. I specialize in the prog rock/metal style and have an affinity for polymetric compositions and odd groupings/tuplets. 
+                    </p>
+                    <p>
+                        I also have practical skills and experience in recording and mixing, as well as composing and transcribing for small ensembles. 
+                    </p>
+                </div>
+            </section>
+
+            <!-- Performance Experience -->
+            <section>
+                <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Experience</h2>
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg space-y-2">
+                    <h3 class="text-lg font-medium text-white">Percussion</h3>
+                    <p class="text-accent text-sm"></p>
+                    <p class="text-sm text-neutral-300 mt-2">
+                        I have performed live with various rock, metal, jazz, afro-cuban, and classical ensembles, and have recorded drums for Pittsburgh rock bands Constellation X and 446. I like to combine both highly dynamic and improvisational performance with complex rhythmic constructions. I have also developed techniques for xylophone, timpani, cymbals, chimes, and other percussion instruments. 
+                    </p>
+                </div>
+            </section>
+
+            <section>
+                <div class="bg-cardBg border border-borderCol p-6 rounded-lg space-y-2">
+                    <h3 class="text-lg font-medium text-white">Guitar</h3>
+                    <p class="text-accent text-sm"></p>
+                    <p class="text-sm text-neutral-300 mt-2">
+                         I have performed electric guitar in rock and jazz settings as well as solo classical guitar. Most of my composition is done on guitar. Lately I have been working on using live-looping to cover pop tunes and jazz standards in solo performance.  
+                    </p>
+                </div>
+            </section>
+
+            <!-- Spotify Pages Links -->
+            <section>
+                <h2 class="text-xs font-mono uppercase tracking-widest text-muted mb-3">Recordings</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Solo Artist -->
+                    <div class="bg-cardBg border border-borderCol p-5 rounded-lg flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <i class="fa-brands fa-spotify text-2xl text-green-500"></i>
+                                <a href="https://open.spotify.com/artist/197YJjnkCmocpK2wqMxiD6?si=kecPDMqTRIid-iRhUrgE7Q" target="_blank" rel="noopener noreferrer" class="text-xs text-muted hover:text-white transition-colors flex items-center gap-1">
+                                    <span>Spotify</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </div>
+                            <h3 class="font-medium text-white text-base mb-1">Josiah Hudock</h3>
+                            <p class="text-xs text-muted mb-4">Solo Artist / Jazz Rock</p>
+                        </div>
+                        <div class="space-y-2">
+                            <audio id="audio-solo" preload="none" src="solo.mp3"></audio>
+                            <button onclick="playLocalAudio('audio-solo', this)" class="w-full bg-neutral-800 hover:bg-neutral-700 border border-borderCol text-xs font-medium text-white py-2 px-3 rounded transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play text-green-400 play-icon"></i>
+                                <span class="btn-label">Preview Solo Track</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Constellation X -->
+                    <div class="bg-cardBg border border-borderCol p-5 rounded-lg flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <i class="fa-brands fa-spotify text-2xl text-green-500"></i>
+                                <a href="https://open.spotify.com/artist/6XUK0bA0DN5f2hRjYcSPDd?si=uGO2toSVSL-VVOwkbOpvTw" target="_blank" rel="noopener noreferrer" class="text-xs text-muted hover:text-white transition-colors flex items-center gap-1">
+                                    <span>Spotify</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </div>
+                            <h3 class="font-medium text-white text-base mb-1">Constellation X</h3>
+                            <p class="text-xs text-muted mb-4">Former Drummer / Metalcore</p>
+                        </div>
+                        <div class="space-y-2">
+                            <audio id="audio-constellation" preload="none" src="constellation.mp3"></audio>
+                            <button onclick="playLocalAudio('audio-constellation', this)" class="w-full bg-neutral-800 hover:bg-neutral-700 border border-borderCol text-xs font-medium text-white py-2 px-3 rounded transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play text-green-400 play-icon"></i>
+                                <span class="btn-label">Preview Constellation X</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 446 -->
+                    <div class="bg-cardBg border border-borderCol p-5 rounded-lg flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <i class="fa-brands fa-spotify text-2xl text-green-500"></i>
+                                <a href="https://open.spotify.com/artist/2oXQUG8bSiNYyVFL7Itl3P?si=9dqYwiJZTDCLYN6lW2CJyg" target="_blank" rel="noopener noreferrer" class="text-xs text-muted hover:text-white transition-colors flex items-center gap-1">
+                                    <span>Spotify</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </div>
+                            <h3 class="font-medium text-white text-base mb-1">446</h3>
+                            <p class="text-xs text-muted mb-4">Former Drummer / Rock n Roll</p>
+                        </div>
+                        <div class="space-y-2">
+                            <audio id="audio-four46" preload="none" src="track446.mp3"></audio>
+                            <button onclick="playLocalAudio('audio-four46', this)" class="w-full bg-neutral-800 hover:bg-neutral-700 border border-borderCol text-xs font-medium text-white py-2 px-3 rounded transition-colors flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-play text-green-400 play-icon"></i>
+                                <span class="btn-label">Preview 446 Track</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Custom Notification Box (replaces alert) -->
+    <div id="notification-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 px-4">
+        <div class="bg-cardBg border border-borderCol p-6 rounded-lg max-w-sm w-full text-center space-y-4 shadow-xl">
+            <h3 id="notification-title" class="text-lg font-medium text-white">Notice</h3>
+            <p id="notification-message" class="text-sm text-neutral-300">Action completed.</p>
+            <button onclick="closeNotification()" class="w-full bg-white text-neutral-900 font-medium text-sm py-2 rounded hover:bg-neutral-200 transition-colors">
+                Dismiss
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript for Tab Switching, Copy Email, Audio Previews, and Notifications -->
+    <script>
+        function switchTab(tabName) {
+            const mathTab = document.getElementById('tab-math');
+            const musicTab = document.getElementById('tab-music');
+            const mathContent = document.getElementById('content-math');
+            const musicContent = document.getElementById('content-music');
+
+            if (tabName === 'math') {
+                mathTab.classList.add('border-white', 'text-white');
+                mathTab.classList.remove('border-transparent', 'text-muted');
+                musicTab.classList.remove('border-white', 'text-white');
+                musicTab.classList.add('border-transparent', 'text-muted');
+
+                mathContent.classList.remove('hidden');
+                musicContent.classList.add('hidden');
+            } else {
+                musicTab.classList.add('border-white', 'text-white');
+                musicTab.classList.remove('border-transparent', 'text-muted');
+                mathTab.classList.remove('border-white', 'text-white');
+                mathTab.classList.add('border-transparent', 'text-muted');
+
+                musicContent.classList.remove('hidden');
+                mathContent.classList.add('hidden');
+            }
+        }
+
+        function copyEmail() {
+            const email = "josiahghudock@gmail.com";
+            const btnText = document.getElementById('copy-btn-text');
+            
+            // Fallback clipboard method for iframe compatibility
+            const textArea = document.createElement("textarea");
+            textArea.value = email;
+            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    btnText.innerText = "Copied!";
+                    setTimeout(() => {
+                        btnText.innerText = "Copy Email Address";
+                    }, 2000);
+                } else {
+                    showNotification('Email Address', 'Contact email: ' + email);
+                }
+            } catch (err) {
+                showNotification('Email Address', 'Contact email: ' + email);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Local Audio File Playback Handler
+        let currentPlayingAudio = null;
+        let currentPlayingBtn = null;
+
+        function playLocalAudio(audioId, btnElement) {
+            const audioElement = document.getElementById(audioId);
+            const icon = btnElement.querySelector('.play-icon');
+            const label = btnElement.querySelector('.btn-label');
+
+            // If another audio is currently playing, pause it and reset its button
+            if (currentPlayingAudio && currentPlayingAudio !== audioElement) {
+                currentPlayingAudio.pause();
+                currentPlayingAudio.currentTime = 0;
+                if (currentPlayingBtn) {
+                    resetButtonUI(currentPlayingBtn);
+                }
+            }
+
+            if (audioElement.paused) {
+                audioElement.play().then(() => {
+                    currentPlayingAudio = audioElement;
+                    currentPlayingBtn = btnElement;
+                    icon.classList.remove('fa-play', 'text-green-400');
+                    icon.classList.add('fa-pause', 'text-amber-400');
+                    label.innerText = "Pause Track";
+                }).catch(err => {
+                    showNotification('Playback Error', 'Could not play audio file. Ensure the audio file is in the same folder and named correctly.');
+                });
+            } else {
+                audioElement.pause();
+                resetButtonUI(btnElement);
+                currentPlayingAudio = null;
+                currentPlayingBtn = null;
+            }
+
+            audioElement.onended = () => {
+                resetButtonUI(btnElement);
+                currentPlayingAudio = null;
+                currentPlayingBtn = null;
+            };
+        }
+
+        function resetButtonUI(btn) {
+            const icon = btn.querySelector('.play-icon');
+            const label = btn.querySelector('.btn-label');
+            icon.classList.remove('fa-pause', 'text-amber-400');
+            icon.classList.add('fa-play', 'text-green-400');
+            if (btn.getAttribute('onclick').includes('solo')) {
+                label.innerText = "Preview Solo Track";
+            } else if (btn.getAttribute('onclick').includes('constellation')) {
+                label.innerText = "Preview Constellation X";
+            } else {
+                label.innerText = "Preview 446 Track";
+            }
+        }
+
+        function downloadCV() {
+            showNotification('Curriculum Vitae Download', 'Your download for Josiah Hudock’s CV has started successfully.');
+        }
+
+        function showNotification(title, message) {
+            document.getElementById('notification-title').innerText = title;
+            document.getElementById('notification-message').innerText = message;
+            const modal = document.getElementById('notification-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeNotification() {
+            const modal = document.getElementById('notification-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
