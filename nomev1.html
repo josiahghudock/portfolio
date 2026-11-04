@@ -46,7 +46,8 @@
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
             transition: transform 0.1s ease;
         }
-        input[type=range]::-webkit-slider-thumb:hover {
+        /* Only show pointer cursor when directly hovering over the thumb */
+        input[type=range]:hover::-webkit-slider-thumb {
             transform: scale(1.2);
         }
         canvas {
@@ -1210,12 +1211,18 @@
         }
 
         bpmSlider.addEventListener('input', (e) => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
             state.bpm = parseInt(e.target.value);
             bpmText.textContent = state.bpm;
             centerBpmDisplay.textContent = state.bpm;
         });
 
         decBpmBtn.addEventListener('click', () => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
             if (state.bpm > 30) {
                 state.bpm--;
                 bpmSlider.value = state.bpm;
@@ -1225,6 +1232,9 @@
         });
 
         incBpmBtn.addEventListener('click', () => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
             if (state.bpm < 300) {
                 state.bpm++;
                 bpmSlider.value = state.bpm;
@@ -1234,6 +1244,9 @@
         });
 
         beatsSlider.addEventListener('input', (e) => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
             state.totalBeats = parseInt(e.target.value);
             beatsText.textContent = state.totalBeats;
             ensurePerBeatSettings();
@@ -1242,8 +1255,25 @@
         });
 
         decBeatsBtn.addEventListener('click', () => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
             if (state.totalBeats > 1) {
                 state.totalBeats--;
+                beatsSlider.value = state.totalBeats;
+                beatsText.textContent = state.totalBeats;
+                ensurePerBeatSettings();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        incBeatsBtn.addEventListener('click', () => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
+            if (state.totalBeats < 25) {
+                state.totalBeats++;
                 beatsSlider.value = state.totalBeats;
                 beatsText.textContent = state.totalBeats;
                 ensurePerBeatSettings();
@@ -1257,6 +1287,9 @@
                 state.totalBeats++;
                 beatsSlider.value = state.totalBeats;
                 beatsText.textContent = state.totalBeats;
+                if (state.polyrhythmEnabled && state.isPlaying) {
+                    togglePlay();
+                }
                 ensurePerBeatSettings();
                 initSegments();
                 if (!state.isPlaying) drawStaticSequencer();
