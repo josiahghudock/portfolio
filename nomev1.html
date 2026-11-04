@@ -46,7 +46,6 @@
             box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
             transition: transform 0.1s ease;
         }
-        /* Only show pointer cursor when directly hovering over the thumb */
         input[type=range]:hover::-webkit-slider-thumb {
             transform: scale(1.2);
         }
@@ -472,7 +471,6 @@
         let tapTimestamps = [];
         let tapHighlightTimeout = null;
 
-        // Prevent range slider jump-to-click on both mouse and touch: only allow sliding when dragging near or on the thumb
         document.querySelectorAll('input[type=range]').forEach(slider => {
             const checkThumbTarget = (clientX) => {
                 const rect = slider.getBoundingClientRect();
@@ -482,7 +480,6 @@
                 const val = parseFloat(slider.value);
                 const percent = (val - min) / (max - min);
                 const thumbX = percent * rect.width;
-                // Allow touch/click only if within 30px of the thumb center
                 return Math.abs(clickX - thumbX) <= 30;
             };
 
@@ -1268,6 +1265,7 @@
             }
         });
 
+        // Fixed single-step increment handler for beats (+1)
         incBeatsBtn.addEventListener('click', () => {
             if (state.polyrhythmEnabled && state.isPlaying) {
                 togglePlay();
@@ -1276,20 +1274,6 @@
                 state.totalBeats++;
                 beatsSlider.value = state.totalBeats;
                 beatsText.textContent = state.totalBeats;
-                ensurePerBeatSettings();
-                initSegments();
-                if (!state.isPlaying) drawStaticSequencer();
-            }
-        });
-
-        incBeatsBtn.addEventListener('click', () => {
-            if (state.totalBeats < 25) {
-                state.totalBeats++;
-                beatsSlider.value = state.totalBeats;
-                beatsText.textContent = state.totalBeats;
-                if (state.polyrhythmEnabled && state.isPlaying) {
-                    togglePlay();
-                }
                 ensurePerBeatSettings();
                 initSegments();
                 if (!state.isPlaying) drawStaticSequencer();
