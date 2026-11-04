@@ -88,8 +88,8 @@
             </div>
         </div>
 
-        <!-- Canvas Container -->
-        <div id="canvasContainer" class="relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]">
+        <!-- Canvas Container (Fix #2: w-[352px] h-[352px] instead of invalid w-88 h-88) -->
+        <div id="canvasContainer" class="relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]">
             <canvas id="sequencerCanvas" width="480" height="480" class="w-full h-full cursor-pointer rounded-full shadow-2xl bg-[#0f0f14] border border-borderSubtle origin-center"></canvas>
             
             <div id="customBadgesContainer" class="absolute inset-0 pointer-events-none z-30"></div>
@@ -442,8 +442,9 @@
             modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
             modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
             instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.';
-            document.getElementById('customBadgesContainer').innerHTML = '';
+            updateCustomBadges();
             beatEditorPopup.classList.add('hidden');
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
         modeSubdivBtn.addEventListener('click', () => {
@@ -456,8 +457,10 @@
                 customSubdivCheckbox.checked = true;
                 customSubdivHint.classList.remove('hidden');
                 initSegments();
-                if (!state.isPlaying) drawStaticSequencer();
+            } else {
+                updateCustomBadges();
             }
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
         function initAudioContext() {
@@ -470,6 +473,7 @@
             }
         }
 
+        // Fix #4: Crisper Audio Envelopes (Zero-Click Attack)
         function playToneAtTime(isDownbeat, colorType, beatIndex, time) {
             try {
                 if (!state.audioCtx) return;
@@ -497,7 +501,9 @@
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, time);
 
-                gain.gain.setValueAtTime(vol, time);
+                // Start near zero and ramp linearly over 4ms to eliminate speaker click/pop
+                gain.gain.setValueAtTime(0.0001, time);
+                gain.gain.linearRampToValueAtTime(Math.max(0.0001, vol), time + 0.004);
                 gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.1);
 
                 osc.connect(gain);
@@ -522,12 +528,13 @@
                 if (counts.length > 0) maxSubdivs = Math.max(...counts);
             }
 
+            // Fix #2: Replace w-88 h-88 with w-[352px] h-[352px]
             if (maxSubdivs >= 10) {
-                canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.12]";
+                canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.12]";
             } else if (maxSubdivs >= 5) {
-                canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.08]";
+                canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.08]";
             } else {
-                canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
+                canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
             }
 
             for (let b = 0; b < state.totalBeats; b++) {
@@ -586,6 +593,9 @@
                     }
                 }
             }
+
+            // Refresh custom badges only when segments are re-initialized (Fix #3)
+            updateCustomBadges();
         }
 
         function scheduleNote() {
@@ -617,6 +627,7 @@
             state.timerID = setTimeout(scheduler, state.lookahead);
         }
 
+        // Fix #3: Removed updateCustomBadges() from animationLoop() to prevent 60fps DOM thrashing
         function animationLoop() {
             if (!state.isPlaying) return;
 
@@ -665,7 +676,6 @@
                 }
             }
 
-            updateCustomBadges();
             requestAnimationFrame(animationLoop);
         }
 
@@ -721,6 +731,7 @@
             }
         }
 
+        // Fix #1: Position fixed #beatEditorPopup using viewport coordinates (e.clientX / e.clientY)
         function openPopupForSegment(seg, layer, e) {
             activePopupSegment = seg;
             activePopupLayer = layer;
@@ -731,9 +742,13 @@
             popupSubdivVal.textContent = currentCount;
             popupSlider.value = currentCount;
 
-            const containerRect = canvas.parentElement.getBoundingClientRect();
-            beatEditorPopup.style.left = `${Math.min(containerRect.width - 210, Math.max(10, e.clientX - containerRect.left))}px`;
-            beatEditorPopup.style.top = `${Math.max(10, e.clientY - containerRect.top - 80)}px`;
+            const popupWidth = 208; // w-52
+            const popupHeight = 128;
+            const leftPos = Math.min(window.innerWidth - popupWidth - 12, Math.max(12, e.clientX - popupWidth / 2));
+            const topPos = Math.min(window.innerHeight - popupHeight - 12, Math.max(12, e.clientY - popupHeight - 12));
+
+            beatEditorPopup.style.left = `${leftPos}px`;
+            beatEditorPopup.style.top = `${topPos}px`;
             beatEditorPopup.classList.remove('hidden');
         }
 
@@ -791,6 +806,15 @@
             beatEditorPopup.classList.add('hidden');
         });
 
+        // Allow clicking outside or pressing Escape to close popup cleanly
+        document.addEventListener('pointerdown', (e) => {
+            if (!beatEditorPopup.classList.contains('hidden')) {
+                if (!beatEditorPopup.contains(e.target) && !e.target.closest('#badgeLayer1') && !e.target.closest('#badgeLayer2')) {
+                    beatEditorPopup.classList.add('hidden');
+                }
+            }
+        });
+
         function togglePlay() {
             initAudioContext();
             state.isPlaying = !state.isPlaying;
@@ -822,6 +846,10 @@
         playBtn.addEventListener('click', togglePlay);
 
         window.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape' && !beatEditorPopup.classList.contains('hidden')) {
+                beatEditorPopup.classList.add('hidden');
+                return;
+            }
             if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'BUTTON') {
                 e.preventDefault();
                 togglePlay();
@@ -867,7 +895,6 @@
                     ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
                 }
             }
-            updateCustomBadges();
         }
 
         bpmSlider.addEventListener('input', (e) => {
@@ -1037,8 +1064,11 @@
             state.beatSubdivCounts = {};
             state.subSubdivCounts = {};
             state.beatStates = {};
+            hoveredSegmentKey = null;
+            hoveredSegmentIndex = null;
 
-            canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
+            // Fix #2: Use valid Tailwind arbitrary dimensions w-[352px] h-[352px]
+            canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
 
             ensurePerBeatSettings();
             initSegments();
@@ -1169,12 +1199,14 @@
             }
         });
 
+        // Fix #3: Update custom badges only when hoveredSegmentKey changes
         canvas.addEventListener('mousemove', (e) => {
             const seg = getSegmentFromEvent(e);
             const newHoverKey = seg ? seg.segKey : null;
             if (newHoverKey !== hoveredSegmentKey) {
                 hoveredSegmentKey = newHoverKey;
                 hoveredSegmentIndex = seg ? state.segments.indexOf(seg) : null;
+                updateCustomBadges();
                 if (!state.isPlaying) drawStaticSequencer();
             }
         });
