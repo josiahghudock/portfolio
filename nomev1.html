@@ -31,10 +31,17 @@
             user-select: none;
             -webkit-font-smoothing: antialiased;
         }
+        /* Prevent accidental touch scrolling hijacking on range inputs & canvas */
+        input[type=range] {
+            touch-action: pan-y;
+        }
+        canvas {
+            touch-action: manipulation;
+        }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 16px;
-            width: 16px;
+            height: 20px;
+            width: 20px;
             border-radius: 50%;
             background: #38bdf8;
             cursor: pointer;
@@ -59,13 +66,6 @@
     <header class="w-full max-w-xl text-center py-4 flex flex-col items-center gap-2">
         <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
         <p class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
-        <div id="flashingLightsNotice" class="mt-1 px-3 py-1 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-[11px] font-medium rounded-lg flex items-center justify-between gap-3 shadow-sm cursor-pointer transition-all group">
-            <div class="flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <span id="noticeText">Notice: Contains flashing lights and visuals during playback</span>
-            </div>
-            <span class="text-amber-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity uppercase text-[10px] tracking-wider bg-amber-500/20 px-1.5 py-0.5 rounded">OK</span>
-        </div>
         <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
             <button id="resetStandardBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -114,7 +114,15 @@
         <!-- Controls Section -->
         <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-6">
             
-            <div class="flex justify-center">
+            <div class="flex flex-col items-center gap-3">
+                <div id="flashingLightsNotice" class="w-full px-3 py-2 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-[11px] font-medium rounded-xl flex items-center justify-between gap-3 shadow-sm cursor-pointer transition-all group">
+                    <div class="flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span id="noticeText">Notice: Contains flashing lights and visuals during playback</span>
+                    </div>
+                    <span class="text-amber-400 font-bold opacity-0 group-hover:opacity-100 transition-opacity uppercase text-[10px] tracking-wider bg-amber-500/20 px-1.5 py-0.5 rounded">OK</span>
+                </div>
+
                 <button id="playBtn" class="w-full md:w-3/4 py-3.5 px-6 rounded-xl font-semibold text-sm tracking-wider uppercase transition-all duration-200 bg-slate-100 text-slate-900 hover:bg-white active:scale-95 shadow-lg flex items-center justify-center gap-2">
                     <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
@@ -462,6 +470,13 @@
         let tapTimestamps = [];
         let tapHighlightTimeout = null;
 
+        // Prevent range slider touch drag from accidentally hijacking vertical page scroll
+        document.querySelectorAll('input[type=range]').forEach(slider => {
+            slider.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+            }, { passive: true });
+        });
+
         function handleTapTempo() {
             const now = performance.now();
             if (tapTimestamps.length > 0 && now - tapTimestamps[tapTimestamps.length - 1] > 2500) {
@@ -537,6 +552,7 @@
             perBeatControlsContainer.appendChild(fragment);
 
             perBeatControlsContainer.querySelectorAll('input[type=range]').forEach(input => {
+                input.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
                 input.addEventListener('input', (e) => {
                     const beatIdx = parseInt(e.target.getAttribute('data-beat'));
                     const type = e.target.getAttribute('data-type');
@@ -707,7 +723,6 @@
                     for (let ss = 0; ss < l2Count; ss++) {
                         const segKey = `${b}_${s}_${ss}`;
                         if (state.beatStates[segKey] === undefined) {
-                            // Automatically toggled on by default for all segments (downbeats and subdivisions)
                             state.beatStates[segKey] = true;
                         }
 
@@ -783,13 +798,15 @@
             const twoPi = 2 * Math.PI;
 
             while (state.nextNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                if (state.segments.length === 0) break;
+                state.currentSegmentIndex = state.currentSegmentIndex % state.segments.length;
                 const seg = state.segments[state.currentSegmentIndex];
-                if (seg && seg.active) {
+                if (!seg) break;
+
+                if (seg.active) {
                     playToneAtTime(seg.isDownbeat, seg.colorType, seg.beatIndex, state.nextNoteTime);
                 }
-                if (seg) {
-                    seg.scheduledTime = state.nextNoteTime;
-                }
+                seg.scheduledTime = state.nextNoteTime;
 
                 const standardBeatSpan = twoPi / state.totalBeats;
                 const ratio = seg.spanAngle / standardBeatSpan;
@@ -970,6 +987,7 @@
             beatEditorPopup.classList.remove('hidden');
         }
 
+        popupSlider.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
         popupSlider.addEventListener('input', (e) => {
             const val = parseInt(e.target.value);
             popupSubdivVal.textContent = val;
