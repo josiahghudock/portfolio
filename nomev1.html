@@ -59,7 +59,11 @@
     <header class="w-full max-w-xl text-center py-4 flex flex-col items-center gap-2">
         <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
         <p class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
-        <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
+        <div class="mt-1 px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-medium rounded-lg flex items-center gap-1.5 shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span>Notice: Displays flashing lights during playback</span>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
             <button id="resetStandardBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 Reset 4/4
@@ -184,11 +188,32 @@
                 <div class="flex justify-between items-center text-sm font-medium">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input id="customSubdivCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-purple-400 accent-purple-400 cursor-pointer">
-                        <span class="text-slate-400">Custom Recursive Subdivisions (Advanced)</span>
+                        <span class="text-slate-400">Custom Nested Subdivisions (Advanced)</span>
                     </label>
                 </div>
                 <div id="customSubdivHint" class="text-[11px] text-slate-500 italic hidden">
                     Switch to Subdivision Mode and hover over any beat to reveal Layer 1 (Pink) and Layer 2 (Green) split badges.
+                </div>
+            </div>
+
+            <!-- Polyrhythm -->
+            <div class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input id="polyrhythmCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-amber-400 accent-amber-400 cursor-pointer">
+                        <span class="text-slate-400">Polyrhythm</span>
+                    </label>
+                    <div class="flex items-center gap-2">
+                        <span id="polyBeatsText" class="text-amber-400 font-bold text-base opacity-40">3</span>
+                        <span class="text-xs text-slate-400 opacity-40">beats</span>
+                    </div>
+                </div>
+                <div id="polyControlContainer" class="flex items-center gap-3 opacity-40 pointer-events-none transition-opacity duration-200">
+                    <button id="decPolyBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
+                    <div class="relative flex-1 flex items-center">
+                        <input id="polySlider" type="range" min="1" max="25" value="3" disabled class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-amber-400 border border-borderSubtle">
+                    </div>
+                    <button id="incPolyBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
                 </div>
             </div>
 
@@ -208,7 +233,7 @@
                                 <span>Advanced Per-Beat</span>
                             </label>
                         </div>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div class="flex flex-col gap-1">
                                 <span class="text-slate-400">Waveform</span>
                                 <select id="downbeatType" class="bg-[#1a1a22] border border-borderSubtle rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-accent">
@@ -220,7 +245,11 @@
                             </div>
                             <div class="flex flex-col gap-1">
                                 <span class="text-slate-400">Pitch (<span id="downbeatPitchVal">440</span> Hz)</span>
-                                <input id="downbeatPitch" type="range" min="100" max="1200" value="440" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2">
+                                <input id="downbeatPitch" type="range" min="100" max="1200" value="440" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Volume (<span id="downbeatVolVal">35%</span>)</span>
+                                <input id="downbeatVolume" type="range" min="0" max="1" step="0.05" value="0.35" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
                             </div>
                         </div>
 
@@ -232,7 +261,7 @@
 
                     <div class="flex flex-col gap-2 pt-2 border-t border-borderSubtle/30">
                         <span class="text-slate-300 font-semibold">Subdivision Audio</span>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             <div class="flex flex-col gap-1">
                                 <span class="text-slate-400">Waveform</span>
                                 <select id="subdivType" class="bg-[#1a1a22] border border-borderSubtle rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-accent">
@@ -244,7 +273,34 @@
                             </div>
                             <div class="flex flex-col gap-1">
                                 <span class="text-slate-400">Pitch (<span id="subdivPitchVal">330</span> Hz)</span>
-                                <input id="subdivPitch" type="range" min="150" max="1000" value="330" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2">
+                                <input id="subdivPitch" type="range" min="150" max="1000" value="330" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Volume (<span id="subdivVolVal">25%</span>)</span>
+                                <input id="subdivVolume" type="range" min="0" max="1" step="0.05" value="0.25" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 pt-2 border-t border-borderSubtle/30">
+                        <span class="text-amber-400 font-semibold">Polyrhythm Audio</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Waveform</span>
+                                <select id="polyType" class="bg-[#1a1a22] border border-borderSubtle rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-amber-400">
+                                    <option value="sine" selected>Sine</option>
+                                    <option value="triangle">Triangle</option>
+                                    <option value="square">Square</option>
+                                    <option value="sawtooth">Sawtooth</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Pitch (<span id="polyPitchVal">587</span> Hz)</span>
+                                <input id="polyPitch" type="range" min="150" max="1200" value="587" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-amber-400 mt-2 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Volume (<span id="polyVolVal">30%</span>)</span>
+                                <input id="polyVolume" type="range" min="0" max="1" step="0.05" value="0.3" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-amber-400 mt-2 cursor-pointer">
                             </div>
                         </div>
                     </div>
@@ -257,7 +313,7 @@
         <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-4 text-xs">
             <h2 class="text-sm font-bold tracking-wider text-slate-200 uppercase">About The 'Nome</h2>
             <p class="text-slate-400 leading-relaxed">
-                This is a free user-friendly online metronome with advanced capabilities. It is built specifically for practicing odd-time, odd-tuplet, or nested tuplet rhythms. If you found this tool useful, have questions, or suggestions please let me know!
+                This is a free user-friendly online metronome with advanced capabilities. It is built specifically for practicing polyrhythmic, odd-time, odd-tuplet, or nested tuplet rhythms. If you found this tool useful, have questions, or suggestions please let me know!
             </p>
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2 border-t border-borderSubtle/50">
                 <span id="obfuscatedEmailDisplay" class="text-slate-300 font-mono text-[11px] select-all">josiahghudock [at] gmail.com</span>
@@ -290,8 +346,9 @@
     </div>
 
     <!-- Footer -->
-    <footer class="w-full max-w-xl text-center py-4 text-xs text-slate-500 flex flex-col gap-1">
+    <footer class="w-full max-w-xl text-center py-4 text-xs text-slate-500 flex flex-col gap-1.5">
         <div>The 'Nome v1.0</div>
+        <div class="text-[11px] text-slate-400">Disclaimer: Flashing lights.</div>
     </footer>
 
     <!-- Optimized Application Logic -->
@@ -321,18 +378,33 @@
         const incSubdivBtn = document.getElementById('incSubdivBtn');
         const customSubdivCheckbox = document.getElementById('customSubdivCheckbox');
         const customSubdivHint = document.getElementById('customSubdivHint');
+        const polyrhythmCheckbox = document.getElementById('polyrhythmCheckbox');
+        const polyBeatsText = document.getElementById('polyBeatsText');
+        const polyControlContainer = document.getElementById('polyControlContainer');
+        const polySlider = document.getElementById('polySlider');
+        const decPolyBtn = document.getElementById('decPolyBtn');
+        const incPolyBtn = document.getElementById('incPolyBtn');
         const toggleSoundsMenu = document.getElementById('toggleSoundsMenu');
         const soundsMenuContent = document.getElementById('soundsMenuContent');
         const soundsChevron = document.getElementById('soundsChevron');
         const downbeatType = document.getElementById('downbeatType');
         const downbeatPitch = document.getElementById('downbeatPitch');
         const downbeatPitchVal = document.getElementById('downbeatPitchVal');
+        const downbeatVolume = document.getElementById('downbeatVolume');
+        const downbeatVolVal = document.getElementById('downbeatVolVal');
         const advancedDownbeatCheckbox = document.getElementById('advancedDownbeatCheckbox');
         const advancedDownbeatPanel = document.getElementById('advancedDownbeatPanel');
         const perBeatControlsContainer = document.getElementById('perBeatControlsContainer');
         const subdivType = document.getElementById('subdivType');
         const subdivPitch = document.getElementById('subdivPitch');
         const subdivPitchVal = document.getElementById('subdivPitchVal');
+        const subdivVolume = document.getElementById('subdivVolume');
+        const subdivVolVal = document.getElementById('subdivVolVal');
+        const polyType = document.getElementById('polyType');
+        const polyPitch = document.getElementById('polyPitch');
+        const polyPitchVal = document.getElementById('polyPitchVal');
+        const polyVolume = document.getElementById('polyVolume');
+        const polyVolVal = document.getElementById('polyVolVal');
         const resetStandardBtn = document.getElementById('resetStandardBtn');
         const beatEditorPopup = document.getElementById('beatEditorPopup');
         const popupBeatTitle = document.getElementById('popupBeatTitle');
@@ -355,6 +427,12 @@
             subdivEnabled: false,
             subdivCount: 1,
             customSubdivEnabled: false,
+            polyrhythmEnabled: false,
+            polyBeats: 3,
+            polyStates: {},
+            polySegments: [],
+            nextPolyNoteTime: 0.0,
+            currentPolyIndex: 0,
             interactionMode: 'toggle',
             beatSubdivCounts: {},
             subSubdivCounts: {},
@@ -369,10 +447,12 @@
             lookahead: 25.0,
             scheduleAheadTime: 0.1,
             downbeat: { type: 'triangle', pitch: 440, volume: 0.35 },
-            subdivision: { type: 'triangle', pitch: 330, volume: 0.25 }
+            subdivision: { type: 'triangle', pitch: 330, volume: 0.25 },
+            polyrhythm: { type: 'sine', pitch: 587, volume: 0.30 }
         };
 
         let hoveredSegmentIndex = null;
+        let hoveredPolyIndex = null;
         let activePopupSegment = null;
         let activePopupLayer = 1;
         let hoveredSegmentKey = null;
@@ -536,6 +616,10 @@
                         freq = state.perBeatSettings[beatIndex].pitch;
                         vol = state.perBeatSettings[beatIndex].volume;
                     }
+                } else if (colorType === 'poly') {
+                    type = state.polyrhythm.type;
+                    freq = state.polyrhythm.pitch;
+                    vol = state.polyrhythm.volume;
                 } else {
                     type = state.subdivision.type;
                     freq = state.subdivision.pitch;
@@ -563,8 +647,33 @@
             }
         }
 
+        function playPolyToneAtTime(time) {
+            try {
+                if (!state.audioCtx) return;
+                const osc = state.audioCtx.createOscillator();
+                const gain = state.audioCtx.createGain();
+
+                osc.type = state.polyrhythm.type;
+                osc.frequency.setValueAtTime(state.polyrhythm.pitch, time);
+
+                const vol = state.polyrhythm.volume;
+                gain.gain.setValueAtTime(0.0001, time);
+                gain.gain.linearRampToValueAtTime(Math.max(0.0001, vol), time + 0.004);
+                gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.1);
+
+                osc.connect(gain);
+                gain.connect(state.audioCtx.destination);
+
+                osc.start(time);
+                osc.stop(time + 0.11);
+            } catch (err) {
+                console.debug('Polyrhythm audio error:', err);
+            }
+        }
+
         function initSegments() {
             state.segments = [];
+            state.polySegments = [];
             const twoPi = 2 * Math.PI;
             const beatAngleSpan = twoPi / state.totalBeats;
             const startOffset = -3 * Math.PI / 4;
@@ -641,6 +750,29 @@
                 }
             }
 
+            if (state.polyrhythmEnabled && state.polyBeats > 0) {
+                const polyAngleSpan = twoPi / state.polyBeats;
+                for (let p = 0; p < state.polyBeats; p++) {
+                    const pKey = `poly_${p}`;
+                    if (state.polyStates[pKey] === undefined) {
+                        state.polyStates[pKey] = true;
+                    }
+                    const pStart = startOffset + (p * polyAngleSpan);
+                    const pEnd = pStart + polyAngleSpan;
+                    state.polySegments.push({
+                        polyIndex: p,
+                        polyKey: pKey,
+                        isPoly: true,
+                        active: state.polyStates[pKey],
+                        startAngle: pStart,
+                        endAngle: pEnd,
+                        rOuter: 228,
+                        rInner: 210,
+                        spanAngle: polyAngleSpan
+                    });
+                }
+            }
+
             // Refresh custom badges only when segments are re-initialized (Fix #3)
             updateCustomBadges();
         }
@@ -665,6 +797,22 @@
 
                 state.nextNoteTime += duration;
                 state.currentSegmentIndex = (state.currentSegmentIndex + 1) % state.segments.length;
+            }
+
+            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
+                const cycleDuration = secondsPerBeat * state.totalBeats;
+                const polyDuration = cycleDuration / state.polyBeats;
+                while (state.nextPolyNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                    const pSeg = state.polySegments[state.currentPolyIndex % state.polySegments.length];
+                    if (pSeg && pSeg.active) {
+                        playPolyToneAtTime(state.nextPolyNoteTime);
+                    }
+                    if (pSeg) {
+                        pSeg.scheduledTime = state.nextPolyNoteTime;
+                    }
+                    state.nextPolyNoteTime += polyDuration;
+                    state.currentPolyIndex = (state.currentPolyIndex + 1) % state.polySegments.length;
+                }
             }
         }
 
@@ -702,7 +850,7 @@
                 }
 
                 if (isCurrent) {
-                    fillColor = seg.active ? '#ffffff' : '#333344';
+                    fillColor = seg.active ? '#93c5fd' : '#262633';
                 } else if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
                     fillColor = seg.active ? '#e0f2fe' : '#222233';
                 }
@@ -711,7 +859,7 @@
                 ctx.fill();
 
                 ctx.lineWidth = seg.isDownbeat ? 2 : 1;
-                ctx.strokeStyle = isCurrent ? '#f59e0b' : '#22222c';
+                ctx.strokeStyle = isCurrent ? '#fbbf24' : '#22222c';
                 ctx.stroke();
 
                 if (seg.isDownbeat) {
@@ -720,6 +868,31 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                }
+            }
+
+            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    const pSeg = state.polySegments[p];
+                    const isCurrentPoly = pSeg.scheduledTime && (currentTime >= pSeg.scheduledTime && currentTime < pSeg.scheduledTime + 0.08);
+
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, pSeg.rOuter, pSeg.startAngle, pSeg.endAngle, false);
+                    ctx.arc(centerX, centerY, pSeg.rInner, pSeg.endAngle, pSeg.startAngle, true);
+                    ctx.closePath();
+
+                    let pFill = pSeg.active ? '#f59e0b' : '#14141c';
+                    if (isCurrentPoly) {
+                        pFill = pSeg.active ? '#fde68a' : '#262633';
+                    } else if (p === hoveredPolyIndex && state.interactionMode === 'toggle') {
+                        pFill = pSeg.active ? '#fde68a' : '#222233';
+                    }
+
+                    ctx.fillStyle = pFill;
+                    ctx.fill();
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = isCurrentPoly ? '#fde68a' : '#22222c';
+                    ctx.stroke();
                 }
             }
 
@@ -872,8 +1045,11 @@
                 playBtn.classList.remove('bg-slate-100', 'text-slate-900', 'hover:bg-white');
                 playBtn.classList.add('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
                 
-                state.nextNoteTime = state.audioCtx.currentTime + 0.05;
+                const startTime = state.audioCtx.currentTime + 0.05;
+                state.nextNoteTime = startTime;
                 state.currentSegmentIndex = 0;
+                state.nextPolyNoteTime = startTime;
+                state.currentPolyIndex = 0;
                 scheduler();
                 requestAnimationFrame(animationLoop);
             } else {
@@ -885,6 +1061,9 @@
                 clearTimeout(state.timerID);
                 for (let i = 0, len = state.segments.length; i < len; i++) {
                     state.segments[i].scheduledTime = null;
+                }
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    state.polySegments[p].scheduledTime = null;
                 }
                 drawStaticSequencer();
             }
@@ -945,6 +1124,27 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                }
+            }
+
+            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    const pSeg = state.polySegments[p];
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, pSeg.rOuter, pSeg.startAngle, pSeg.endAngle, false);
+                    ctx.arc(centerX, centerY, pSeg.rInner, pSeg.endAngle, pSeg.startAngle, true);
+                    ctx.closePath();
+
+                    let pFill = pSeg.active ? '#f59e0b' : '#14141c';
+                    if (p === hoveredPolyIndex && state.interactionMode === 'toggle') {
+                        pFill = pSeg.active ? '#fde68a' : '#222233';
+                    }
+
+                    ctx.fillStyle = pFill;
+                    ctx.fill();
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = '#22222c';
+                    ctx.stroke();
                 }
             }
         }
@@ -1084,6 +1284,56 @@
             if (!state.isPlaying) drawStaticSequencer();
         });
 
+        polyrhythmCheckbox.addEventListener('change', (e) => {
+            state.polyrhythmEnabled = e.target.checked;
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            if (state.polyrhythmEnabled) {
+                polyBeatsText.classList.remove('opacity-40');
+                polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                decPolyBtn.removeAttribute('disabled');
+                incPolyBtn.removeAttribute('disabled');
+                polySlider.removeAttribute('disabled');
+            } else {
+                polyBeatsText.classList.add('opacity-40');
+                polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                decPolyBtn.setAttribute('disabled', 'true');
+                incPolyBtn.setAttribute('disabled', 'true');
+                polySlider.setAttribute('disabled', 'true');
+                hoveredPolyIndex = null;
+            }
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        polySlider.addEventListener('input', (e) => {
+            state.polyBeats = parseInt(e.target.value);
+            polyBeatsText.textContent = state.polyBeats;
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        decPolyBtn.addEventListener('click', () => {
+            if (state.polyBeats > 1) {
+                state.polyBeats--;
+                polySlider.value = state.polyBeats;
+                polyBeatsText.textContent = state.polyBeats;
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        incPolyBtn.addEventListener('click', () => {
+            if (state.polyBeats < 25) {
+                state.polyBeats++;
+                polySlider.value = state.polyBeats;
+                polyBeatsText.textContent = state.polyBeats;
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
         resetStandardBtn.addEventListener('click', () => {
             state.totalBeats = 4;
             beatsSlider.value = 4;
@@ -1100,6 +1350,18 @@
             state.customSubdivEnabled = false;
             customSubdivCheckbox.checked = false;
             customSubdivHint.classList.add('hidden');
+
+            state.polyrhythmEnabled = false;
+            polyrhythmCheckbox.checked = false;
+            state.polyBeats = 3;
+            polySlider.value = 3;
+            polyBeatsText.textContent = '3';
+            polyBeatsText.classList.add('opacity-40');
+            polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+            decPolyBtn.setAttribute('disabled', 'true');
+            incPolyBtn.setAttribute('disabled', 'true');
+            polySlider.setAttribute('disabled', 'true');
+            state.polyStates = {};
             
             state.advancedDownbeatEnabled = false;
             advancedDownbeatCheckbox.checked = false;
@@ -1118,6 +1380,7 @@
             state.beatStates = {};
             hoveredSegmentKey = null;
             hoveredSegmentIndex = null;
+            hoveredPolyIndex = null;
 
             // Fix #2: Use valid Tailwind arbitrary dimensions w-[352px] h-[352px]
             canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
@@ -1132,6 +1395,10 @@
                 state.segments[i].active = true;
                 state.beatStates[state.segments[i].segKey] = true;
             }
+            for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                state.polySegments[p].active = true;
+                state.polyStates[state.polySegments[p].polyKey] = true;
+            }
             if (!state.isPlaying) drawStaticSequencer();
         });
 
@@ -1139,6 +1406,10 @@
             for (let i = 0, len = state.segments.length; i < len; i++) {
                 state.segments[i].active = false;
                 state.beatStates[state.segments[i].segKey] = false;
+            }
+            for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                state.polySegments[p].active = false;
+                state.polyStates[state.polySegments[p].polyKey] = false;
             }
             if (!state.isPlaying) drawStaticSequencer();
         });
@@ -1163,11 +1434,29 @@
             state.downbeat.pitch = parseInt(e.target.value);
             downbeatPitchVal.textContent = state.downbeat.pitch;
         });
+        downbeatVolume.addEventListener('input', (e) => {
+            state.downbeat.volume = parseFloat(e.target.value);
+            downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
+        });
 
         subdivType.addEventListener('change', (e) => { state.subdivision.type = e.target.value; });
         subdivPitch.addEventListener('input', (e) => {
             state.subdivision.pitch = parseInt(e.target.value);
             subdivPitchVal.textContent = state.subdivision.pitch;
+        });
+        subdivVolume.addEventListener('input', (e) => {
+            state.subdivision.volume = parseFloat(e.target.value);
+            subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
+        });
+
+        polyType.addEventListener('change', (e) => { state.polyrhythm.type = e.target.value; });
+        polyPitch.addEventListener('input', (e) => {
+            state.polyrhythm.pitch = parseInt(e.target.value);
+            polyPitchVal.textContent = state.polyrhythm.pitch;
+        });
+        polyVolume.addEventListener('input', (e) => {
+            state.polyrhythm.volume = parseFloat(e.target.value);
+            polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
         });
 
         const copyEmailBtn = document.getElementById('copyEmailBtn');
@@ -1211,13 +1500,33 @@
             const dy = y - centerY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 80 || distance > 190) return null;
-
             let angle = Math.atan2(dy, dx);
             const startOffset = -3 * Math.PI / 4;
             let relativeAngle = angle - startOffset;
             if (relativeAngle < 0) relativeAngle += 2 * Math.PI;
             while (relativeAngle >= 2 * Math.PI) relativeAngle -= 2 * Math.PI;
+
+            if (state.polyrhythmEnabled && distance >= 204 && distance <= 236) {
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    const pSeg = state.polySegments[p];
+                    let sStart = pSeg.startAngle - startOffset;
+                    let sEnd = pSeg.endAngle - startOffset;
+
+                    while (sStart < 0) sStart += 2 * Math.PI;
+                    while (sStart >= 2 * Math.PI) sStart -= 2 * Math.PI;
+                    while (sEnd < 0) sEnd += 2 * Math.PI;
+                    while (sEnd >= 2 * Math.PI) sEnd -= 2 * Math.PI;
+
+                    if (sStart < sEnd) {
+                        if (relativeAngle >= sStart && relativeAngle <= sEnd) return pSeg;
+                    } else {
+                        if (relativeAngle >= sStart || relativeAngle <= sEnd) return pSeg;
+                    }
+                }
+                return null;
+            }
+
+            if (distance < 80 || distance > 190) return null;
 
             for (let i = 0, len = state.segments.length; i < len; i++) {
                 const seg = state.segments[i];
@@ -1246,7 +1555,11 @@
             const seg = getSegmentFromEvent(e);
             if (seg) {
                 seg.active = !seg.active;
-                state.beatStates[seg.segKey] = seg.active;
+                if (seg.isPoly) {
+                    state.polyStates[seg.polyKey] = seg.active;
+                } else {
+                    state.beatStates[seg.segKey] = seg.active;
+                }
                 if (!state.isPlaying) drawStaticSequencer();
             }
         });
@@ -1254,10 +1567,12 @@
         // Fix #3: Update custom badges only when hoveredSegmentKey changes
         canvas.addEventListener('mousemove', (e) => {
             const seg = getSegmentFromEvent(e);
-            const newHoverKey = seg ? seg.segKey : null;
-            if (newHoverKey !== hoveredSegmentKey) {
+            const newHoverKey = (seg && !seg.isPoly) ? seg.segKey : null;
+            const newPolyIdx = (seg && seg.isPoly) ? seg.polyIndex : null;
+            if (newHoverKey !== hoveredSegmentKey || newPolyIdx !== hoveredPolyIndex) {
                 hoveredSegmentKey = newHoverKey;
-                hoveredSegmentIndex = seg ? state.segments.indexOf(seg) : null;
+                hoveredSegmentIndex = (seg && !seg.isPoly) ? state.segments.indexOf(seg) : null;
+                hoveredPolyIndex = newPolyIdx;
                 updateCustomBadges();
                 if (!state.isPlaying) drawStaticSequencer();
             }
