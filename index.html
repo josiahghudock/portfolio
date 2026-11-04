@@ -57,7 +57,7 @@
                         <i class="fa-solid fa-location-dot text-neutral-400"></i>
                         <span>Athens, Ohio</span>
                     </div>
-                    <!-- Contact Copy Email Button -->
+                    <!-- Contact Copy Email Button (Spam-protected via JS) -->
                     <button onclick="copyEmail()" id="copy-email-btn" class="bg-neutral-800 hover:bg-neutral-700 border border-borderCol text-xs font-mono text-white px-3.5 py-2 rounded transition-colors flex items-center gap-2">
                         <i class="fa-regular fa-envelope text-neutral-400"></i>
                         <span id="copy-btn-text">Copy Email Address</span>
@@ -108,14 +108,13 @@
                     <div class="space-y-2">
                         <div class="flex items-center gap-2">
                             <h3 class="text-lg font-medium text-white">The 'Nome</h3>
-                            <span class="text-[10px] font-mono bg-neutral-800 text-sky-400 border border-borderCol px-2 py-0.5 rounded">Web Audio API</span>
                         </div>
                         <p class="text-sm text-neutral-300 leading-relaxed">
-                            A dark minimalist circular rhythm sequencer featuring custom recursive subdivisions, interactive accent tuners, and real-time audio synthesis.
+                            A minimalist online metronome for complex rhythmic structures. 
                         </p>
                     </div>
                     <div class="flex-shrink-0">
-                        <a href="nome.html" target="_blank" rel="noopener noreferrer" class="bg-white hover:bg-neutral-200 text-neutral-900 font-medium text-xs px-4 py-2.5 rounded transition-colors flex items-center gap-2 shadow-sm inline-flex">
+                        <a href="nomev1.html" target="_blank" rel="noopener noreferrer" class="bg-white hover:bg-neutral-200 text-neutral-900 font-medium text-xs px-4 py-2.5 rounded transition-colors flex items-center gap-2 shadow-sm inline-flex">
                             <span>Launch App</span>
                             <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                         </a>
@@ -324,7 +323,11 @@
         }
 
         function copyEmail() {
-            const email = "josiahghudock@gmail.com";
+            // Obfuscated string assembly prevents simple email scraper bots from harvesting the address
+            const user = "josiahghudock";
+            const domain = "gmail.com";
+            const email = user + "@" + domain;
+            
             const btnText = document.getElementById('copy-btn-text');
             
             const textArea = document.createElement("textarea");
