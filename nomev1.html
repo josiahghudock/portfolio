@@ -34,6 +34,7 @@
         /* Prevent accidental touch scrolling hijacking on range inputs & canvas */
         input[type=range] {
             touch-action: pan-y;
+            cursor: default;
         }
         canvas {
             touch-action: manipulation;
@@ -470,8 +471,22 @@
         let tapTimestamps = [];
         let tapHighlightTimeout = null;
 
-        // Prevent range slider touch drag from accidentally hijacking vertical page scroll
+        // Prevent range slider jump-to-click: only allow sliding when dragging near or on the thumb
         document.querySelectorAll('input[type=range]').forEach(slider => {
+            slider.addEventListener('pointerdown', (e) => {
+                const rect = slider.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const min = parseFloat(slider.min) || 0;
+                const max = parseFloat(slider.max) || 100;
+                const val = parseFloat(slider.value);
+                const percent = (val - min) / (max - min);
+                const thumbX = percent * rect.width;
+
+                // If click is further than 28px away from thumb center, prevent immediate value jump
+                if (Math.abs(clickX - thumbX) > 28) {
+                    e.preventDefault();
+                }
+            });
             slider.addEventListener('touchmove', (e) => {
                 e.stopPropagation();
             }, { passive: true });
@@ -537,12 +552,12 @@
                     <span class="font-bold text-accent w-8 text-center">#${i + 1}</span>
                     <div class="flex items-center gap-1.5 flex-1">
                         <span class="text-[10px] text-slate-400 w-8">Pitch</span>
-                        <input type="range" min="100" max="1200" value="${beatCfg.pitch}" data-beat="${i}" data-type="pitch" class="per-beat-pitch w-full h-1.5 bg-[#1a1a22] rounded-lg accent-accent cursor-pointer">
+                        <input type="range" min="100" max="1200" value="${beatCfg.pitch}" data-beat="${i}" data-type="pitch" class="per-beat-pitch w-full h-1.5 bg-[#1a1a22] rounded-lg accent-accent">
                         <span class="text-[10px] text-slate-300 w-10 text-right pitch-val-${i}">${beatCfg.pitch}Hz</span>
                     </div>
                     <div class="flex items-center gap-1.5 flex-1">
                         <span class="text-[10px] text-slate-400 w-8">Vol</span>
-                        <input type="range" min="0" max="1" step="0.05" value="${beatCfg.volume}" data-beat="${i}" data-type="volume" class="per-beat-vol w-full h-1.5 bg-[#1a1a22] rounded-lg accent-accent cursor-pointer">
+                        <input type="range" min="0" max="1" step="0.05" value="${beatCfg.volume}" data-beat="${i}" data-type="volume" class="per-beat-vol w-full h-1.5 bg-[#1a1a22] rounded-lg accent-accent">
                         <span class="text-[10px] text-slate-300 w-8 text-right vol-val-${i}">${Math.round(beatCfg.volume * 100)}%</span>
                     </div>
                 `;
@@ -552,6 +567,18 @@
             perBeatControlsContainer.appendChild(fragment);
 
             perBeatControlsContainer.querySelectorAll('input[type=range]').forEach(input => {
+                input.addEventListener('pointerdown', (e) => {
+                    const rect = input.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const min = parseFloat(input.min) || 0;
+                    const max = parseFloat(input.max) || 100;
+                    const val = parseFloat(input.value);
+                    const percent = (val - min) / (max - min);
+                    const thumbX = percent * rect.width;
+                    if (Math.abs(clickX - thumbX) > 28) {
+                        e.preventDefault();
+                    }
+                });
                 input.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
                 input.addEventListener('input', (e) => {
                     const beatIdx = parseInt(e.target.getAttribute('data-beat'));
@@ -987,7 +1014,6 @@
             beatEditorPopup.classList.remove('hidden');
         }
 
-        popupSlider.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
         popupSlider.addEventListener('input', (e) => {
             const val = parseInt(e.target.value);
             popupSubdivVal.textContent = val;
