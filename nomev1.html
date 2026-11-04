@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The 'Nome - Precision Beat Sequencer</title>
+    <title>The 'Nome - Precision Rhythm Circle Sequencer</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -355,13 +355,12 @@
             advancedDownbeatEnabled: false,
             perBeatSettings: {},
             segments: [],
-            totalSubdivisions: 0,
             audioCtx: null,
             nextNoteTime: 0.0,
-            currentSubdivisionIndex: 0,
+            currentSegmentIndex: 0,
             timerID: null,
-            lookahead: 25.0, // ms
-            scheduleAheadTime: 0.1, // s
+            lookahead: 25.0,
+            scheduleAheadTime: 0.1,
             downbeat: { type: 'triangle', pitch: 440, volume: 0.35 },
             subdivision: { type: 'triangle', pitch: 330, volume: 0.25 }
         };
@@ -457,7 +456,7 @@
                 customSubdivCheckbox.checked = true;
                 customSubdivHint.classList.remove('hidden');
                 initSegments();
-                if (!state.isPlaying) drawSequencer();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
@@ -511,7 +510,6 @@
             }
         }
 
-        // Pre-calculate and cache all segment parameters and static coordinates
         function initSegments() {
             state.segments = [];
             const twoPi = 2 * Math.PI;
@@ -557,7 +555,6 @@
                         if (s > 0 && ss === 0) colorType = 'pink';
                         else if (ss > 0) colorType = 'green';
 
-                        // Pre-calculate radii
                         let rOuter = (s === 0 && ss === 0) ? 166 : 160;
                         let rInner = 92;
                         if (colorType === 'pink') {
@@ -582,43 +579,35 @@
                             midAngle: midAngle,
                             rOuter: rOuter,
                             rInner: rInner,
-                            isCurrent: false,
-                            // Cached text coordinates for downbeats
+                            spanAngle: l2AngleSpan,
                             textX: 240 + Math.cos(midAngle) * 192,
                             textY: 240 + Math.sin(midAngle) * 192
                         });
                     }
                 }
             }
-            state.totalSubdivisions = state.segments.length;
-        }
-
-        // Decoupled Lookahead Audio Scheduler (runs every 25ms independently of UI frame rate)
-        function nextNote() {
-            const secondsPerBeat = 60.0 / state.bpm;
-            // Each subdivision slice duration equals beat duration divided by total subdivisions in current cycle
-            const sliceDuration = secondsPerBeat / (state.totalSubdivisions / state.totalBeats);
-            state.nextNoteTime += sliceDuration;
-            state.currentSubdivisionIndex = (state.currentSubdivisionIndex + 1) % state.totalSubdivisions;
         }
 
         function scheduleNote() {
-            if (!state.audioCtx) return;
-            // Push notes into audio queue if they are within lookahead window
+            if (!state.audioCtx || state.segments.length === 0) return;
+            const secondsPerBeat = 60.0 / state.bpm;
+            const twoPi = 2 * Math.PI;
+
             while (state.nextNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
-                const idx = state.currentSubdivisionIndex;
-                const seg = state.segments[idx];
-                
+                const seg = state.segments[state.currentSegmentIndex];
                 if (seg && seg.active) {
                     playToneAtTime(seg.isDownbeat, seg.colorType, seg.beatIndex, state.nextNoteTime);
                 }
-                
-                // Save scheduled time to highlight current segment precisely on canvas
                 if (seg) {
                     seg.scheduledTime = state.nextNoteTime;
                 }
 
-                nextNote();
+                const standardBeatSpan = twoPi / state.totalBeats;
+                const ratio = seg.spanAngle / standardBeatSpan;
+                const duration = secondsPerBeat * ratio;
+
+                state.nextNoteTime += duration;
+                state.currentSegmentIndex = (state.currentSegmentIndex + 1) % state.segments.length;
             }
         }
 
@@ -628,7 +617,6 @@
             state.timerID = setTimeout(scheduler, state.lookahead);
         }
 
-        // Optimized Render Loop synchronized via requestAnimationFrame
         function animationLoop() {
             if (!state.isPlaying) return;
 
@@ -641,8 +629,6 @@
 
             for (let i = 0, len = state.segments.length; i < len; i++) {
                 const seg = state.segments[i];
-                
-                // Check if this segment is currently playing based on audio context timing
                 const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + 0.08);
 
                 ctx.beginPath();
@@ -741,7 +727,7 @@
             const currentCount = (layer === 1) ? (state.beatSubdivCounts[seg.beatIndex] || 1) : (state.subSubdivCounts[seg.subKey] || 1);
 
             popupBeatTitle.textContent = layer === 1 ? `Layer 1 Split (Beat ${seg.beatIndex + 1})` : `Layer 2 Split (${seg.beatIndex + 1}.${seg.subIndex + 1})`;
-            popupLayerDesc.textContent = layer === 1 ? 'Splits beat into equal pink parts' : 'Splits subsegment into equal green parts';
+            popupLayerDesc.textContent = layer === 1 ? 'Splits beat into equal pink parts (up to 19)' : 'Splits subsegment into equal green parts';
             popupSubdivVal.textContent = currentCount;
             popupSlider.value = currentCount;
 
@@ -816,7 +802,7 @@
                 playBtn.classList.add('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
                 
                 state.nextNoteTime = state.audioCtx.currentTime + 0.05;
-                state.currentSubdivisionIndex = 0;
+                state.currentSegmentIndex = 0;
                 scheduler();
                 requestAnimationFrame(animationLoop);
             } else {
@@ -884,7 +870,6 @@
             updateCustomBadges();
         }
 
-        // Control Listeners
         bpmSlider.addEventListener('input', (e) => {
             state.bpm = parseInt(e.target.value);
             bpmText.textContent = state.bpm;
@@ -1103,7 +1088,6 @@
             subdivPitchVal.textContent = state.subdivision.pitch;
         });
 
-        // Email copy
         const copyEmailBtn = document.getElementById('copyEmailBtn');
         const copyEmailText = document.getElementById('copyEmailText');
         const obfuscatedEmailDisplay = document.getElementById('obfuscatedEmailDisplay');
@@ -1173,6 +1157,10 @@
         }
 
         canvas.addEventListener('click', (e) => {
+            // CRITICAL SAFEGUARD: Prevent accidental toggling when in Subdivision Mode
+            if (state.interactionMode === 'subdivision') {
+                return; 
+            }
             const seg = getSegmentFromEvent(e);
             if (seg) {
                 seg.active = !seg.active;
