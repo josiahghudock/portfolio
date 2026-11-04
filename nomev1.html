@@ -36,9 +36,6 @@
             touch-action: pan-y;
             cursor: default;
         }
-        canvas {
-            touch-action: manipulation;
-        }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             height: 20px;
@@ -51,6 +48,9 @@
         }
         input[type=range]::-webkit-slider-thumb:hover {
             transform: scale(1.2);
+        }
+        canvas {
+            touch-action: manipulation;
         }
         select {
             appearance: none;
@@ -471,22 +471,32 @@
         let tapTimestamps = [];
         let tapHighlightTimeout = null;
 
-        // Prevent range slider jump-to-click: only allow sliding when dragging near or on the thumb
+        // Prevent range slider jump-to-click on both mouse and touch: only allow sliding when dragging near or on the thumb
         document.querySelectorAll('input[type=range]').forEach(slider => {
-            slider.addEventListener('pointerdown', (e) => {
+            const checkThumbTarget = (clientX) => {
                 const rect = slider.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
+                const clickX = clientX - rect.left;
                 const min = parseFloat(slider.min) || 0;
                 const max = parseFloat(slider.max) || 100;
                 const val = parseFloat(slider.value);
                 const percent = (val - min) / (max - min);
                 const thumbX = percent * rect.width;
+                // Allow touch/click only if within 30px of the thumb center
+                return Math.abs(clickX - thumbX) <= 30;
+            };
 
-                // If click is further than 28px away from thumb center, prevent immediate value jump
-                if (Math.abs(clickX - thumbX) > 28) {
+            slider.addEventListener('pointerdown', (e) => {
+                if (!checkThumbTarget(e.clientX)) {
                     e.preventDefault();
                 }
             });
+
+            slider.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 0 && !checkThumbTarget(e.touches[0].clientX)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
             slider.addEventListener('touchmove', (e) => {
                 e.stopPropagation();
             }, { passive: true });
@@ -567,18 +577,27 @@
             perBeatControlsContainer.appendChild(fragment);
 
             perBeatControlsContainer.querySelectorAll('input[type=range]').forEach(input => {
-                input.addEventListener('pointerdown', (e) => {
+                const checkThumbTarget = (clientX) => {
                     const rect = input.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
+                    const clickX = clientX - rect.left;
                     const min = parseFloat(input.min) || 0;
                     const max = parseFloat(input.max) || 100;
                     const val = parseFloat(input.value);
                     const percent = (val - min) / (max - min);
                     const thumbX = percent * rect.width;
-                    if (Math.abs(clickX - thumbX) > 28) {
+                    return Math.abs(clickX - thumbX) <= 30;
+                };
+
+                input.addEventListener('pointerdown', (e) => {
+                    if (!checkThumbTarget(e.clientX)) {
                         e.preventDefault();
                     }
                 });
+                input.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0 && !checkThumbTarget(e.touches[0].clientX)) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
                 input.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
                 input.addEventListener('input', (e) => {
                     const beatIdx = parseInt(e.target.getAttribute('data-beat'));
