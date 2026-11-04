@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The 'Nome - Precision Rhythm Circle Sequencer</title>
+    <title>The 'Nome - Precision Beat Sequencer</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -101,7 +101,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <p id="instructionHint" class="text-xs text-slate-400">Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.</p>
+            <p id="instructionHint" class="text-xs text-slate-400">Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.</p>
         </div>
 
         <!-- Controls Section -->
@@ -119,7 +119,13 @@
             <!-- BPM Control -->
             <div class="flex flex-col gap-3">
                 <div class="flex justify-between items-center text-sm font-medium">
-                    <span class="text-slate-400">Tempo</span>
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-slate-400">Tempo</span>
+                        <button id="tapTempoBtn" title="Tap repeatedly or press 'T' to set tempo" class="px-2.5 py-1 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-[11px] font-semibold uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1">
+                            <span>Tap</span>
+                            <span class="text-[9px] text-slate-500 font-mono">(T)</span>
+                        </button>
+                    </div>
                     <div class="flex items-center gap-2">
                         <span id="bpmText" class="text-accent font-bold text-base">100</span>
                         <span class="text-xs text-slate-400">BPM</span>
@@ -302,6 +308,7 @@
         const bpmText = document.getElementById('bpmText');
         const decBpmBtn = document.getElementById('decBpmBtn');
         const incBpmBtn = document.getElementById('incBpmBtn');
+        const tapTempoBtn = document.getElementById('tapTempoBtn');
         const beatsSlider = document.getElementById('beatsSlider');
         const beatsText = document.getElementById('beatsText');
         const decBeatsBtn = document.getElementById('decBeatsBtn');
@@ -369,6 +376,46 @@
         let activePopupSegment = null;
         let activePopupLayer = 1;
         let hoveredSegmentKey = null;
+        let tapTimestamps = [];
+        let tapHighlightTimeout = null;
+
+        function handleTapTempo() {
+            const now = performance.now();
+            if (tapTimestamps.length > 0 && now - tapTimestamps[tapTimestamps.length - 1] > 2500) {
+                tapTimestamps = [];
+            }
+            tapTimestamps.push(now);
+            if (tapTimestamps.length > 5) {
+                tapTimestamps.shift();
+            }
+
+            if (tapTempoBtn) {
+                tapTempoBtn.classList.add('bg-sky-500/20', 'border-sky-400', 'text-white', 'scale-95');
+                clearTimeout(tapHighlightTimeout);
+                tapHighlightTimeout = setTimeout(() => {
+                    tapTempoBtn.classList.remove('bg-sky-500/20', 'border-sky-400', 'text-white', 'scale-95');
+                }, 130);
+            }
+
+            if (tapTimestamps.length >= 2) {
+                let totalInterval = 0;
+                for (let i = 1; i < tapTimestamps.length; i++) {
+                    totalInterval += (tapTimestamps[i] - tapTimestamps[i - 1]);
+                }
+                const avgInterval = totalInterval / (tapTimestamps.length - 1);
+                const calculatedBpm = Math.round(60000 / avgInterval);
+                const clampedBpm = Math.max(30, Math.min(300, calculatedBpm));
+
+                state.bpm = clampedBpm;
+                bpmSlider.value = state.bpm;
+                bpmText.textContent = state.bpm;
+                centerBpmDisplay.textContent = state.bpm;
+            }
+        }
+
+        if (tapTempoBtn) {
+            tapTempoBtn.addEventListener('click', handleTapTempo);
+        }
 
         function ensurePerBeatSettings() {
             for (let i = 0; i < state.totalBeats; i++) {
@@ -441,7 +488,7 @@
             state.interactionMode = 'toggle';
             modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
             modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
-            instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.';
+            instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.';
             updateCustomBadges();
             beatEditorPopup.classList.add('hidden');
             if (!state.isPlaying) drawStaticSequencer();
@@ -850,9 +897,14 @@
                 beatEditorPopup.classList.add('hidden');
                 return;
             }
-            if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'BUTTON') {
-                e.preventDefault();
-                togglePlay();
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA') {
+                if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                    e.preventDefault();
+                    togglePlay();
+                } else if (e.code === 'KeyT' && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    e.preventDefault();
+                    handleTapTempo();
+                }
             }
         });
 
@@ -962,7 +1014,7 @@
                     state.interactionMode = 'toggle';
                     modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                     modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
-                    instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.';
+                    instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.';
                     beatEditorPopup.classList.add('hidden');
                 }
                 subdivText.classList.remove('opacity-40');
@@ -1026,7 +1078,7 @@
                 state.interactionMode = 'toggle';
                 modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                 modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
-                instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.';
+                instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.';
             }
             initSegments();
             if (!state.isPlaying) drawStaticSequencer();
@@ -1059,7 +1111,7 @@
             state.interactionMode = 'toggle';
             modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
             modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
-            instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.';
+            instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.';
 
             state.beatSubdivCounts = {};
             state.subSubdivCounts = {};
