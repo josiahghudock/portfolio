@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The 'Nome - Dark Minimalist Rhythm Circle Sequencer</title>
+    <title>The 'Nome - Precision Beat Sequencer</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -15,14 +15,13 @@
                         darkBg: '#0a0a0c',
                         cardBg: '#121216',
                         borderSubtle: '#22222c',
-                        accent: '#38bdf8', // sleek cyan
+                        accent: '#38bdf8',
                         accentGlow: 'rgba(56, 189, 248, 0.4)'
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -30,6 +29,7 @@
             background-color: #0a0a0c;
             color: #f3f4f6;
             user-select: none;
+            -webkit-font-smoothing: antialiased;
         }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -58,7 +58,7 @@
     <!-- Header -->
     <header class="w-full max-w-xl text-center py-4 flex flex-col items-center gap-2">
         <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
-        <p class="text-xs md:text-sm text-slate-400">Minimalist Beat Sequencer</p>
+        <p class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
         <div class="flex flex-wrap items-center justify-center gap-2 mt-1">
             <button id="resetStandardBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -79,7 +79,7 @@
     <!-- Main Sequencer Area -->
     <main class="w-full max-w-xl flex flex-col items-center justify-center my-auto py-6">
         
-        <!-- Mode Switcher directly beside the circle area (Visible ONLY when Custom Recursive Subdivisions is checked) -->
+        <!-- Mode Switcher -->
         <div id="interactionModeWrapper" class="w-full flex justify-between items-center px-2 mb-2 text-xs hidden">
             <span class="text-slate-400 font-medium">Interaction Mode:</span>
             <div class="inline-flex p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md">
@@ -88,21 +88,18 @@
             </div>
         </div>
 
-        <!-- Circular Sequencer Canvas Container with Hover Zoom Lens -->
+        <!-- Canvas Container -->
         <div id="canvasContainer" class="relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]">
             <canvas id="sequencerCanvas" width="480" height="480" class="w-full h-full cursor-pointer rounded-full shadow-2xl bg-[#0f0f14] border border-borderSubtle origin-center"></canvas>
             
-            <!-- Dynamic Container for Fixed Custom Subdivide Badges in Custom/Subdivision Mode -->
             <div id="customBadgesContainer" class="absolute inset-0 pointer-events-none z-30"></div>
 
-            <!-- Center Display Information -->
             <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span id="centerBpmDisplay" class="text-2xl font-bold tracking-tight text-slate-200">100</span>
                 <span class="text-[10px] uppercase tracking-widest text-slate-500 font-medium">BPM</span>
             </div>
         </div>
 
-        <!-- Instructions hint -->
         <div class="text-center mt-4">
             <p id="instructionHint" class="text-xs text-slate-400">Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.</p>
         </div>
@@ -110,7 +107,6 @@
         <!-- Controls Section -->
         <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-6">
             
-            <!-- Play Button -->
             <div class="flex justify-center">
                 <button id="playBtn" class="w-full md:w-3/4 py-3.5 px-6 rounded-xl font-semibold text-sm tracking-wider uppercase transition-all duration-200 bg-slate-100 text-slate-900 hover:bg-white active:scale-95 shadow-lg flex items-center justify-center gap-2">
                     <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 24 24">
@@ -120,7 +116,7 @@
                 </button>
             </div>
 
-            <!-- BPM Control Box (30-300 range) -->
+            <!-- BPM Control -->
             <div class="flex flex-col gap-3">
                 <div class="flex justify-between items-center text-sm font-medium">
                     <span class="text-slate-400">Tempo</span>
@@ -129,19 +125,16 @@
                         <span class="text-xs text-slate-400">BPM</span>
                     </div>
                 </div>
-
                 <div class="flex items-center gap-3">
                     <button id="decBpmBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
-                    
                     <div class="relative flex-1 flex items-center">
                         <input id="bpmSlider" type="range" min="30" max="300" value="100" class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-accent border border-borderSubtle">
                     </div>
-
                     <button id="incBpmBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
                 </div>
             </div>
 
-            <!-- Beats / Time Signature Control Box (Up to 25 beats) -->
+            <!-- Beats Control -->
             <div class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
                 <div class="flex justify-between items-center text-sm font-medium">
                     <span class="text-slate-400">Beats</span>
@@ -150,19 +143,16 @@
                         <span class="text-xs text-slate-400">beats</span>
                     </div>
                 </div>
-
                 <div class="flex items-center gap-3">
                     <button id="decBeatsBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
-                    
                     <div class="relative flex-1 flex items-center">
                         <input id="beatsSlider" type="range" min="1" max="25" value="4" class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-accent border border-borderSubtle">
                     </div>
-
                     <button id="incBeatsBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
                 </div>
             </div>
 
-            <!-- Uniform Subdivision Control Box (1-20) -->
+            <!-- Uniform Subdivision -->
             <div class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
                 <div class="flex justify-between items-center text-sm font-medium">
                     <label class="flex items-center gap-2 cursor-pointer">
@@ -174,19 +164,16 @@
                         <span class="text-xs text-slate-400 opacity-40">per beat</span>
                     </div>
                 </div>
-
                 <div id="subdivControlContainer" class="flex items-center gap-3 opacity-40 pointer-events-none transition-opacity duration-200">
                     <button id="decSubdivBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
-                    
                     <div class="relative flex-1 flex items-center">
                         <input id="subdivSlider" type="range" min="1" max="20" value="1" disabled class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-accent border border-borderSubtle">
                     </div>
-
                     <button id="incSubdivBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
                 </div>
             </div>
 
-            <!-- Custom Recursive Subdivision Control Box -->
+            <!-- Custom Recursive Subdivision -->
             <div class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
                 <div class="flex justify-between items-center text-sm font-medium">
                     <label class="flex items-center gap-2 cursor-pointer">
@@ -199,7 +186,7 @@
                 </div>
             </div>
 
-            <!-- Sound Settings Dropdown Toggle -->
+            <!-- Sound Settings Menu -->
             <div class="pt-3 border-t border-borderSubtle">
                 <button id="toggleSoundsMenu" class="w-full flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-200 py-1 transition-colors">
                     <span>Sound Settings & Synthesis</span>
@@ -207,7 +194,6 @@
                 </button>
                 
                 <div id="soundsMenuContent" class="hidden flex flex-col gap-4 mt-4 pt-4 border-t border-borderSubtle/50 text-xs">
-                    <!-- Downbeat Sound Config -->
                     <div class="flex flex-col gap-2">
                         <div class="flex justify-between items-center">
                             <span class="text-slate-300 font-semibold">Downbeat Audio</span>
@@ -232,16 +218,12 @@
                             </div>
                         </div>
 
-                        <!-- Advanced Per-Beat Downbeat Panel -->
                         <div id="advancedDownbeatPanel" class="hidden flex flex-col gap-3 mt-2 p-3 bg-[#16161c] border border-borderSubtle rounded-xl">
                             <div class="text-[11px] text-slate-400 font-medium">Individual Downbeat Tuner (Pitch & Volume per Beat)</div>
-                            <div id="perBeatControlsContainer" class="flex flex-col gap-2.5 max-h-48 overflow-y-auto pr-1">
-                                <!-- Dynamically populated per beat controls -->
-                            </div>
+                            <div id="perBeatControlsContainer" class="flex flex-col gap-2.5 max-h-48 overflow-y-auto pr-1"></div>
                         </div>
                     </div>
 
-                    <!-- Subdivision Sound Config -->
                     <div class="flex flex-col gap-2 pt-2 border-t border-borderSubtle/30">
                         <span class="text-slate-300 font-semibold">Subdivision Audio</span>
                         <div class="grid grid-cols-2 gap-3">
@@ -281,7 +263,7 @@
         </div>
     </main>
 
-    <!-- Floating Beat Subdivision Editor Popup (for Subdivision/Custom Mode) -->
+    <!-- Popup Modal -->
     <div id="beatEditorPopup" class="fixed hidden bg-[#16161c] border border-borderSubtle rounded-xl p-3 shadow-2xl flex flex-col gap-2 z-50 text-xs w-52 backdrop-blur-md">
         <div class="flex justify-between items-center text-slate-300 font-semibold border-b border-borderSubtle pb-1.5">
             <span id="popupBeatTitle">Subdivide Segment</span>
@@ -301,17 +283,17 @@
         </div>
     </div>
 
-    <!-- Footer / Credits -->
+    <!-- Footer -->
     <footer class="w-full max-w-xl text-center py-4 text-xs text-slate-500 flex flex-col gap-1">
         <div>The 'Nome v1.0</div>
     </footer>
 
-    <!-- JavaScript Application Logic -->
+    <!-- Optimized Application Logic -->
     <script>
-        // DOM Elements
         const canvas = document.getElementById('sequencerCanvas');
         const canvasContainer = document.getElementById('canvasContainer');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: false });
+
         const centerBpmDisplay = document.getElementById('centerBpmDisplay');
         const playBtn = document.getElementById('playBtn');
         const playIcon = document.getElementById('playIcon');
@@ -358,7 +340,7 @@
         const interactionModeWrapper = document.getElementById('interactionModeWrapper');
         const instructionHint = document.getElementById('instructionHint');
 
-        // State Management
+        // Application State
         const state = {
             isPlaying: false,
             bpm: 100,
@@ -366,27 +348,29 @@
             subdivEnabled: false,
             subdivCount: 1,
             customSubdivEnabled: false,
-            interactionMode: 'toggle', // 'toggle' or 'subdivision'
-            beatSubdivCounts: {},   // beatIndex -> subdivision count (Layer 1, pink)
-            subSubdivCounts: {},    // `${beatIndex}_${subIndex}` -> sub-subdivision count (Layer 2, green)
-            beatStates: {},         // segment key -> active boolean
+            interactionMode: 'toggle',
+            beatSubdivCounts: {},
+            subSubdivCounts: {},
+            beatStates: {},
             advancedDownbeatEnabled: false,
-            perBeatSettings: {},    // beatIndex -> { pitch: 440, volume: 0.35 }
+            perBeatSettings: {},
             segments: [],
-            currentAngle: 0,
-            lastAudioTime: null,
+            totalSubdivisions: 0,
             audioCtx: null,
+            nextNoteTime: 0.0,
+            currentSubdivisionIndex: 0,
+            timerID: null,
+            lookahead: 25.0, // ms
+            scheduleAheadTime: 0.1, // s
             downbeat: { type: 'triangle', pitch: 440, volume: 0.35 },
             subdivision: { type: 'triangle', pitch: 330, volume: 0.25 }
         };
 
-        let lastSegmentIndex = -1;
         let hoveredSegmentIndex = null;
-        let activePopupSegment = null; 
-        let activePopupLayer = 1;      
-        let hoveredSegmentKey = null; 
+        let activePopupSegment = null;
+        let activePopupLayer = 1;
+        let hoveredSegmentKey = null;
 
-        // Generate or ensure per-beat settings exist for all beats 0 to totalBeats-1
         function ensurePerBeatSettings() {
             for (let i = 0; i < state.totalBeats; i++) {
                 if (!state.perBeatSettings[i]) {
@@ -400,10 +384,9 @@
         }
 
         function renderPerBeatControls() {
-            perBeatControlsContainer.innerHTML = '';
+            const fragment = document.createDocumentFragment();
             for (let i = 0; i < state.totalBeats; i++) {
                 const beatCfg = state.perBeatSettings[i] || { pitch: state.downbeat.pitch, volume: state.downbeat.volume };
-                
                 const row = document.createElement('div');
                 row.className = 'flex items-center justify-between gap-2 bg-[#121216] p-2 rounded-lg border border-borderSubtle';
                 row.innerHTML = `
@@ -419,8 +402,10 @@
                         <span class="text-[10px] text-slate-300 w-8 text-right vol-val-${i}">${Math.round(beatCfg.volume * 100)}%</span>
                     </div>
                 `;
-                perBeatControlsContainer.appendChild(row);
+                fragment.appendChild(row);
             }
+            perBeatControlsContainer.innerHTML = '';
+            perBeatControlsContainer.appendChild(fragment);
 
             perBeatControlsContainer.querySelectorAll('input[type=range]').forEach(input => {
                 input.addEventListener('input', (e) => {
@@ -453,7 +438,6 @@
             }
         });
 
-        // Mode Switching Logic
         modeToggleBtn.addEventListener('click', () => {
             state.interactionMode = 'toggle';
             modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
@@ -472,12 +456,11 @@
                 state.customSubdivEnabled = true;
                 customSubdivCheckbox.checked = true;
                 customSubdivHint.classList.remove('hidden');
-                initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
+                initSegments();
                 if (!state.isPlaying) drawSequencer();
             }
         });
 
-        // Sound Synthesis Setup
         function initAudioContext() {
             if (!state.audioCtx) {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -488,11 +471,9 @@
             }
         }
 
-        function playTone(isDownbeat, colorType, beatIndex) {
+        function playToneAtTime(isDownbeat, colorType, beatIndex, time) {
             try {
-                initAudioContext();
                 if (!state.audioCtx) return;
-
                 const osc = state.audioCtx.createOscillator();
                 const gain = state.audioCtx.createGain();
 
@@ -507,90 +488,85 @@
                     }
                 } else {
                     type = state.subdivision.type;
-                    freq = state.subdivision.pitch; 
+                    freq = state.subdivision.pitch;
                     vol = state.subdivision.volume;
                     if (colorType === 'green') {
-                        freq *= 0.85; 
+                        freq *= 0.85;
                     }
                 }
 
                 osc.type = type;
-                osc.frequency.setValueAtTime(freq, state.audioCtx.currentTime);
+                osc.frequency.setValueAtTime(freq, time);
 
-                const now = state.audioCtx.currentTime;
-                gain.gain.setValueAtTime(vol, now);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+                gain.gain.setValueAtTime(vol, time);
+                gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.1);
 
                 osc.connect(gain);
                 gain.connect(state.audioCtx.destination);
 
-                osc.start(now);
-                osc.stop(now + 0.13);
+                osc.start(time);
+                osc.stop(time + 0.11);
             } catch (err) {
-                console.debug('Audio playback error:', err);
+                console.debug('Audio error:', err);
             }
         }
 
-        // Initialize Segments with fixed northwest alignment (-3 * Math.PI / 4)
-        function initSegments(totalBeats, subdivEnabled, subdivCount, customSubdivEnabled) {
+        // Pre-calculate and cache all segment parameters and static coordinates
+        function initSegments() {
             state.segments = [];
-            
             const twoPi = 2 * Math.PI;
-            const beatAngleSpan = twoPi / totalBeats;
-            const startOffset = -3 * Math.PI / 4; 
+            const beatAngleSpan = twoPi / state.totalBeats;
+            const startOffset = -3 * Math.PI / 4;
 
-            let maxSubdivisions = subdivEnabled ? subdivCount : 1;
-            if (customSubdivEnabled) {
+            let maxSubdivs = state.subdivEnabled ? state.subdivCount : 1;
+            if (state.customSubdivEnabled) {
                 let counts = Object.values(state.beatSubdivCounts);
-                if (counts.length > 0) {
-                    maxSubdivisions = Math.max(...counts);
-                }
+                if (counts.length > 0) maxSubdivs = Math.max(...counts);
             }
-            
-            if (maxSubdivisions >= 10) {
+
+            if (maxSubdivs >= 10) {
                 canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.12]";
-            } else if (maxSubdivisions >= 5) {
+            } else if (maxSubdivs >= 5) {
                 canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.08]";
             } else {
                 canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
             }
 
-            for (let b = 0; b < totalBeats; b++) {
+            for (let b = 0; b < state.totalBeats; b++) {
                 const beatStartAngle = startOffset + (b * beatAngleSpan);
-                
-                let l1Count = 1;
-                if (customSubdivEnabled) {
-                    l1Count = state.beatSubdivCounts[b] || 1;
-                } else if (subdivEnabled) {
-                    l1Count = subdivCount;
-                }
-
+                let l1Count = state.customSubdivEnabled ? (state.beatSubdivCounts[b] || 1) : (state.subdivEnabled ? state.subdivCount : 1);
                 const l1AngleSpan = beatAngleSpan / l1Count;
 
                 for (let s = 0; s < l1Count; s++) {
                     const subKey = `${b}_${s}`;
                     const l1StartAngle = beatStartAngle + (s * l1AngleSpan);
-
-                    let l2Count = 1;
-                    if (customSubdivEnabled) {
-                        l2Count = state.subSubdivCounts[subKey] || 1;
-                    }
-
+                    let l2Count = state.customSubdivEnabled ? (state.subSubdivCounts[subKey] || 1) : 1;
                     const l2AngleSpan = l1AngleSpan / l2Count;
 
                     for (let ss = 0; ss < l2Count; ss++) {
                         const segKey = `${b}_${s}_${ss}`;
-                        
                         if (state.beatStates[segKey] === undefined) {
                             state.beatStates[segKey] = (s === 0 && ss === 0);
                         }
 
                         const absStartAngle = l1StartAngle + (ss * l2AngleSpan);
                         const absEndAngle = absStartAngle + l2AngleSpan;
+                        const midAngle = absStartAngle + (absEndAngle - absStartAngle) / 2;
 
                         let colorType = 'blue';
                         if (s > 0 && ss === 0) colorType = 'pink';
                         else if (ss > 0) colorType = 'green';
+
+                        // Pre-calculate radii
+                        let rOuter = (s === 0 && ss === 0) ? 166 : 160;
+                        let rInner = 92;
+                        if (colorType === 'pink') {
+                            rOuter = 156;
+                            rInner = 108;
+                        } else if (colorType === 'green') {
+                            rOuter = 150;
+                            rInner = 118;
+                        }
 
                         state.segments.push({
                             beatIndex: b,
@@ -602,46 +578,76 @@
                             colorType: colorType,
                             active: state.beatStates[segKey],
                             startAngle: absStartAngle,
-                            endAngle: absEndAngle
+                            endAngle: absEndAngle,
+                            midAngle: midAngle,
+                            rOuter: rOuter,
+                            rInner: rInner,
+                            isCurrent: false,
+                            // Cached text coordinates for downbeats
+                            textX: 240 + Math.cos(midAngle) * 192,
+                            textY: 240 + Math.sin(midAngle) * 192
                         });
                     }
                 }
             }
+            state.totalSubdivisions = state.segments.length;
         }
 
-        // Render Sequencer Circle
-        function drawSequencer() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Decoupled Lookahead Audio Scheduler (runs every 25ms independently of UI frame rate)
+        function nextNote() {
+            const secondsPerBeat = 60.0 / state.bpm;
+            // Each subdivision slice duration equals beat duration divided by total subdivisions in current cycle
+            const sliceDuration = secondsPerBeat / (state.totalSubdivisions / state.totalBeats);
+            state.nextNoteTime += sliceDuration;
+            state.currentSubdivisionIndex = (state.currentSubdivisionIndex + 1) % state.totalSubdivisions;
+        }
+
+        function scheduleNote() {
+            if (!state.audioCtx) return;
+            // Push notes into audio queue if they are within lookahead window
+            while (state.nextNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                const idx = state.currentSubdivisionIndex;
+                const seg = state.segments[idx];
+                
+                if (seg && seg.active) {
+                    playToneAtTime(seg.isDownbeat, seg.colorType, seg.beatIndex, state.nextNoteTime);
+                }
+                
+                // Save scheduled time to highlight current segment precisely on canvas
+                if (seg) {
+                    seg.scheduledTime = state.nextNoteTime;
+                }
+
+                nextNote();
+            }
+        }
+
+        function scheduler() {
+            if (!state.isPlaying) return;
+            scheduleNote();
+            state.timerID = setTimeout(scheduler, state.lookahead);
+        }
+
+        // Optimized Render Loop synchronized via requestAnimationFrame
+        function animationLoop() {
+            if (!state.isPlaying) return;
+
+            ctx.fillStyle = '#0f0f14';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const outerRadius = 160;
-            const innerRadius = 92;
-            const twoPi = 2 * Math.PI;
+            const currentTime = state.audioCtx ? state.audioCtx.currentTime : 0;
 
-            const totalSegs = state.segments.length;
-            if (totalSegs === 0) return;
-
-            state.segments.forEach((seg, idx) => {
-                const startAngle = seg.startAngle;
-                const endAngle = seg.endAngle;
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                const seg = state.segments[i];
+                
+                // Check if this segment is currently playing based on audio context timing
+                const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + 0.08);
 
                 ctx.beginPath();
-                
-                // Concentric hierarchical radii: Blue (outermost), Pink (middle), Green (innermost)
-                let rOuter = seg.isDownbeat ? outerRadius + 6 : outerRadius;
-                let rInner = innerRadius;
-
-                if (seg.colorType === 'pink') {
-                    rOuter = outerRadius - 4;
-                    rInner = innerRadius + 16;
-                } else if (seg.colorType === 'green') {
-                    rOuter = outerRadius - 10;
-                    rInner = innerRadius + 26;
-                }
-
-                ctx.arc(centerX, centerY, rOuter, startAngle, endAngle, false);
-                ctx.arc(centerX, centerY, rInner, endAngle, startAngle, true);
+                ctx.arc(centerX, centerY, seg.rOuter, seg.startAngle, seg.endAngle, false);
+                ctx.arc(centerX, centerY, seg.rInner, seg.endAngle, seg.startAngle, true);
                 ctx.closePath();
 
                 let fillColor = '#14141c';
@@ -651,10 +657,9 @@
                     else fillColor = '#34d399';
                 }
 
-                if (seg.isCurrent) {
+                if (isCurrent) {
                     fillColor = seg.active ? '#ffffff' : '#333344';
-                }
-                if (idx === hoveredSegmentIndex && state.interactionMode === 'toggle') {
+                } else if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
                     fillColor = seg.active ? '#e0f2fe' : '#222233';
                 }
 
@@ -662,32 +667,28 @@
                 ctx.fill();
 
                 ctx.lineWidth = seg.isDownbeat ? 2 : 1;
-                ctx.strokeStyle = seg.isCurrent ? '#f59e0b' : '#22222c';
+                ctx.strokeStyle = isCurrent ? '#f59e0b' : '#22222c';
                 ctx.stroke();
 
                 if (seg.isDownbeat) {
-                    const midAngle = startAngle + (endAngle - startAngle) / 2;
-                    const textRadius = outerRadius + 32;
-                    const tx = centerX + Math.cos(midAngle) * textRadius;
-                    const ty = centerY + Math.sin(midAngle) * textRadius;
-
                     ctx.fillStyle = seg.active ? '#38bdf8' : '#64748b';
                     ctx.font = '600 13px Inter, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText((seg.beatIndex + 1).toString(), tx, ty);
+                    ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
                 }
-            });
+            }
 
             updateCustomBadges();
+            requestAnimationFrame(animationLoop);
         }
 
-        // Dynamic Hover Badges for Subdivision Mode
         function updateCustomBadges() {
             const container = document.getElementById('customBadgesContainer');
-            container.innerHTML = '';
-
-            if (state.interactionMode !== 'subdivision' || !state.customSubdivEnabled || !hoveredSegmentKey) return;
+            if (state.interactionMode !== 'subdivision' || !state.customSubdivEnabled || !hoveredSegmentKey) {
+                if (container.children.length > 0) container.innerHTML = '';
+                return;
+            }
 
             const containerWidth = canvas.clientWidth;
             const containerHeight = canvas.clientHeight;
@@ -695,61 +696,48 @@
             const centerY = containerHeight / 2;
             
             const seg = state.segments.find(s => s.segKey === hoveredSegmentKey);
-            if (!seg) return;
+            if (!seg) {
+                container.innerHTML = '';
+                return;
+            }
 
-            const midAngle = seg.startAngle + (seg.endAngle - seg.startAngle) / 2;
+            const bx1 = centerX + Math.cos(seg.midAngle) * 104;
+            const by1 = centerY + Math.sin(seg.midAngle) * 104;
+            const bx2 = centerX + Math.cos(seg.midAngle) * 126;
+            const by2 = centerY + Math.sin(seg.midAngle) * 126;
 
-            const badgeRadius1 = 104; 
-            const badgeRadius2 = 126;
-
-            const bx1 = centerX + Math.cos(midAngle) * badgeRadius1;
-            const by1 = centerY + Math.sin(midAngle) * badgeRadius1;
-
-            const bx2 = centerX + Math.cos(midAngle) * badgeRadius2;
-            const by2 = centerY + Math.sin(midAngle) * badgeRadius2;
-
-            const badge1 = document.createElement('button');
-            badge1.className = 'absolute pointer-events-auto px-2 py-0.5 bg-pink-600 hover:bg-pink-500 border border-pink-300 text-white text-[10px] font-bold rounded-md shadow-xl transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 flex items-center gap-1 z-50';
-            badge1.innerHTML = '<span>L1+</span>';
-            badge1.title = `Split Beat into Layer 1 Subdivisions`;
-            badge1.style.left = `${bx1}px`;
-            badge1.style.top = `${by1}px`;
-
-            badge1.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                openPopupForSegment(seg, 1, e);
-            });
-            badge1.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openPopupForSegment(seg, 1, e);
-            });
-            container.appendChild(badge1);
+            let html = `
+                <button id="badgeLayer1" class="absolute pointer-events-auto px-2 py-0.5 bg-pink-600 hover:bg-pink-500 border border-pink-300 text-white text-[10px] font-bold rounded-md shadow-xl transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 flex items-center gap-1 z-50" style="left: ${bx1}px; top: ${by1}px;">
+                    <span>L1+</span>
+                </button>
+            `;
 
             const l1Count = state.beatSubdivCounts[seg.beatIndex] || 1;
             if (l1Count > 1) {
-                const badge2 = document.createElement('button');
-                badge2.className = 'absolute pointer-events-auto px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 border border-emerald-300 text-white text-[10px] font-bold rounded-md shadow-xl transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 flex items-center gap-1 z-50';
-                badge2.innerHTML = '<span>L2+</span>';
-                badge2.title = `Split this Subsegment into Layer 2 Parts`;
-                badge2.style.left = `${bx2}px`;
-                badge2.style.top = `${by2}px`;
+                html += `
+                    <button id="badgeLayer2" class="absolute pointer-events-auto px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 border border-emerald-300 text-white text-[10px] font-bold rounded-md shadow-xl transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 flex items-center gap-1 z-50" style="left: ${bx2}px; top: ${by2}px;">
+                        <span>L2+</span>
+                    </button>
+                `;
+            }
 
-                badge2.addEventListener('pointerdown', (e) => {
-                    e.stopPropagation();
-                    openPopupForSegment(seg, 2, e);
-                });
-                badge2.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openPopupForSegment(seg, 2, e);
-                });
-                container.appendChild(badge2);
+            container.innerHTML = html;
+
+            const btn1 = document.getElementById('badgeLayer1');
+            if (btn1) {
+                btn1.addEventListener('pointerdown', (e) => { e.stopPropagation(); openPopupForSegment(seg, 1, e); });
+                btn1.addEventListener('click', (e) => { e.stopPropagation(); openPopupForSegment(seg, 1, e); });
+            }
+            const btn2 = document.getElementById('badgeLayer2');
+            if (btn2) {
+                btn2.addEventListener('pointerdown', (e) => { e.stopPropagation(); openPopupForSegment(seg, 2, e); });
+                btn2.addEventListener('click', (e) => { e.stopPropagation(); openPopupForSegment(seg, 2, e); });
             }
         }
 
         function openPopupForSegment(seg, layer, e) {
             activePopupSegment = seg;
             activePopupLayer = layer;
-            
             const currentCount = (layer === 1) ? (state.beatSubdivCounts[seg.beatIndex] || 1) : (state.subSubdivCounts[seg.subKey] || 1);
 
             popupBeatTitle.textContent = layer === 1 ? `Layer 1 Split (Beat ${seg.beatIndex + 1})` : `Layer 2 Split (${seg.beatIndex + 1}.${seg.subIndex + 1})`;
@@ -772,8 +760,8 @@
                 } else {
                     state.subSubdivCounts[activePopupSegment.subKey] = val;
                 }
-                initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                if (!state.isPlaying) drawSequencer();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
@@ -789,8 +777,8 @@
                     } else {
                         state.subSubdivCounts[activePopupSegment.subKey] = val;
                     }
-                    initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                    if (!state.isPlaying) drawSequencer();
+                    initSegments();
+                    if (!state.isPlaying) drawStaticSequencer();
                 }
             }
         });
@@ -807,8 +795,8 @@
                     } else {
                         state.subSubdivCounts[activePopupSegment.subKey] = val;
                     }
-                    initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                    if (!state.isPlaying) drawSequencer();
+                    initSegments();
+                    if (!state.isPlaying) drawStaticSequencer();
                 }
             }
         });
@@ -817,71 +805,6 @@
             beatEditorPopup.classList.add('hidden');
         });
 
-        // LAG-FREE TIMING ENGINE: High-Precision AudioContext Delta Clock
-        function animationLoop(timestamp) {
-            if (!state.isPlaying) return;
-
-            initAudioContext();
-            const now = state.audioCtx ? state.audioCtx.currentTime : (timestamp / 1000);
-            
-            if (!state.lastAudioTime) {
-                state.lastAudioTime = now;
-            }
-            const dt = now - state.lastAudioTime;
-            state.lastAudioTime = now;
-
-            const cappedDt = Math.min(dt, 0.1);
-
-            const revsPerSec = (state.bpm / state.totalBeats) / 60;
-            state.currentAngle += (2 * Math.PI) * revsPerSec * cappedDt;
-            
-            const twoPi = 2 * Math.PI;
-            state.currentAngle = state.currentAngle % twoPi;
-
-            let currentNormalizedAngle = state.currentAngle;
-            while (currentNormalizedAngle < 0) currentNormalizedAngle += twoPi;
-            while (currentNormalizedAngle >= twoPi) currentNormalizedAngle -= twoPi;
-
-            let activeSegmentIndex = -1;
-            const startOffset = -3 * Math.PI / 4;
-
-            for (let i = 0; i < state.segments.length; i++) {
-                const seg = state.segments[i];
-                let sStart = seg.startAngle - startOffset;
-                let sEnd = seg.endAngle - startOffset;
-                
-                while (sStart < 0) sStart += twoPi;
-                while (sStart >= twoPi) sStart -= twoPi;
-                while (sEnd < 0) sEnd += twoPi;
-                while (sEnd >= twoPi) sEnd -= twoPi;
-
-                if (sStart < sEnd) {
-                    if (currentNormalizedAngle >= sStart && currentNormalizedAngle < sEnd) {
-                        activeSegmentIndex = i;
-                        break;
-                    }
-                } else {
-                    if (currentNormalizedAngle >= sStart || currentNormalizedAngle < sEnd) {
-                        activeSegmentIndex = i;
-                        break;
-                    }
-                }
-            }
-
-            if (activeSegmentIndex !== -1 && activeSegmentIndex !== lastSegmentIndex) {
-                state.segments.forEach((s, idx) => s.isCurrent = (idx === activeSegmentIndex));
-                const currentSeg = state.segments[activeSegmentIndex];
-                if (currentSeg && currentSeg.active) {
-                    playTone(currentSeg.isDownbeat, currentSeg.colorType, currentSeg.beatIndex);
-                }
-                lastSegmentIndex = activeSegmentIndex;
-            }
-
-            drawSequencer();
-            requestAnimationFrame(animationLoop);
-        }
-
-        // Play / Pause Toggle with Spacebar Shortcut
         function togglePlay() {
             initAudioContext();
             state.isPlaying = !state.isPlaying;
@@ -891,7 +814,10 @@
                 playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
                 playBtn.classList.remove('bg-slate-100', 'text-slate-900', 'hover:bg-white');
                 playBtn.classList.add('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
-                state.lastAudioTime = state.audioCtx ? state.audioCtx.currentTime : null;
+                
+                state.nextNoteTime = state.audioCtx.currentTime + 0.05;
+                state.currentSubdivisionIndex = 0;
+                scheduler();
                 requestAnimationFrame(animationLoop);
             } else {
                 playBtnText.textContent = 'Play';
@@ -899,11 +825,11 @@
                 playBtn.classList.remove('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
                 playBtn.classList.add('bg-slate-100', 'text-slate-900', 'hover:bg-white');
                 
-                state.currentAngle = 0;
-                lastSegmentIndex = -1;
-                state.lastAudioTime = null;
-                state.segments.forEach(s => s.isCurrent = false);
-                drawSequencer();
+                clearTimeout(state.timerID);
+                for (let i = 0, len = state.segments.length; i < len; i++) {
+                    state.segments[i].scheduledTime = null;
+                }
+                drawStaticSequencer();
             }
         }
 
@@ -916,7 +842,49 @@
             }
         });
 
-        // Controls Event Handlers
+        function drawStaticSequencer() {
+            ctx.fillStyle = '#0f0f14';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                const seg = state.segments[i];
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, seg.rOuter, seg.startAngle, seg.endAngle, false);
+                ctx.arc(centerX, centerY, seg.rInner, seg.endAngle, seg.startAngle, true);
+                ctx.closePath();
+
+                let fillColor = '#14141c';
+                if (seg.active) {
+                    if (seg.colorType === 'blue') fillColor = '#38bdf8';
+                    else if (seg.colorType === 'pink') fillColor = '#f472b6';
+                    else fillColor = '#34d399';
+                }
+                if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
+                    fillColor = seg.active ? '#e0f2fe' : '#222233';
+                }
+
+                ctx.fillStyle = fillColor;
+                ctx.fill();
+
+                ctx.lineWidth = seg.isDownbeat ? 2 : 1;
+                ctx.strokeStyle = '#22222c';
+                ctx.stroke();
+
+                if (seg.isDownbeat) {
+                    ctx.fillStyle = seg.active ? '#38bdf8' : '#64748b';
+                    ctx.font = '600 13px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                }
+            }
+            updateCustomBadges();
+        }
+
+        // Control Listeners
         bpmSlider.addEventListener('input', (e) => {
             state.bpm = parseInt(e.target.value);
             bpmText.textContent = state.bpm;
@@ -945,8 +913,8 @@
             state.totalBeats = parseInt(e.target.value);
             beatsText.textContent = state.totalBeats;
             ensurePerBeatSettings();
-            initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-            if (!state.isPlaying) drawSequencer();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
         decBeatsBtn.addEventListener('click', () => {
@@ -955,8 +923,8 @@
                 beatsSlider.value = state.totalBeats;
                 beatsText.textContent = state.totalBeats;
                 ensurePerBeatSettings();
-                initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                if (!state.isPlaying) drawSequencer();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
@@ -966,15 +934,14 @@
                 beatsSlider.value = state.totalBeats;
                 beatsText.textContent = state.totalBeats;
                 ensurePerBeatSettings();
-                initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                if (!state.isPlaying) drawSequencer();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
         subdivCheckbox.addEventListener('change', (e) => {
             state.subdivEnabled = e.target.checked;
             if (state.subdivEnabled) {
-                // Turning on Uniform Subdivision automatically turns off Custom Recursive Subdivisions
                 if (state.customSubdivEnabled) {
                     state.customSubdivEnabled = false;
                     customSubdivCheckbox.checked = false;
@@ -998,15 +965,15 @@
                 incSubdivBtn.setAttribute('disabled', 'true');
                 subdivSlider.setAttribute('disabled', 'true');
             }
-            initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-            if (!state.isPlaying) drawSequencer();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
         subdivSlider.addEventListener('input', (e) => {
             state.subdivCount = parseInt(e.target.value);
             subdivText.textContent = state.subdivCount;
-            initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-            if (!state.isPlaying) drawSequencer();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
         decSubdivBtn.addEventListener('click', () => {
@@ -1014,8 +981,8 @@
                 state.subdivCount--;
                 subdivSlider.value = state.subdivCount;
                 subdivText.textContent = state.subdivCount;
-                initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                if (!state.isPlaying) drawSequencer();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
@@ -1024,8 +991,8 @@
                 state.subdivCount++;
                 subdivSlider.value = state.subdivCount;
                 subdivText.textContent = state.subdivCount;
-                initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-                if (!state.isPlaying) drawSequencer();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
@@ -1049,8 +1016,8 @@
                 modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
                 instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause.';
             }
-            initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-            if (!state.isPlaying) drawSequencer();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
         resetStandardBtn.addEventListener('click', () => {
@@ -1089,42 +1056,36 @@
             canvasContainer.className = "relative w-88 h-88 md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
 
             ensurePerBeatSettings();
-            initSegments(4, false, 1, false);
-            if (!state.isPlaying) drawSequencer();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
-        // Bulk Control Buttons Logic
-        const allOnBtn = document.getElementById('allOnBtn');
-        const allOffBtn = document.getElementById('allOffBtn');
-        const clearSubdivBtn = document.getElementById('clearSubdivBtn');
-
-        allOnBtn.addEventListener('click', () => {
-            state.segments.forEach(seg => {
-                seg.active = true;
-                state.beatStates[seg.segKey] = true;
-            });
-            if (!state.isPlaying) drawSequencer();
+        document.getElementById('allOnBtn').addEventListener('click', () => {
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                state.segments[i].active = true;
+                state.beatStates[state.segments[i].segKey] = true;
+            }
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
-        allOffBtn.addEventListener('click', () => {
-            state.segments.forEach(seg => {
-                seg.active = false;
-                state.beatStates[seg.segKey] = false;
-            });
-            if (!state.isPlaying) drawSequencer();
+        document.getElementById('allOffBtn').addEventListener('click', () => {
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                state.segments[i].active = false;
+                state.beatStates[state.segments[i].segKey] = false;
+            }
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
-        clearSubdivBtn.addEventListener('click', () => {
-            state.segments.forEach(seg => {
-                if (!seg.isDownbeat) {
-                    seg.active = false;
-                    state.beatStates[seg.segKey] = false;
+        document.getElementById('clearSubdivBtn').addEventListener('click', () => {
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                if (!state.segments[i].isDownbeat) {
+                    state.segments[i].active = false;
+                    state.beatStates[state.segments[i].segKey] = false;
                 }
-            });
-            if (!state.isPlaying) drawSequencer();
+            }
+            if (!state.isPlaying) drawStaticSequencer();
         });
 
-        // Sound Settings Menu Toggle
         toggleSoundsMenu.addEventListener('click', () => {
             soundsMenuContent.classList.toggle('hidden');
             soundsChevron.classList.toggle('rotate-180');
@@ -1142,21 +1103,15 @@
             subdivPitchVal.textContent = state.subdivision.pitch;
         });
 
-        // Spam-protected Obfuscated Email Copy Functionality
+        // Email copy
         const copyEmailBtn = document.getElementById('copyEmailBtn');
         const copyEmailText = document.getElementById('copyEmailText');
         const obfuscatedEmailDisplay = document.getElementById('obfuscatedEmailDisplay');
 
         if (copyEmailBtn) {
             copyEmailBtn.addEventListener('click', () => {
-                // String parts assembled dynamically on click to prevent automated scrapers
-                const uPart = "josiahghudock";
-                const dPart = "gmail.com";
-                const fullEmail = uPart + "@" + dPart;
-
-                if (obfuscatedEmailDisplay) {
-                    obfuscatedEmailDisplay.textContent = fullEmail;
-                }
+                const fullEmail = "josiahghudock" + "@" + "gmail.com";
+                if (obfuscatedEmailDisplay) obfuscatedEmailDisplay.textContent = fullEmail;
 
                 const textarea = document.createElement('textarea');
                 textarea.value = fullEmail;
@@ -1164,24 +1119,19 @@
                 textarea.select();
                 try {
                     document.execCommand('copy');
-                    if (copyEmailText) {
-                        copyEmailText.textContent = "Copied!";
-                    }
+                    if (copyEmailText) copyEmailText.textContent = "Copied!";
                     copyEmailBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
                     setTimeout(() => {
-                        if (copyEmailText) {
-                            copyEmailText.textContent = "Copy Email";
-                        }
+                        if (copyEmailText) copyEmailText.textContent = "Copy Email";
                         copyEmailBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
                     }, 2000);
                 } catch (err) {
-                    console.debug('Failed to copy text', err);
+                    console.debug('Copy failed', err);
                 }
                 document.body.removeChild(textarea);
             });
         }
 
-        // Hit Testing & Canvas Interaction
         function getSegmentFromEvent(e) {
             const rect = canvas.getBoundingClientRect();
             const scaleX = canvas.width / rect.width;
@@ -1195,12 +1145,7 @@
             const dy = y - centerY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            const outerRadius = 175;
-            const innerRadius = 92;
-
-            if (distance < innerRadius || distance > outerRadius) {
-                return null;
-            }
+            if (distance < 80 || distance > 190) return null;
 
             let angle = Math.atan2(dy, dx);
             const startOffset = -3 * Math.PI / 4;
@@ -1208,7 +1153,8 @@
             if (relativeAngle < 0) relativeAngle += 2 * Math.PI;
             while (relativeAngle >= 2 * Math.PI) relativeAngle -= 2 * Math.PI;
 
-            for (let seg of state.segments) {
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                const seg = state.segments[i];
                 let sStart = seg.startAngle - startOffset;
                 let sEnd = seg.endAngle - startOffset;
                 
@@ -1231,7 +1177,7 @@
             if (seg) {
                 seg.active = !seg.active;
                 state.beatStates[seg.segKey] = seg.active;
-                drawSequencer();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
@@ -1241,15 +1187,14 @@
             if (newHoverKey !== hoveredSegmentKey) {
                 hoveredSegmentKey = newHoverKey;
                 hoveredSegmentIndex = seg ? state.segments.indexOf(seg) : null;
-                if (!state.isPlaying) drawSequencer();
+                if (!state.isPlaying) drawStaticSequencer();
             }
         });
 
-        // Initialize on load
         window.onload = function() {
             ensurePerBeatSettings();
-            initSegments(state.totalBeats, state.subdivEnabled, state.subdivCount, state.customSubdivEnabled);
-            drawSequencer();
+            initSegments();
+            drawStaticSequencer();
         };
     </script>
 </body>
