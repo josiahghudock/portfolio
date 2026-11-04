@@ -59,7 +59,7 @@
     <header class="w-full max-w-xl text-center py-4 flex flex-col items-center gap-2">
         <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
         <p class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
-        <div id="flashingLightsNotice" class="mt-1 px-3 py-1 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-[11px] font-medium rounded-lg flex items-center justify-between gap-3 shadow-sm cursor-pointer transition-all group">
+        <div id="flashingLightsNotice" class="mt-1 px-3 py-1 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-[11px] font-medium rounded-lg flex items-center justify-between gap-3 shadow-sm cursor-pointer transition-all group">
             <div class="flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                 <span id="noticeText">Notice: Contains flashing lights and visuals during playback</span>
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-        <!-- Canvas Container (Fix #2: w-[352px] h-[352px] instead of invalid w-88 h-88) -->
+        <!-- Canvas Container -->
         <div id="canvasContainer" class="relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]">
             <canvas id="sequencerCanvas" width="480" height="480" class="w-full h-full cursor-pointer rounded-full shadow-2xl bg-[#0f0f14] border border-borderSubtle origin-center"></canvas>
             
@@ -351,7 +351,6 @@
     <!-- Footer -->
     <footer class="w-full max-w-xl text-center py-4 text-xs text-slate-500 flex flex-col gap-1.5">
         <div>The 'Nome v1.0</div>
-
     </footer>
 
     <!-- Optimized Application Logic -->
@@ -604,7 +603,6 @@
             }
         }
 
-        // Fix #4: Crisper Audio Envelopes (Zero-Click Attack)
         function playToneAtTime(isDownbeat, colorType, beatIndex, time) {
             try {
                 if (!state.audioCtx) return;
@@ -636,7 +634,6 @@
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, time);
 
-                // Start near zero and ramp linearly over 4ms to eliminate speaker click/pop
                 gain.gain.setValueAtTime(0.0001, time);
                 gain.gain.linearRampToValueAtTime(Math.max(0.0001, vol), time + 0.004);
                 gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.1);
@@ -688,7 +685,6 @@
                 if (counts.length > 0) maxSubdivs = Math.max(...counts);
             }
 
-            // Fix #2: Replace w-88 h-88 with w-[352px] h-[352px]
             if (maxSubdivs >= 10) {
                 canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.12]";
             } else if (maxSubdivs >= 5) {
@@ -711,7 +707,8 @@
                     for (let ss = 0; ss < l2Count; ss++) {
                         const segKey = `${b}_${s}_${ss}`;
                         if (state.beatStates[segKey] === undefined) {
-                            state.beatStates[segKey] = (s === 0 && ss === 0);
+                            // Automatically toggled on by default for all segments (downbeats and subdivisions)
+                            state.beatStates[segKey] = true;
                         }
 
                         const absStartAngle = l1StartAngle + (ss * l2AngleSpan);
@@ -777,7 +774,6 @@
                 }
             }
 
-            // Refresh custom badges only when segments are re-initialized (Fix #3)
             updateCustomBadges();
         }
 
@@ -826,7 +822,6 @@
             state.timerID = setTimeout(scheduler, state.lookahead);
         }
 
-        // Fix #3: Removed updateCustomBadges() from animationLoop() to prevent 60fps DOM thrashing
         function animationLoop() {
             if (!state.isPlaying) return;
 
@@ -955,7 +950,6 @@
             }
         }
 
-        // Fix #1: Position fixed #beatEditorPopup using viewport coordinates (e.clientX / e.clientY)
         function openPopupForSegment(seg, layer, e) {
             activePopupSegment = seg;
             activePopupLayer = layer;
@@ -966,7 +960,7 @@
             popupSubdivVal.textContent = currentCount;
             popupSlider.value = currentCount;
 
-            const popupWidth = 208; // w-52
+            const popupWidth = 208;
             const popupHeight = 128;
             const leftPos = Math.min(window.innerWidth - popupWidth - 12, Math.max(12, e.clientX - popupWidth / 2));
             const topPos = Math.min(window.innerHeight - popupHeight - 12, Math.max(12, e.clientY - popupHeight - 12));
@@ -1030,7 +1024,6 @@
             beatEditorPopup.classList.add('hidden');
         });
 
-        // Allow clicking outside or pressing Escape to close popup cleanly
         document.addEventListener('pointerdown', (e) => {
             if (!beatEditorPopup.classList.contains('hidden')) {
                 if (!beatEditorPopup.contains(e.target) && !e.target.closest('#badgeLayer1') && !e.target.closest('#badgeLayer2')) {
@@ -1395,7 +1388,6 @@
             hoveredSegmentIndex = null;
             hoveredPolyIndex = null;
 
-            // Fix #2: Use valid Tailwind arbitrary dimensions w-[352px] h-[352px]
             canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
 
             ensurePerBeatSettings();
@@ -1561,7 +1553,6 @@
         }
 
         canvas.addEventListener('click', (e) => {
-            // CRITICAL SAFEGUARD: Prevent accidental toggling when in Subdivision Mode
             if (state.interactionMode === 'subdivision') {
                 return; 
             }
@@ -1577,7 +1568,6 @@
             }
         });
 
-        // Fix #3: Update custom badges only when hoveredSegmentKey changes
         canvas.addEventListener('mousemove', (e) => {
             const seg = getSegmentFromEvent(e);
             const newHoverKey = (seg && !seg.isPoly) ? seg.segKey : null;
