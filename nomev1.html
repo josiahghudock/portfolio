@@ -962,7 +962,7 @@
             const currentCount = (layer === 1) ? (state.beatSubdivCounts[seg.beatIndex] || 1) : (state.subSubdivCounts[seg.subKey] || 1);
 
             popupBeatTitle.textContent = layer === 1 ? `Layer 1 Split (Beat ${seg.beatIndex + 1})` : `Layer 2 Split (${seg.beatIndex + 1}.${seg.subIndex + 1})`;
-            popupLayerDesc.textContent = layer === 1 ? 'Splits beat into equal pink parts (up to 19)' : 'Splits subsegment into equal green parts';
+            popupLayerDesc.textContent = layer === 1 ? 'Splits beat into equal pink parts' : 'Splits subsegment into equal green parts';
             popupSubdivVal.textContent = currentCount;
             popupSlider.value = currentCount;
 
