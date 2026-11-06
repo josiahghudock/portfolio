@@ -455,7 +455,15 @@
 
         <!-- About Section -->
         <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-4 text-xs">
-            <h2 class="text-sm font-bold tracking-wider text-slate-200 uppercase">About The 'Nome</h2>
+            <div class="flex items-center justify-between gap-2">
+                <h2 class="text-sm font-bold tracking-wider text-slate-200 uppercase">About The 'Nome</h2>
+                <button id="learnMoreBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    <span>Learn More</span>
+                </button>
+            </div>
             <p class="text-slate-400 leading-relaxed">
                 The 'Nome is a free user-friendly online metronome with advanced capabilities. It is built specifically for practicing odd-time, polyrhythmic, odd-tuplet, or nested tuplet rhythms. Ultra-Nerd mode allows for "irrational" time signatures and extremely precise sequencing. If you found this tool useful, have questions, or suggestions please let me know!
             </p>
@@ -468,6 +476,215 @@
             </div>
         </div>
     </main>
+
+    <!-- Learn More Article View -->
+    <article id="articleView" class="hidden w-full max-w-3xl my-auto py-6 flex-col gap-6 text-slate-300">
+        <!-- Sticky / Top Navigation Bar -->
+        <div class="flex items-center justify-between bg-cardBg border border-borderSubtle rounded-2xl px-5 py-4 shadow-xl">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_8px_rgba(56,189,248,0.6)]"></span>
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome — Guide & Examples</span>
+            </div>
+            <button id="backToNomeTopBtn" type="button" class="px-3.5 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>Back to The 'Nome</span>
+            </button>
+        </div>
+
+        <!-- Main Article Body -->
+        <div class="bg-cardBg border border-borderSubtle rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col gap-8 text-sm leading-relaxed">
+            
+            <!-- Section: What is The 'Nome? -->
+            <section class="flex flex-col gap-3">
+                <h2 class="text-lg md:text-xl font-bold text-slate-100 tracking-wide">What is The 'Nome?</h2>
+                <p class="text-slate-300">
+                    The 'Nome is a tool musicians can use to work on their timing. The metronome keeps perfect time. Musicians can compare their timing to the machine's or use it as a foundation for the construction of their own rhythms.
+                </p>
+            </section>
+
+            <!-- Section: Is it Just Another Metronome? -->
+            <section class="flex flex-col gap-3 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-slate-100 tracking-wide">Is it Just Another Metronome?</h2>
+                <p class="text-slate-300">
+                    No! The 'Nome takes many features available from different apps and combines it into one free user-friendly tool. Metronomes can be built for different purposes. The 'Nome takes a more mathematical approach to rhythm. It allows for precise timing controls for advanced musicians, including features for polyrhythms, nested tuplets, and irrational time signatures. In this regard, The 'Nome is unmatched in its technicality.
+                </p>
+                <p class="text-slate-300">
+                    A traditional metronome sounds at every beat, but a beat sequencer like The 'Nome allows musicians to construct custom rhythmic sequences to use as a metronomic reference.
+                </p>
+            </section>
+
+            <!-- Section: Using The 'Nome -->
+            <section class="flex flex-col gap-4 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-slate-100 tracking-wide">Using The 'Nome:</h2>
+
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-accent/40">
+                    <h3 class="text-base font-semibold text-accent">The Basics:</h3>
+                    <p class="text-slate-300">
+                        First, set your favorite BPM tempo. Hitting play, The 'Nome acts as a traditional metronome would, counting off bars of 4 at the chosen tempo.
+                    </p>
+                    <p class="text-slate-300">
+                        To customize your metronome, you can toggle certain beats on or off by clicking on their spot on the circle. You can also adjust the number of beats, allowing for all X/4 standard time signatures.
+                    </p>
+                    <p class="text-slate-300">
+                        If you want to adjust the pitch or timbre of the sound, you can do so in Sound Settings &amp; Synthesis. You can also adjust the volume of each individual beat, for instance if you wanted an accent on the first beat.
+                    </p>
+                    <div class="p-3.5 rounded-xl bg-sky-500/10 border border-sky-500/30 text-xs text-sky-200 flex items-center gap-2.5">
+                        <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold uppercase tracking-wider shrink-0">Pro Tip</span>
+                        <span>If you ever get lost, the <strong>Reset 4/4</strong> button will bring you right back to the beginning.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Subdivision -->
+            <section class="flex flex-col gap-5 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-slate-100 tracking-wide">Subdivision:</h2>
+
+                <!-- Uniform Subdivision -->
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-sky-400/40">
+                    <h3 class="text-base font-semibold text-sky-400">Uniform Subdivision:</h3>
+                    <p class="text-slate-300">
+                        By allowing uniform subdivision, you can further split each beat into your desired number of subdivisions. For instance, we can create 6/8 time signatures like this:
+                    </p>
+                    <div>
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjoyLCJzZSI6MSwic2MiOjMsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjp0cnVlLCIxXzFfMCI6dHJ1ZSwiMF8yXzAiOnRydWUsIjFfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8zXzAiOnRydWV9LCJhZGUiOjEsInBicyI6eyIwIjp7InBpdGNoIjo1NzUsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W10sImJjZSI6MCwiYmNzIjp7fSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjI1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/40 text-sky-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open in The 'Nome: 6/8 Time Signature</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Swing -->
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-pink-400/40">
+                    <h3 class="text-base font-semibold text-pink-400">Swing:</h3>
+                    <p class="text-slate-300">
+                        Instead of playing strictly "on-the-grid", many musicians intentionally "swing" their rhythms by playing slightly before or after where a note should lie mathematically. The 'Nome is built for musicians who want to use a more precise swing through use of various tuplets. There are several degrees of swing that musicians can use in their performance. For example, consider the difference between this triplet swing
+                    </p>
+                    <div class="flex flex-wrap items-center gap-2.5 my-1">
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjo0LCJzZSI6MSwic2MiOjMsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIyXzFfMCI6ZmFsc2UsIjNfMV8wIjpmYWxzZSwiMF8yXzAiOmZhbHNlLCIxXzJfMCI6dHJ1ZSwiMl8yXzAiOmZhbHNlLCIzXzJfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo1OTcsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fX0sIm5iIjpbXSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDIwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6Mzk2LCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/40 text-pink-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open in The 'Nome: Triplet Swing</span>
+                        </button>
+                    </div>
+                    <p class="text-slate-300">and this septuplet swing:</p>
+                    <div class="flex flex-wrap items-center gap-2.5 my-1">
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjo0LCJzZSI6MSwic2MiOjcsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIyXzFfMCI6ZmFsc2UsIjNfMV8wIjpmYWxzZSwiMF8yXzAiOmZhbHNlLCIxXzJfMCI6ZmFsc2UsIjJfMl8wIjpmYWxzZSwiM18yXzAiOmZhbHNlLCIwXzNfMCI6ZmFsc2UsIjFfM18wIjpmYWxzZSwiMl8zXzAiOmZhbHNlLCIzXzNfMCI6ZmFsc2UsIjBfNF8wIjpmYWxzZSwiMV80XzAiOnRydWUsIjJfNF8wIjpmYWxzZSwiM180XzAiOnRydWUsIjBfNV8wIjpmYWxzZSwiMV81XzAiOmZhbHNlLCIyXzVfMCI6ZmFsc2UsIjNfNV8wIjpmYWxzZSwiMF82XzAiOmZhbHNlLCIxXzZfMCI6ZmFsc2UsIjJfNl8wIjpmYWxzZSwiM182XzAiOmZhbHNlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo1OTcsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0MjAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozOTYsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/40 text-pink-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open in The 'Nome: Septuplet Swing</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Recursive Subdivision (Advanced) -->
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-emerald-400/40">
+                    <h3 class="text-base font-semibold text-emerald-400">Custom Recursive Subdivision (Advanced):</h3>
+                    <p class="text-slate-300">
+                        The 'Nome is a great tool for practicing transitioning between different note rates. With Custom Subdivision, you can set a different subdivision for each beat. For example, you could practice "speeding up" in a metric way by playing cycling through the tuplets:
+                    </p>
+                    <div>
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo1NywidGIiOjgsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMSI6MiwiMiI6MywiMyI6NCwiNCI6NSwiNSI6NiwiNiI6NywiNyI6OH0sInNzYyI6e30sImJzIjp7IjBfMF8wIjp0cnVlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjp0cnVlLCI0XzBfMCI6dHJ1ZSwiNV8wXzAiOnRydWUsIjZfMF8wIjp0cnVlLCI3XzBfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjJfMV8wIjp0cnVlLCIyXzJfMCI6dHJ1ZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzNfMCI6dHJ1ZSwiNF8xXzAiOnRydWUsIjRfMl8wIjp0cnVlLCI0XzNfMCI6dHJ1ZSwiNF80XzAiOnRydWUsIjVfMV8wIjp0cnVlLCI1XzJfMCI6dHJ1ZSwiNV8zXzAiOnRydWUsIjVfNF8wIjp0cnVlLCI1XzVfMCI6dHJ1ZSwiNl8xXzAiOnRydWUsIjZfMl8wIjp0cnVlLCI2XzNfMCI6dHJ1ZSwiNl80XzAiOnRydWUsIjZfNV8wIjp0cnVlLCI2XzZfMCI6dHJ1ZSwiN18xXzAiOnRydWUsIjdfMl8wIjp0cnVlLCI3XzNfMCI6dHJ1ZSwiN180XzAiOnRydWUsIjdfNV8wIjp0cnVlLCI3XzZfMCI6dHJ1ZSwiN183XzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbXSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open in The 'Nome: Cycling Through Tuplets (1 to 8)</span>
+                        </button>
+                    </div>
+                    <p class="text-slate-300">
+                        A nested tuplet is just "a tuplet within a tuplet". Technically speaking, most musicians are very comfortable with at least one type of nested tuplet. Indeed, sixteenth notes can be thought of as "4-lets" or equivalently as "2-lets" nested inside "2-lets". Likewise, sextuplets can be thought of as "3-lets" nested within "2-lets". Check it out here!:
+                    </p>
+                    <div>
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6NCwiMSI6MiwiMiI6NiwiMyI6Mn0sInNzYyI6eyIxXzAiOjIsIjFfMSI6MiwiM18wIjozLCIzXzEiOjN9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjFfMF8xIjp0cnVlLCIxXzFfMSI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6dHJ1ZSwiMl80XzAiOnRydWUsIjJfNV8wIjp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open in The 'Nome: Nested Tuplets Comparison</span>
+                        </button>
+                    </div>
+                    <p class="text-slate-300">
+                        The 'Nome allows for the construction of more complicated nested tuplets. To use it, first activate Custom Recursive Subdivisions. Above the circle, you can now switch between toggle mode (turning beats on or off) and subdivision mode. In subdivision mode, you can click the L1 box on any beat to select your desired subdivision of that beat. Going further, you can click the L2 box on any of those subdivisions to add a second layer of subdivision.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section: Polyrhythm -->
+            <section class="flex flex-col gap-3 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-amber-400 tracking-wide">Polyrhythm:</h2>
+                <p class="text-slate-300">
+                    Colloquially, a polyrhythm occurs when two different rhythms are played against each other. Strictly speaking, a x:y polyrhythm occurs when x beats are played against y beats, all equally spaced, and such that the two rhythms align on the first beat. The most popular polyrhythm is 3:2, the so-called "hemiola". The 'Nome allows for both polyrhythmic and polymetric constructions.
+                </p>
+                <p class="text-slate-300">
+                    By activating polyrhythm and selecting a beat count, you can instantly superimpose any number of beats over your existing beat sequence.
+                </p>
+            </section>
+
+            <!-- Section: Ultra-Nerd Mode -->
+            <section class="flex flex-col gap-4 pt-6 border-t border-borderSubtle/60">
+                <div class="flex items-center gap-2.5">
+                    <h2 class="text-lg md:text-xl font-bold text-purple-300 tracking-wide">Ultra-Nerd Mode:</h2>
+                </div>
+                <p class="text-slate-300">
+                    Ultra-Nerd Mode extends the functionality of The 'Nome to allow for greater polyrhythmic abilities and use of non-dyadic time signatures. If you are in this deep, I'm just assuming you know what you're doing theoretically.
+                </p>
+                <p class="text-slate-300">
+                    You can input your rhythm block by block in the following way: Set the duration in terms of "the time it takes to play y notes as r-lets" for parameters y and r. Then choose how many notes to squeeze into that duration (equal to y by default).
+                </p>
+                <p class="text-slate-300">
+                    You can also choose to turn on the Beat Click, which is like the "meta-metronome" to your rhythm. Because this function allows for non-dyadic time signatures, the last beat of your pulse might be cut short, as expected.
+                </p>
+                <p class="text-slate-300 italic">
+                    Nested subdivisions are still available here, if you're brave...
+                </p>
+
+                <div class="flex flex-col gap-4 mt-2 p-4 rounded-2xl bg-[#16161e] border border-purple-500/30">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-purple-300">Some examples using these more advanced features:</h3>
+
+                    <!-- Example 1: Monomyth -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
+                        <div class="text-xs text-slate-200">
+                            <a href="https://youtu.be/-xUqa6pYqnY?si=KmOeJbd2oRfGGOqA&t=85" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
+                                <span>This run</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <span> in <strong>Monomyth</strong> by Animals as Leaders:</span>
+                        </div>
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNTAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI5Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjExIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjE0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W3siaWQiOjEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjozLCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo1LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6NiwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6NywibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6OCwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjksIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEwLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEyLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTMsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjE0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjoxNSwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZSwiY2xpY2tfNyI6dHJ1ZSwiY2xpY2tfOCI6dHJ1ZSwiY2xpY2tfOSI6dHJ1ZSwiY2xpY2tfMTAiOnRydWUsImNsaWNrXzExIjp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open Monomyth Run</span>
+                        </button>
+                    </div>
+
+                    <!-- Example 2: Cool 7 -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
+                        <div class="text-xs text-slate-200">
+                            <a href="https://youtu.be/Hmu8X0FmcHo?si=jlyM6N_SQaDwwBCh&t=166" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
+                                <span>This Groove</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <span> in <strong>Cool 7</strong> by Sungazer:</span>
+                        </div>
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNDAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjozLCJuIjo2LCJyIjo0LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6NCwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjUsIm4iOjEsInIiOjEsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZX0sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open Cool 7 Groove</span>
+                        </button>
+                    </div>
+
+                    <!-- Example 3: Car Bomb -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
+                        <div class="text-xs text-slate-200">
+                            <a href="https://youtu.be/DqiVp0Nx5I4?si=Yh714d4mFgyzA0Jc&t=79" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
+                                <span>This groove</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <span> in <strong>Lights Out</strong> by Car Bomb:</span>
+                        </div>
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open Lights Out Groove</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Saving Your Work & Sign-off -->
+        </div>
+    </article>
 
     <!-- Subdivision Popup Modal (Used in both Circular & Ultra-nerd Mode) -->
     <div id="beatEditorPopup" class="fixed hidden bg-[#16161c] border border-borderSubtle rounded-xl p-3 shadow-2xl flex flex-col gap-2 z-50 text-xs w-52 backdrop-blur-md">
@@ -1395,6 +1612,11 @@
                 // Circle '+' button after every block (between adjacent blocks and at the right end)
                 nerdTrackContent.appendChild(createInsertPlusButton(bIdx + 1));
             });
+
+            // Add a trailing spacer to prevent the last plus button from being cut off
+            const trailingSpacer = document.createElement('div');
+            trailingSpacer.className = 'w-8 shrink-0 pointer-events-none';
+            nerdTrackContent.appendChild(trailingSpacer);
         }
 
         function openNerdSubdivPopup(block, noteIndex, e) {
@@ -1890,7 +2112,7 @@
                         const targetScroll = offsetInsideContainer - (containerRect.width / 2) + (elRect.width / 2);
                         nerdScrollContainer.scrollTo({
                             left: Math.max(0, targetScroll),
-                            behavior: 'smooth'
+                            behavior: 'auto'
                         });
                     }
                 }
@@ -2682,30 +2904,94 @@
         const copyEmailBtn = document.getElementById('copyEmailBtn');
         const copyEmailText = document.getElementById('copyEmailText');
         const obfuscatedEmailDisplay = document.getElementById('obfuscatedEmailDisplay');
+        const articleCopyEmailBtn = document.getElementById('articleCopyEmailBtn');
+        const articleCopyEmailText = document.getElementById('articleCopyEmailText');
+        const articleObfuscatedEmailDisplay = document.getElementById('articleObfuscatedEmailDisplay');
+
+        function handleCopyAuthorEmail(btnEl, textEl, displayEl) {
+            const fullEmail = "josiahghudock" + "@" + "gmail.com";
+            if (displayEl) displayEl.textContent = fullEmail;
+
+            const textarea = document.createElement('textarea');
+            textarea.value = fullEmail;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                if (textEl) textEl.textContent = "Copied!";
+                if (btnEl) btnEl.classList.add('text-emerald-400', 'border-emerald-500/50');
+                setTimeout(() => {
+                    if (textEl) textEl.textContent = "Copy Email";
+                    if (btnEl) btnEl.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                }, 2000);
+            } catch (err) {
+                console.debug('Copy failed', err);
+            }
+            document.body.removeChild(textarea);
+        }
 
         if (copyEmailBtn) {
             copyEmailBtn.addEventListener('click', () => {
-                const fullEmail = "josiahghudock" + "@" + "gmail.com";
-                if (obfuscatedEmailDisplay) obfuscatedEmailDisplay.textContent = fullEmail;
-
-                const textarea = document.createElement('textarea');
-                textarea.value = fullEmail;
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    if (copyEmailText) copyEmailText.textContent = "Copied!";
-                    copyEmailBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
-                    setTimeout(() => {
-                        if (copyEmailText) copyEmailText.textContent = "Copy Email";
-                        copyEmailBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
-                    }, 2000);
-                } catch (err) {
-                    console.debug('Copy failed', err);
-                }
-                document.body.removeChild(textarea);
+                handleCopyAuthorEmail(copyEmailBtn, copyEmailText, obfuscatedEmailDisplay);
             });
         }
+
+        if (articleCopyEmailBtn) {
+            articleCopyEmailBtn.addEventListener('click', () => {
+                handleCopyAuthorEmail(articleCopyEmailBtn, articleCopyEmailText, articleObfuscatedEmailDisplay);
+            });
+        }
+
+        /* ==========================================
+         * LEARN MORE ARTICLE VIEW NAVIGATION
+         * ========================================== */
+        const learnMoreBtn = document.getElementById('learnMoreBtn');
+        const articleView = document.getElementById('articleView');
+        const backToNomeTopBtn = document.getElementById('backToNomeTopBtn');
+        const backToNomeBottomBtn = document.getElementById('backToNomeBottomBtn');
+        const headerActionButtons = resetStandardBtn ? resetStandardBtn.parentElement : null;
+
+        function openArticleView() {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+            closeBlockModal();
+            mainContainer.classList.add('hidden');
+            if (headerActionButtons) headerActionButtons.classList.add('hidden');
+            articleView.classList.remove('hidden');
+            articleView.classList.add('flex');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeArticleView() {
+            articleView.classList.add('hidden');
+            articleView.classList.remove('flex');
+            mainContainer.classList.remove('hidden');
+            if (headerActionButtons) headerActionButtons.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        if (learnMoreBtn) {
+            learnMoreBtn.addEventListener('click', openArticleView);
+        }
+        if (backToNomeTopBtn) {
+            backToNomeTopBtn.addEventListener('click', closeArticleView);
+        }
+        if (backToNomeBottomBtn) {
+            backToNomeBottomBtn.addEventListener('click', closeArticleView);
+        }
+
+        document.querySelectorAll('.preset-hash-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const hash = btn.getAttribute('data-preset-hash');
+                closeArticleView();
+                if (hash) {
+                    if (setupHashInput) setupHashInput.value = hash;
+                    loadSetupFromHash(hash);
+                }
+            });
+        });
 
         /* ==========================================
          * HASH SAVE & LOAD SYSTEM
