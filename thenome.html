@@ -1,0 +1,2807 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 'Nome - Precision Beat Sequencer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0a0a0c',
+                        cardBg: '#121216',
+                        borderSubtle: '#22222c',
+                        accent: '#38bdf8',
+                        accentGlow: 'rgba(56, 189, 248, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0c;
+            color: #f3f4f6;
+            user-select: none;
+            -webkit-font-smoothing: antialiased;
+        }
+        input[type=range] {
+            touch-action: pan-y;
+            cursor: default;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: transform 0.1s ease;
+        }
+        input[type=range]:hover::-webkit-slider-thumb {
+            transform: scale(1.2);
+        }
+        canvas {
+            touch-action: manipulation;
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+        /* Custom scrollbar for Ultra-nerd horizontal sequencer */
+        .nerd-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+        .nerd-scroll::-webkit-scrollbar-track {
+            background: #0f0f14;
+            border-radius: 9999px;
+        }
+        .nerd-scroll::-webkit-scrollbar-thumb {
+            background: #262636;
+            border-radius: 9999px;
+        }
+        .nerd-scroll::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+        /* Subtle shimmering effect for Activate Ultra-nerd Mode button */
+        @keyframes subtleShimmer {
+            0% {
+                transform: translateX(-150%) skewX(-20deg);
+            }
+            45%, 100% {
+                transform: translateX(250%) skewX(-20deg);
+            }
+        }
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 45%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.09) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: translateX(-150%) skewX(-20deg);
+            animation: subtleShimmer 5.5s infinite ease-in-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-4 md:p-8">
+
+    <!-- Header -->
+    <header class="w-full max-w-3xl text-center py-4 flex flex-col items-center gap-2">
+        <div class="flex items-center gap-2">
+            <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
+            <span id="nerdModeBadge" class="hidden px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded-full">Ultra-Nerd</span>
+        </div>
+        <p id="headerSubtitle" class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
+            <button id="resetStandardBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <span id="resetBtnText">Reset 4/4</span>
+            </button>
+            <button id="allOnBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95">
+                All On
+            </button>
+            <button id="allOffBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-amber-400 hover:text-amber-300 text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95">
+                All Off
+            </button>
+            <button id="clearSubdivBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-purple-400 hover:text-purple-300 text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95">
+                Toggle Subdivs Off
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Sequencer Area -->
+    <main id="mainContainer" class="w-full max-w-xl flex flex-col items-center justify-center my-auto py-6 transition-all duration-300">
+        
+        <!-- Mode Switcher -->
+        <div id="interactionModeWrapper" class="w-full flex justify-between items-center px-2 mb-3 text-xs hidden">
+            <span class="text-slate-400 font-medium">Interaction Mode:</span>
+            <div class="inline-flex p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md">
+                <button id="modeToggleBtn" class="px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm">Toggle Mode</button>
+                <button id="modeSubdivBtn" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all">Subdivision Mode</button>
+            </div>
+        </div>
+
+        <!-- Circular Canvas Container (Normal Mode) -->
+        <div id="canvasContainer" class="relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]">
+            <canvas id="sequencerCanvas" width="480" height="480" class="w-full h-full cursor-pointer rounded-full shadow-2xl bg-[#0f0f14] border border-borderSubtle origin-center"></canvas>
+            
+            <div id="customBadgesContainer" class="absolute inset-0 pointer-events-none z-30"></div>
+
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span id="centerBpmDisplay" class="text-2xl font-bold tracking-tight text-slate-200">100</span>
+                <span class="text-[10px] uppercase tracking-widest text-slate-500 font-medium">BPM</span>
+            </div>
+        </div>
+
+        <!-- Horizontal Line Sequencer Container (Ultra-nerd Mode) -->
+        <div id="nerdLineWrapper" class="hidden w-full flex-col gap-2">
+            <!-- Top status bar for Ultra-nerd line -->
+            <div class="flex items-center justify-between px-3 py-1.5 bg-[#121216] border border-borderSubtle rounded-xl text-[11px] text-slate-400">
+                <div class="flex items-center gap-3">
+                    <span>Blocks: <strong id="nerdBlockCount" class="text-slate-200">0</strong></span>
+                    <span>Total Duration: <strong id="nerdTotalDuration" class="text-accent">0.00s</strong> (<span id="nerdTotalBeatsEquiv">0.00</span> beats)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sky-400 inline-block"></span> Downbeat</span>
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-pink-400 inline-block"></span> Tuplet Note</span>
+                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> L2 Subdiv</span>
+                </div>
+            </div>
+
+            <!-- Horizontal Scrollable Sequencer Track -->
+            <div id="nerdScrollContainer" class="nerd-scroll relative w-full min-h-[250px] bg-[#0f0f14] border border-borderSubtle rounded-2xl shadow-2xl overflow-x-auto overflow-y-hidden flex items-center px-6 py-8">
+                <!-- Center Horizontal Reference Line -->
+                <div class="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-gradient-to-r from-borderSubtle via-slate-700/60 to-borderSubtle pointer-events-none z-0"></div>
+
+                <!-- Dynamic Blocks & Plus Buttons Track -->
+                <div id="nerdTrackContent" class="relative z-10 flex items-center min-w-full">
+                    <!-- Rendered dynamically by JS -->
+                </div>
+            </div>
+
+            <!-- Beat-Click Pulse Metronome Bar (when Beat-Click is enabled in Ultra-nerd Mode) -->
+            <div id="nerdBeatClickWrapper" class="hidden w-full bg-[#0f0f14] border border-amber-500/30 rounded-xl px-4 py-3 flex flex-col gap-2">
+                <div class="flex justify-between items-center text-[10px] uppercase tracking-wider text-amber-400 font-semibold">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>Pulse Metronome Bar (Quarter Note Beat-Click @ <span id="nerdBeatClickBpmLabel">100</span> BPM)</span>
+                    </div>
+                    <span id="nerdBeatClickSummary" class="text-slate-400 font-mono normal-case">0 beats</span>
+                </div>
+                <div id="nerdBeatClickTrack" class="w-full h-7 flex items-center gap-1 bg-[#14141d] p-1 rounded-lg border border-borderSubtle overflow-hidden"></div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <p id="instructionHint" class="text-xs text-slate-400">Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.</p>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-6">
+            
+            <div class="flex flex-col items-center gap-3">
+                <div id="flashingLightsNotice" class="w-full px-3 py-2 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-400 text-amber-300 text-[11px] font-medium rounded-xl flex items-center justify-between gap-3 shadow-sm cursor-pointer transition-all">
+                    <div class="flex items-center gap-1.5 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <span id="noticeText">Notice: Contains flashing lights and visuals during playback</span>
+                    </div>
+                    <span class="text-amber-400 font-bold uppercase text-[10px] tracking-wider bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30 shrink-0 pointer-events-none">OK</span>
+                </div>
+
+                <button id="playBtn" class="w-full md:w-3/4 py-3.5 px-6 rounded-xl font-semibold text-sm tracking-wider uppercase transition-all duration-200 bg-slate-100 text-slate-900 hover:bg-white active:scale-95 shadow-lg flex items-center justify-center gap-2">
+                    <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <span id="playBtnText">Play</span>
+                </button>
+            </div>
+
+            <!-- BPM Control -->
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-slate-400">Tempo</span>
+                        <button id="tapTempoBtn" title="Tap repeatedly or press 'T' to set tempo" class="px-2.5 py-1 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-[11px] font-semibold uppercase tracking-wider rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1">
+                            <span>Tap</span>
+                            <span class="text-[9px] text-slate-500 font-mono">(T)</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="bpmText" class="text-accent font-bold text-base">100</span>
+                        <span class="text-xs text-slate-400">BPM</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="decBpmBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
+                    <div class="relative flex-1 flex items-center">
+                        <input id="bpmSlider" type="range" min="30" max="300" value="100" class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-accent border border-borderSubtle">
+                    </div>
+                    <button id="incBpmBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
+                </div>
+            </div>
+
+            <!-- Beats Control (Hidden in Ultra-nerd mode) -->
+            <div id="beatsControlSection" class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <span class="text-slate-400">Beats</span>
+                    <div class="flex items-center gap-2">
+                        <span id="beatsText" class="text-accent font-bold text-base">4</span>
+                        <span class="text-xs text-slate-400">beats</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="decBeatsBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
+                    <div class="relative flex-1 flex items-center">
+                        <input id="beatsSlider" type="range" min="1" max="25" value="4" class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-accent border border-borderSubtle">
+                    </div>
+                    <button id="incBeatsBtn" class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
+                </div>
+            </div>
+
+            <!-- Uniform Subdivision (Hidden in Ultra-nerd mode) -->
+            <div id="uniformSubdivSection" class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input id="subdivCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-accent accent-accent cursor-pointer">
+                        <span class="text-slate-400">Uniform Subdivision</span>
+                    </label>
+                    <div class="flex items-center gap-2">
+                        <span id="subdivText" class="text-accent font-bold text-base opacity-40">1</span>
+                        <span class="text-xs text-slate-400 opacity-40">per beat</span>
+                    </div>
+                </div>
+                <div id="subdivControlContainer" class="flex items-center gap-3 opacity-40 pointer-events-none transition-opacity duration-200">
+                    <button id="decSubdivBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
+                    <div class="relative flex-1 flex items-center">
+                        <input id="subdivSlider" type="range" min="1" max="20" value="1" disabled class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-accent border border-borderSubtle">
+                    </div>
+                    <button id="incSubdivBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
+                </div>
+            </div>
+
+            <!-- Custom Recursive Subdivision (Hidden in Ultra-nerd mode because it's always active there) -->
+            <div id="customSubdivSection" class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input id="customSubdivCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-purple-400 accent-purple-400 cursor-pointer">
+                        <span class="text-slate-400">Custom Recursive Subdivisions (Advanced)</span>
+                    </label>
+                </div>
+                <div id="customSubdivHint" class="text-[11px] text-slate-500 italic hidden">
+                    Switch to Subdivision Mode and hover over any beat to reveal Layer 1 (Pink) and Layer 2 (Green) split badges.
+                </div>
+            </div>
+
+            <!-- Polyrhythm (Hidden in Ultra-nerd mode) -->
+            <div id="polyrhythmSection" class="flex flex-col gap-3 pt-3 border-t border-borderSubtle">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input id="polyrhythmCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-amber-400 accent-amber-400 cursor-pointer">
+                        <span class="text-slate-400">Polyrhythm</span>
+                    </label>
+                    <div class="flex items-center gap-2">
+                        <span id="polyBeatsText" class="text-amber-400 font-bold text-base opacity-40">3</span>
+                        <span class="text-xs text-slate-400 opacity-40">beats</span>
+                    </div>
+                </div>
+                <div id="polyControlContainer" class="flex items-center gap-3 opacity-40 pointer-events-none transition-opacity duration-200">
+                    <button id="decPolyBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
+                    <div class="relative flex-1 flex items-center">
+                        <input id="polySlider" type="range" min="1" max="25" value="3" disabled class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-amber-400 border border-borderSubtle">
+                    </div>
+                    <button id="incPolyBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
+                </div>
+            </div>
+
+            <!-- Beat-Click Toggle (Shown ONLY in Ultra-nerd mode) -->
+            <div id="nerdBeatClickSection" class="hidden flex-col gap-2 pt-3 border-t border-borderSubtle">
+                <div class="flex justify-between items-center text-sm font-medium">
+                    <label class="flex items-center gap-2.5 cursor-pointer">
+                        <input id="beatClickCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-amber-400 accent-amber-400 cursor-pointer">
+                        <span class="text-slate-300">Beat-Click (Quarter Note Pulse)</span>
+                    </label>
+                    <span id="beatClickStatusBadge" class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle">Off</span>
+                </div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    Displays a pulse metronome bar that plays steady quarter notes at the current BPM, cutting the final beat short if your block sequence is a non-integer number of beats and restarting with the loop.
+                </p>
+            </div>
+
+            <!-- Sound Settings Menu -->
+            <div class="pt-3 border-t border-borderSubtle">
+                <button id="toggleSoundsMenu" class="w-full flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-slate-200 py-1 transition-colors">
+                    <span>Sound Settings & Synthesis</span>
+                    <svg id="soundsChevron" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                
+                <div id="soundsMenuContent" class="hidden flex flex-col gap-4 mt-4 pt-4 border-t border-borderSubtle/50 text-xs">
+                    <div class="flex flex-col gap-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300 font-semibold">Downbeat Audio</span>
+                            <label class="flex items-center gap-1.5 cursor-pointer text-[11px] text-accent">
+                                <input id="advancedDownbeatCheckbox" type="checkbox" class="w-3.5 h-3.5 rounded bg-[#1a1a22] border-borderSubtle text-accent accent-accent cursor-pointer">
+                                <span>Advanced Per-Beat</span>
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Waveform</span>
+                                <select id="downbeatType" class="bg-[#1a1a22] border border-borderSubtle rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-accent">
+                                    <option value="sine">Sine</option>
+                                    <option value="triangle" selected>Triangle</option>
+                                    <option value="square">Square</option>
+                                    <option value="sawtooth">Sawtooth</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Pitch (<span id="downbeatPitchVal">440</span> Hz)</span>
+                                <input id="downbeatPitch" type="range" min="100" max="1200" value="440" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Volume (<span id="downbeatVolVal">45%</span>)</span>
+                                <input id="downbeatVolume" type="range" min="0" max="1" step="0.05" value="0.45" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <div id="advancedDownbeatPanel" class="hidden flex flex-col gap-3 mt-2 p-3 bg-[#16161c] border border-borderSubtle rounded-xl">
+                            <div class="text-[11px] text-slate-400 font-medium">Individual Downbeat Tuner (Pitch & Volume per Beat/Block)</div>
+                            <div id="perBeatControlsContainer" class="flex flex-col gap-2.5 max-h-48 overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 pt-2 border-t border-borderSubtle/30">
+                        <span class="text-slate-300 font-semibold">Subdivision Audio</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Waveform</span>
+                                <select id="subdivType" class="bg-[#1a1a22] border border-borderSubtle rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-accent">
+                                    <option value="sine">Sine</option>
+                                    <option value="triangle" selected>Triangle</option>
+                                    <option value="square">Square</option>
+                                    <option value="sawtooth">Sawtooth</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Pitch (<span id="subdivPitchVal">330</span> Hz)</span>
+                                <input id="subdivPitch" type="range" min="150" max="1000" value="330" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Volume (<span id="subdivVolVal">35%</span>)</span>
+                                <input id="subdivVolume" type="range" min="0" max="1" step="0.05" value="0.35" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-accent mt-2 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-2 pt-2 border-t border-borderSubtle/30">
+                        <span class="text-amber-400 font-semibold">Polyrhythm Audio</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Waveform</span>
+                                <select id="polyType" class="bg-[#1a1a22] border border-borderSubtle rounded-lg px-2.5 py-1.5 text-slate-200 focus:outline-none focus:border-amber-400">
+                                    <option value="sine" selected>Sine</option>
+                                    <option value="triangle">Triangle</option>
+                                    <option value="square">Square</option>
+                                    <option value="sawtooth">Sawtooth</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Pitch (<span id="polyPitchVal">587</span> Hz)</span>
+                                <input id="polyPitch" type="range" min="150" max="1200" value="587" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-amber-400 mt-2 cursor-pointer">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <span class="text-slate-400">Volume (<span id="polyVolVal">40%</span>)</span>
+                                <input id="polyVolume" type="range" min="0" max="1" step="0.05" value="0.4" class="w-full h-2 bg-[#1a1a22] rounded-lg accent-amber-400 mt-2 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ultra-nerd Mode Toggle Button underneath Sound Settings -->
+            <div class="pt-4 border-t border-borderSubtle flex justify-center">
+                <button id="ultraNerdModeBtn" class="shimmer-btn w-full py-2.5 px-5 rounded-xl font-bold text-xs tracking-wider uppercase transition-all duration-200 bg-gradient-to-r from-purple-600/20 via-sky-500/20 to-emerald-500/20 hover:from-purple-600/30 hover:via-sky-500/30 hover:to-emerald-500/30 border border-purple-500/40 text-purple-300 hover:text-white shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span id="ultraNerdBtnText">Activate Ultra-nerd Mode</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- About Section -->
+        <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-4 text-xs">
+            <h2 class="text-sm font-bold tracking-wider text-slate-200 uppercase">About The 'Nome</h2>
+            <p class="text-slate-400 leading-relaxed">
+                This is a free user-friendly online metronome with advanced capabilities. It is built specifically for practicing odd-time, polyrhythmic, odd-tuplet, or nested tuplet rhythms. If you found this tool useful, have questions, or suggestions please let me know!
+            </p>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2 border-t border-borderSubtle/50">
+                <span id="obfuscatedEmailDisplay" class="text-slate-300 font-mono text-[11px] select-all">josiahghudock [at] gmail.com</span>
+                <button id="copyEmailBtn" class="px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-200 hover:text-white font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                    <span id="copyEmailText">Copy Email</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Subdivision Popup Modal (Used in both Circular & Ultra-nerd Mode) -->
+    <div id="beatEditorPopup" class="fixed hidden bg-[#16161c] border border-borderSubtle rounded-xl p-3 shadow-2xl flex flex-col gap-2 z-50 text-xs w-52 backdrop-blur-md">
+        <div class="flex justify-between items-center text-slate-300 font-semibold border-b border-borderSubtle pb-1.5">
+            <span id="popupBeatTitle">Subdivide Segment</span>
+            <button id="closePopupBtn" class="text-slate-500 hover:text-white text-base leading-none">&times;</button>
+        </div>
+        <div class="flex flex-col gap-2">
+            <div class="text-[10px] text-slate-400" id="popupLayerDesc">Splitting layer</div>
+            <div class="flex justify-between items-center text-slate-400">
+                <span>Parts:</span>
+                <span id="popupSubdivVal" class="text-purple-400 font-bold">1</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="popupDecBtn" class="w-7 h-7 rounded bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-200 hover:text-white font-bold">-</button>
+                <input id="popupSlider" type="range" min="1" max="19" value="1" class="w-full h-1.5 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-purple-400 border border-borderSubtle">
+                <button id="popupIncBtn" class="w-7 h-7 rounded bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-200 hover:text-white font-bold">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add / Edit Block Modal for Ultra-nerd Mode -->
+    <div id="blockConfigModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#16161c] border border-borderSubtle rounded-2xl p-5 shadow-2xl w-full max-w-sm flex flex-col gap-4 text-xs">
+            <div class="flex justify-between items-center border-b border-borderSubtle pb-2.5">
+                <h3 id="blockModalTitle" class="text-sm font-bold text-slate-100 tracking-wide">Add Tuplet Block</h3>
+                <button id="closeBlockModalBtn" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+            </div>
+
+            <div class="flex flex-col gap-3.5">
+                <!-- Number of Notes (1-20) -->
+                <div class="flex flex-col gap-1.5">
+                    <div class="flex justify-between items-center">
+                        <label for="blockNotesInput" class="text-slate-300 font-medium">Number of Notes (<span class="text-sky-400 font-mono">y</span>)</label>
+                        <span class="text-[10px] text-slate-500">Determines duration (Max 20)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="decBlockNotesBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
+                        <input id="blockNotesInput" type="number" min="1" max="20" value="5" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-sky-400 focus:outline-none focus:border-accent">
+                        <button id="incBlockNotesBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
+                    </div>
+                </div>
+
+                <!-- Tuplet Rate / Type (1-20) -->
+                <div class="flex flex-col gap-1.5">
+                    <div class="flex justify-between items-center">
+                        <label for="blockTupletInput" class="text-slate-300 font-medium">Tuplet Rate (<span class="text-pink-400 font-mono">r</span>)</label>
+                        <span class="text-[10px] text-slate-500">Notes per beat (Max 20)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="decBlockTupletBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
+                        <input id="blockTupletInput" type="number" min="1" max="20" value="5" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-pink-400 focus:outline-none focus:border-pink-400">
+                        <button id="incBlockTupletBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
+                    </div>
+                </div>
+
+                <!-- Subdivision Number (1-20) with Question Mark Tooltip -->
+                <div class="flex flex-col gap-1.5 pt-1 border-t border-borderSubtle/60">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-1.5">
+                            <label for="blockSubdivInput" class="text-slate-300 font-medium">Subdivision Number (<span class="text-purple-400 font-mono">x</span>)</label>
+                            <div class="relative group inline-flex items-center">
+                                <span tabindex="0" class="w-4 h-4 rounded-full bg-[#222230] border border-slate-600 text-slate-300 hover:text-white hover:border-purple-400 text-[10px] font-bold flex items-center justify-center cursor-help transition-colors">?</span>
+                                <div class="pointer-events-none opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 bg-[#0a0a0f] border border-purple-500/40 rounded-xl shadow-2xl text-[11px] text-slate-200 leading-relaxed z-50">
+                                    By default, this number is equal to the number of notes. This option allows you to "squeeze 'x' notes into the time it takes to play 'y' notes at a certain rate."
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-[10px] text-slate-500">Evenly spaced notes (Max 20)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="decBlockSubdivBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
+                        <input id="blockSubdivInput" type="number" min="1" max="20" value="5" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-purple-400 focus:outline-none focus:border-purple-400">
+                        <button id="incBlockSubdivBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
+                    </div>
+                </div>
+
+                <!-- Math Preview Box -->
+                <div id="blockMathPreview" class="p-3 rounded-xl bg-[#101015] border border-borderSubtle/80 text-[11px] text-slate-300 leading-relaxed flex flex-col gap-1">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2 border-t border-borderSubtle">
+                <button id="cancelBlockModalBtn" type="button" class="px-3.5 py-2 rounded-lg bg-[#1a1a22] hover:bg-[#22222c] text-slate-300 font-semibold transition-all">Cancel</button>
+                <button id="saveBlockModalBtn" type="button" class="px-4 py-2 rounded-lg bg-accent hover:bg-sky-300 text-slate-950 font-bold transition-all shadow-md">Save Block</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-xl text-center py-4 text-xs text-slate-500 flex flex-col gap-1.5">
+        <div>The 'Nome v1.0</div>
+    </footer>
+
+    <!-- Application Logic -->
+    <script>
+        const canvas = document.getElementById('sequencerCanvas');
+        const canvasContainer = document.getElementById('canvasContainer');
+        const ctx = canvas.getContext('2d', { alpha: false });
+
+        const mainContainer = document.getElementById('mainContainer');
+        const nerdLineWrapper = document.getElementById('nerdLineWrapper');
+        const nerdScrollContainer = document.getElementById('nerdScrollContainer');
+        const nerdTrackContent = document.getElementById('nerdTrackContent');
+        const nerdBlockCount = document.getElementById('nerdBlockCount');
+        const nerdTotalDuration = document.getElementById('nerdTotalDuration');
+        const nerdTotalBeatsEquiv = document.getElementById('nerdTotalBeatsEquiv');
+        const nerdBeatClickWrapper = document.getElementById('nerdBeatClickWrapper');
+        const nerdBeatClickTrack = document.getElementById('nerdBeatClickTrack');
+        const nerdBeatClickBpmLabel = document.getElementById('nerdBeatClickBpmLabel');
+        const nerdBeatClickSummary = document.getElementById('nerdBeatClickSummary');
+        const nerdModeBadge = document.getElementById('nerdModeBadge');
+        const ultraNerdModeBtn = document.getElementById('ultraNerdModeBtn');
+        const ultraNerdBtnText = document.getElementById('ultraNerdBtnText');
+        const resetBtnText = document.getElementById('resetBtnText');
+
+        const beatsControlSection = document.getElementById('beatsControlSection');
+        const uniformSubdivSection = document.getElementById('uniformSubdivSection');
+        const customSubdivSection = document.getElementById('customSubdivSection');
+        const polyrhythmSection = document.getElementById('polyrhythmSection');
+        const nerdBeatClickSection = document.getElementById('nerdBeatClickSection');
+        const beatClickCheckbox = document.getElementById('beatClickCheckbox');
+        const beatClickStatusBadge = document.getElementById('beatClickStatusBadge');
+
+        const centerBpmDisplay = document.getElementById('centerBpmDisplay');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playBtnText = document.getElementById('playBtnText');
+        const bpmSlider = document.getElementById('bpmSlider');
+        const bpmText = document.getElementById('bpmText');
+        const decBpmBtn = document.getElementById('decBpmBtn');
+        const incBpmBtn = document.getElementById('incBpmBtn');
+        const tapTempoBtn = document.getElementById('tapTempoBtn');
+        const beatsSlider = document.getElementById('beatsSlider');
+        const beatsText = document.getElementById('beatsText');
+        const decBeatsBtn = document.getElementById('decBeatsBtn');
+        const incBeatsBtn = document.getElementById('incBeatsBtn');
+        const subdivCheckbox = document.getElementById('subdivCheckbox');
+        const subdivText = document.getElementById('subdivText');
+        const subdivControlContainer = document.getElementById('subdivControlContainer');
+        const subdivSlider = document.getElementById('subdivSlider');
+        const decSubdivBtn = document.getElementById('decSubdivBtn');
+        const incSubdivBtn = document.getElementById('incSubdivBtn');
+        const customSubdivCheckbox = document.getElementById('customSubdivCheckbox');
+        const customSubdivHint = document.getElementById('customSubdivHint');
+        const flashingLightsNotice = document.getElementById('flashingLightsNotice');
+        const polyrhythmCheckbox = document.getElementById('polyrhythmCheckbox');
+        const polyBeatsText = document.getElementById('polyBeatsText');
+        const polyControlContainer = document.getElementById('polyControlContainer');
+        const polySlider = document.getElementById('polySlider');
+        const decPolyBtn = document.getElementById('decPolyBtn');
+        const incPolyBtn = document.getElementById('incPolyBtn');
+        const toggleSoundsMenu = document.getElementById('toggleSoundsMenu');
+        const soundsMenuContent = document.getElementById('soundsMenuContent');
+        const soundsChevron = document.getElementById('soundsChevron');
+        const downbeatType = document.getElementById('downbeatType');
+        const downbeatPitch = document.getElementById('downbeatPitch');
+        const downbeatPitchVal = document.getElementById('downbeatPitchVal');
+        const downbeatVolume = document.getElementById('downbeatVolume');
+        const downbeatVolVal = document.getElementById('downbeatVolVal');
+        const advancedDownbeatCheckbox = document.getElementById('advancedDownbeatCheckbox');
+        const advancedDownbeatPanel = document.getElementById('advancedDownbeatPanel');
+        const perBeatControlsContainer = document.getElementById('perBeatControlsContainer');
+        const subdivType = document.getElementById('subdivType');
+        const subdivPitch = document.getElementById('subdivPitch');
+        const subdivPitchVal = document.getElementById('subdivPitchVal');
+        const subdivVolume = document.getElementById('subdivVolume');
+        const subdivVolVal = document.getElementById('subdivVolVal');
+        const polyType = document.getElementById('polyType');
+        const polyPitch = document.getElementById('polyPitch');
+        const polyPitchVal = document.getElementById('polyPitchVal');
+        const polyVolume = document.getElementById('polyVolume');
+        const polyVolVal = document.getElementById('polyVolVal');
+        const resetStandardBtn = document.getElementById('resetStandardBtn');
+        const beatEditorPopup = document.getElementById('beatEditorPopup');
+        const popupBeatTitle = document.getElementById('popupBeatTitle');
+        const closePopupBtn = document.getElementById('closePopupBtn');
+        const popupSubdivVal = document.getElementById('popupSubdivVal');
+        const popupSlider = document.getElementById('popupSlider');
+        const popupDecBtn = document.getElementById('popupDecBtn');
+        const popupIncBtn = document.getElementById('popupIncBtn');
+        const popupLayerDesc = document.getElementById('popupLayerDesc');
+        const modeToggleBtn = document.getElementById('modeToggleBtn');
+        const modeSubdivBtn = document.getElementById('modeSubdivBtn');
+        const interactionModeWrapper = document.getElementById('interactionModeWrapper');
+        const instructionHint = document.getElementById('instructionHint');
+
+        // Block Modal Elements
+        const blockConfigModal = document.getElementById('blockConfigModal');
+        const blockModalTitle = document.getElementById('blockModalTitle');
+        const closeBlockModalBtn = document.getElementById('closeBlockModalBtn');
+        const cancelBlockModalBtn = document.getElementById('cancelBlockModalBtn');
+        const saveBlockModalBtn = document.getElementById('saveBlockModalBtn');
+        const blockNotesInput = document.getElementById('blockNotesInput');
+        const blockTupletInput = document.getElementById('blockTupletInput');
+        const blockSubdivInput = document.getElementById('blockSubdivInput');
+        const decBlockNotesBtn = document.getElementById('decBlockNotesBtn');
+        const incBlockNotesBtn = document.getElementById('incBlockNotesBtn');
+        const decBlockTupletBtn = document.getElementById('decBlockTupletBtn');
+        const incBlockTupletBtn = document.getElementById('incBlockTupletBtn');
+        const decBlockSubdivBtn = document.getElementById('decBlockSubdivBtn');
+        const incBlockSubdivBtn = document.getElementById('incBlockSubdivBtn');
+        const blockMathPreview = document.getElementById('blockMathPreview');
+
+        // Application State
+        const state = {
+            isPlaying: false,
+            ultraNerdMode: false,
+            bpm: 100,
+            totalBeats: 4,
+            subdivEnabled: false,
+            subdivCount: 1,
+            customSubdivEnabled: false,
+            polyrhythmEnabled: false,
+            polyBeats: 3,
+            polyStates: {},
+            polySegments: [],
+            nextPolyNoteTime: 0.0,
+            currentPolyIndex: 0,
+            interactionMode: 'toggle',
+            beatSubdivCounts: {},
+            subSubdivCounts: {},
+            beatStates: {},
+            advancedDownbeatEnabled: false,
+            perBeatSettings: {},
+            segments: [],
+            // Ultra-nerd Mode specific state
+            nerdBlocks: [], // Array of { id, numNotes, tupletRate, subdivCount, subDivs: { noteIdx: count }, activeStates: { "noteIdx_subIdx": bool } }
+            nerdSegments: [],
+            beatClickEnabled: false,
+            beatClickSegments: [], // Array of { index, beatKey, active, durationBeats, scheduledTime, scheduledDuration }
+            beatClickStates: {},
+            nextBeatClickTime: 0.0,
+            currentBeatClickIndex: 0,
+            nextBlockId: 1,
+            audioCtx: null,
+            nextNoteTime: 0.0,
+            currentSegmentIndex: 0,
+            timerID: null,
+            lookahead: 25.0,
+            scheduleAheadTime: 0.1,
+            downbeat: { type: 'triangle', pitch: 440, volume: 0.45 },
+            subdivision: { type: 'triangle', pitch: 330, volume: 0.35 },
+            polyrhythm: { type: 'sine', pitch: 587, volume: 0.40 }
+        };
+
+        let hoveredSegmentIndex = null;
+        let hoveredPolyIndex = null;
+        let activePopupSegment = null;
+        let activePopupLayer = 1;
+        let activeNerdSubdivTarget = null; // { blockId, noteIndex }
+        let hoveredSegmentKey = null;
+        let tapTimestamps = [];
+        let tapHighlightTimeout = null;
+        let lastScrolledSegIdx = -1;
+
+        // Modal state for adding/editing a block in Ultra-nerd Mode
+        let blockModalContext = {
+            mode: 'add', // 'add' or 'edit'
+            insertIndex: 0,
+            editBlockId: null,
+            subdivManuallyChanged: false
+        };
+
+        document.querySelectorAll('input[type=range]').forEach(slider => {
+            const checkThumbTarget = (clientX) => {
+                const rect = slider.getBoundingClientRect();
+                const clickX = clientX - rect.left;
+                const min = parseFloat(slider.min) || 0;
+                const max = parseFloat(slider.max) || 100;
+                const val = parseFloat(slider.value);
+                const percent = (val - min) / (max - min);
+                const thumbX = percent * rect.width;
+                return Math.abs(clickX - thumbX) <= 30;
+            };
+
+            slider.addEventListener('pointerdown', (e) => {
+                if (!checkThumbTarget(e.clientX)) {
+                    e.preventDefault();
+                }
+            });
+
+            slider.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 0 && !checkThumbTarget(e.touches[0].clientX)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            slider.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+            }, { passive: true });
+        });
+
+        function handleTapTempo() {
+            const now = performance.now();
+            if (tapTimestamps.length > 0 && now - tapTimestamps[tapTimestamps.length - 1] > 2500) {
+                tapTimestamps = [];
+            }
+            tapTimestamps.push(now);
+            if (tapTimestamps.length > 5) {
+                tapTimestamps.shift();
+            }
+
+            if (tapTempoBtn) {
+                tapTempoBtn.classList.add('bg-sky-500/20', 'border-sky-400', 'text-white', 'scale-95');
+                clearTimeout(tapHighlightTimeout);
+                tapHighlightTimeout = setTimeout(() => {
+                    tapTempoBtn.classList.remove('bg-sky-500/20', 'border-sky-400', 'text-white', 'scale-95');
+                }, 130);
+            }
+
+            if (tapTimestamps.length >= 2) {
+                let totalInterval = 0;
+                for (let i = 1; i < tapTimestamps.length; i++) {
+                    totalInterval += (tapTimestamps[i] - tapTimestamps[i - 1]);
+                }
+                const avgInterval = totalInterval / (tapTimestamps.length - 1);
+                const calculatedBpm = Math.round(60000 / avgInterval);
+                const clampedBpm = Math.max(30, Math.min(300, calculatedBpm));
+
+                state.bpm = clampedBpm;
+                bpmSlider.value = state.bpm;
+                bpmText.textContent = state.bpm;
+                centerBpmDisplay.textContent = state.bpm;
+                if (state.ultraNerdMode) {
+                    updateNerdStats();
+                    renderNerdLine();
+                }
+            }
+        }
+
+        if (tapTempoBtn) {
+            tapTempoBtn.addEventListener('click', handleTapTempo);
+        }
+
+        function ensurePerBeatSettings() {
+            const count = state.ultraNerdMode ? Math.max(1, state.nerdBlocks.length) : state.totalBeats;
+            for (let i = 0; i < count; i++) {
+                if (!state.perBeatSettings[i]) {
+                    state.perBeatSettings[i] = {
+                        pitch: state.downbeat.pitch,
+                        volume: state.downbeat.volume
+                    };
+                }
+            }
+            renderPerBeatControls();
+        }
+
+        function renderPerBeatControls() {
+            const count = state.ultraNerdMode ? state.nerdBlocks.length : state.totalBeats;
+            const fragment = document.createDocumentFragment();
+            if (count === 0 && state.ultraNerdMode) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'text-[11px] text-slate-500 italic py-2';
+                emptyMsg.textContent = 'Add blocks to the line to tune individual block downbeats.';
+                perBeatControlsContainer.innerHTML = '';
+                perBeatControlsContainer.appendChild(emptyMsg);
+                return;
+            }
+            for (let i = 0; i < count; i++) {
+                const beatCfg = state.perBeatSettings[i] || { pitch: state.downbeat.pitch, volume: state.downbeat.volume };
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between gap-2 bg-[#121216] p-2 rounded-lg border border-borderSubtle';
+                row.innerHTML = `
+                    <span class="font-bold text-accent w-10 text-center">${state.ultraNerdMode ? 'B' : '#'}${i + 1}</span>
+                    <div class="flex items-center gap-1.5 flex-1">
+                        <span class="text-[10px] text-slate-400 w-8">Pitch</span>
+                        <input type="range" min="100" max="1200" value="${beatCfg.pitch}" data-beat="${i}" data-type="pitch" class="per-beat-pitch w-full h-1.5 bg-[#1a1a22] rounded-lg accent-accent">
+                        <span class="text-[10px] text-slate-300 w-10 text-right pitch-val-${i}">${beatCfg.pitch}Hz</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 flex-1">
+                        <span class="text-[10px] text-slate-400 w-8">Vol</span>
+                        <input type="range" min="0" max="1" step="0.05" value="${beatCfg.volume}" data-beat="${i}" data-type="volume" class="per-beat-vol w-full h-1.5 bg-[#1a1a22] rounded-lg accent-accent">
+                        <span class="text-[10px] text-slate-300 w-8 text-right vol-val-${i}">${Math.round(beatCfg.volume * 100)}%</span>
+                    </div>
+                `;
+                fragment.appendChild(row);
+            }
+            perBeatControlsContainer.innerHTML = '';
+            perBeatControlsContainer.appendChild(fragment);
+
+            perBeatControlsContainer.querySelectorAll('input[type=range]').forEach(input => {
+                const checkThumbTarget = (clientX) => {
+                    const rect = input.getBoundingClientRect();
+                    const clickX = clientX - rect.left;
+                    const min = parseFloat(input.min) || 0;
+                    const max = parseFloat(input.max) || 100;
+                    const val = parseFloat(input.value);
+                    const percent = (val - min) / (max - min);
+                    const thumbX = percent * rect.width;
+                    return Math.abs(clickX - thumbX) <= 30;
+                };
+
+                input.addEventListener('pointerdown', (e) => {
+                    if (!checkThumbTarget(e.clientX)) {
+                        e.preventDefault();
+                    }
+                });
+                input.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0 && !checkThumbTarget(e.touches[0].clientX)) {
+                        e.preventDefault();
+                    }
+                }, { passive: false });
+                input.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
+                input.addEventListener('input', (e) => {
+                    const beatIdx = parseInt(e.target.getAttribute('data-beat'));
+                    const type = e.target.getAttribute('data-type');
+                    const val = parseFloat(e.target.value);
+
+                    if (!state.perBeatSettings[beatIdx]) {
+                        state.perBeatSettings[beatIdx] = { pitch: state.downbeat.pitch, volume: state.downbeat.volume };
+                    }
+
+                    if (type === 'pitch') {
+                        state.perBeatSettings[beatIdx].pitch = val;
+                        perBeatControlsContainer.querySelector(`.pitch-val-${beatIdx}`).textContent = `${val}Hz`;
+                    } else {
+                        state.perBeatSettings[beatIdx].volume = val;
+                        perBeatControlsContainer.querySelector(`.vol-val-${beatIdx}`).textContent = `${Math.round(val * 100)}%`;
+                    }
+                });
+            });
+        }
+
+        advancedDownbeatCheckbox.addEventListener('change', (e) => {
+            state.advancedDownbeatEnabled = e.target.checked;
+            if (state.advancedDownbeatEnabled) {
+                advancedDownbeatPanel.classList.remove('hidden');
+                ensurePerBeatSettings();
+            } else {
+                advancedDownbeatPanel.classList.add('hidden');
+            }
+        });
+
+        function updateInstructionHint() {
+            if (state.ultraNerdMode) {
+                if (state.interactionMode === 'toggle') {
+                    instructionHint.textContent = 'Toggle Mode: Click any note bar on the line to toggle it on/off. Hover between blocks for + buttons.';
+                } else {
+                    instructionHint.textContent = 'Subdivision Mode: Click any note or L2+ badge on the line to add green second-layer subdivisions.';
+                }
+            } else {
+                if (state.interactionMode === 'toggle') {
+                    instructionHint.textContent = 'Toggle Mode: Click segments to toggle beats on/off. Press Spacebar to Play/Pause, T to Tap Tempo.';
+                } else {
+                    instructionHint.textContent = 'Subdivision Mode: Hover over beats to reveal split buttons for recursive subdivisions.';
+                }
+            }
+        }
+
+        modeToggleBtn.addEventListener('click', () => {
+            state.interactionMode = 'toggle';
+            modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+            modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+            updateInstructionHint();
+            beatEditorPopup.classList.add('hidden');
+            if (state.ultraNerdMode) {
+                renderNerdLine();
+            } else {
+                updateCustomBadges();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        modeSubdivBtn.addEventListener('click', () => {
+            state.interactionMode = 'subdivision';
+            modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-purple-500 text-slate-950 transition-all shadow-sm';
+            modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+            updateInstructionHint();
+            beatEditorPopup.classList.add('hidden');
+
+            if (state.ultraNerdMode) {
+                renderNerdLine();
+            } else {
+                if (!state.customSubdivEnabled) {
+                    state.customSubdivEnabled = true;
+                    customSubdivCheckbox.checked = true;
+                    customSubdivHint.classList.remove('hidden');
+                    initSegments();
+                } else {
+                    updateCustomBadges();
+                }
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        function initAudioContext() {
+            if (!state.audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                state.audioCtx = new AudioContext();
+            }
+            if (state.audioCtx.state === 'suspended') {
+                state.audioCtx.resume();
+            }
+        }
+
+        function playToneAtTime(isDownbeat, colorType, beatIndex, time) {
+            try {
+                if (!state.audioCtx) return;
+                const osc = state.audioCtx.createOscillator();
+                const gain = state.audioCtx.createGain();
+
+                let type = state.downbeat.type;
+                let freq = state.downbeat.pitch;
+                let vol = state.downbeat.volume;
+
+                if (isDownbeat) {
+                    if (state.advancedDownbeatEnabled && state.perBeatSettings[beatIndex]) {
+                        freq = state.perBeatSettings[beatIndex].pitch;
+                        vol = state.perBeatSettings[beatIndex].volume;
+                    }
+                } else if (colorType === 'poly') {
+                    type = state.polyrhythm.type;
+                    freq = state.polyrhythm.pitch;
+                    vol = state.polyrhythm.volume;
+                } else {
+                    type = state.subdivision.type;
+                    freq = state.subdivision.pitch;
+                    vol = state.subdivision.volume;
+                    if (colorType === 'green') {
+                        freq *= 0.85;
+                    }
+                }
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, time);
+
+                gain.gain.setValueAtTime(0.0001, time);
+                gain.gain.linearRampToValueAtTime(Math.max(0.0001, vol), time + 0.004);
+                gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.1);
+
+                osc.connect(gain);
+                gain.connect(state.audioCtx.destination);
+
+                osc.start(time);
+                osc.stop(time + 0.11);
+            } catch (err) {
+                console.debug('Audio error:', err);
+            }
+        }
+
+        function playPolyToneAtTime(time) {
+            try {
+                if (!state.audioCtx) return;
+                const osc = state.audioCtx.createOscillator();
+                const gain = state.audioCtx.createGain();
+
+                osc.type = state.polyrhythm.type;
+                osc.frequency.setValueAtTime(state.polyrhythm.pitch, time);
+
+                const vol = state.polyrhythm.volume;
+                gain.gain.setValueAtTime(0.0001, time);
+                gain.gain.linearRampToValueAtTime(Math.max(0.0001, vol), time + 0.004);
+                gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.1);
+
+                osc.connect(gain);
+                gain.connect(state.audioCtx.destination);
+
+                osc.start(time);
+                osc.stop(time + 0.11);
+            } catch (err) {
+                console.debug('Polyrhythm audio error:', err);
+            }
+        }
+
+        /* ==========================================
+         * ULTRA-NERD MODE LOGIC & RENDERING
+         * ========================================== */
+
+        function buildNerdSegments() {
+            state.nerdSegments = [];
+            state.beatClickSegments = [];
+
+            state.nerdBlocks.forEach((block, bIdx) => {
+                const actualNotesCount = block.subdivCount !== undefined ? block.subdivCount : block.numNotes;
+                // Total duration of this block in beats is (numNotes / tupletRate)
+                const blockTotalBeats = block.numNotes / block.tupletRate;
+                // Each of the 'actualNotesCount' notes takes an equal share of blockTotalBeats
+                const primaryNoteBeats = blockTotalBeats / actualNotesCount;
+
+                for (let n = 0; n < actualNotesCount; n++) {
+                    const l2Count = block.subDivs[n] || 1;
+                    for (let s = 0; s < l2Count; s++) {
+                        const stateKey = `${n}_${s}`;
+                        if (block.activeStates[stateKey] === undefined) {
+                            block.activeStates[stateKey] = true;
+                        }
+                        let colorType = 'blue';
+                        if (s > 0) {
+                            colorType = 'green';
+                        } else if (n > 0) {
+                            colorType = 'pink';
+                        }
+
+                        const beatFraction = primaryNoteBeats / l2Count;
+
+                        state.nerdSegments.push({
+                            blockId: block.id,
+                            blockIndex: bIdx,
+                            noteIndex: n,
+                            subIndex: s,
+                            stateKey: stateKey,
+                            domId: `nerd_seg_${block.id}_${n}_${s}`,
+                            isDownbeat: (n === 0 && s === 0),
+                            colorType: colorType,
+                            active: block.activeStates[stateKey],
+                            beatFraction: beatFraction,
+                            scheduledTime: null,
+                            scheduledDuration: 0
+                        });
+                    }
+                }
+            });
+
+            // Build Beat-Click quarter-note segments across the total block sequence duration
+            const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
+            if (state.beatClickEnabled && totalBeatsEquiv > 0) {
+                const eps = 1e-7;
+                const numClickBeats = Math.ceil(totalBeatsEquiv - eps);
+                let remainingBeats = totalBeatsEquiv;
+
+                for (let i = 0; i < numClickBeats; i++) {
+                    const beatKey = `click_${i}`;
+                    if (state.beatClickStates[beatKey] === undefined) {
+                        state.beatClickStates[beatKey] = true;
+                    }
+                    const durBeats = remainingBeats >= 1 - eps ? 1.0 : Math.max(0.001, remainingBeats);
+                    const isPartial = durBeats < (1.0 - 1e-4);
+
+                    state.beatClickSegments.push({
+                        index: i,
+                        beatKey: beatKey,
+                        active: state.beatClickStates[beatKey],
+                        durationBeats: durBeats,
+                        isPartial: isPartial,
+                        scheduledTime: null,
+                        scheduledDuration: 0
+                    });
+
+                    remainingBeats -= durBeats;
+                }
+            }
+
+            updateNerdStats();
+            renderNerdBeatClickBar();
+        }
+
+        function getTotalNerdBeatsEquivalent() {
+            let totalBeatsEquiv = 0;
+            for (const block of state.nerdBlocks) {
+                totalBeatsEquiv += (block.numNotes / block.tupletRate);
+            }
+            return totalBeatsEquiv;
+        }
+
+        function updateNerdStats() {
+            nerdBlockCount.textContent = state.nerdBlocks.length;
+            const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
+            const secondsPerBeat = 60.0 / state.bpm;
+            const totalSec = totalBeatsEquiv * secondsPerBeat;
+
+            nerdTotalDuration.textContent = `${totalSec.toFixed(2)}s`;
+            nerdTotalBeatsEquiv.textContent = totalBeatsEquiv.toFixed(2);
+            if (nerdBeatClickBpmLabel) nerdBeatClickBpmLabel.textContent = state.bpm;
+        }
+
+        function renderNerdBeatClickBar() {
+            if (!state.ultraNerdMode || !state.beatClickEnabled) {
+                nerdBeatClickWrapper.classList.add('hidden');
+                return;
+            }
+            nerdBeatClickWrapper.classList.remove('hidden');
+            nerdBeatClickBpmLabel.textContent = state.bpm;
+            nerdBeatClickTrack.innerHTML = '';
+
+            const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
+            if (totalBeatsEquiv <= 0 || state.beatClickSegments.length === 0) {
+                nerdBeatClickSummary.textContent = 'Add blocks to generate quarter-note pulse';
+                const emptyHint = document.createElement('div');
+                emptyHint.className = 'w-full text-center text-[10px] text-slate-500 italic';
+                emptyHint.textContent = 'No blocks in sequence yet';
+                nerdBeatClickTrack.appendChild(emptyHint);
+                return;
+            }
+
+            const fullCount = state.beatClickSegments.filter(s => !s.isPartial).length;
+            const partialSeg = state.beatClickSegments.find(s => s.isPartial);
+            if (partialSeg) {
+                nerdBeatClickSummary.textContent = `${fullCount} full beat${fullCount !== 1 ? 's' : ''} + ${(partialSeg.durationBeats).toFixed(2)} cut beat (${totalBeatsEquiv.toFixed(2)} beats total)`;
+            } else {
+                nerdBeatClickSummary.textContent = `${fullCount} equal quarter-note beat${fullCount !== 1 ? 's' : ''}`;
+            }
+
+            const secPerBeat = 60.0 / state.bpm;
+
+            state.beatClickSegments.forEach((cSeg, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `nerd_beatclick_${idx}`;
+                btn.type = 'button';
+                // Proportional width via flex-grow matching its beat duration
+                btn.style.flexGrow = cSeg.durationBeats.toFixed(4);
+                btn.style.flexBasis = '0%';
+
+                const secDur = (cSeg.durationBeats * secPerBeat).toFixed(2);
+                btn.title = cSeg.isPartial
+                    ? `Beat ${idx + 1} (Cut short: ${cSeg.durationBeats.toFixed(2)} of a beat / ${secDur}s) - Click to toggle`
+                    : `Beat ${idx + 1} (1.00 beat / ${secDur}s) - Click to toggle`;
+
+                btn.className = `h-full rounded-md border text-[10px] font-mono font-bold flex items-center justify-center gap-1 transition-all overflow-hidden px-1 ${
+                    cSeg.active
+                        ? (cSeg.isPartial
+                            ? 'bg-amber-500/80 border-amber-300 text-slate-950 shadow-[0_0_8px_rgba(245,158,11,0.25)]'
+                            : 'bg-amber-400 border-amber-200 text-slate-950 shadow-[0_0_8px_rgba(245,158,11,0.3)]')
+                        : 'bg-[#181822] border-borderSubtle text-slate-500 opacity-50'
+                }`;
+
+                btn.innerHTML = `
+                    <span>Q${idx + 1}</span>
+                    ${cSeg.isPartial ? `<span class="text-[9px] opacity-80">(${cSeg.durationBeats.toFixed(2)}b)</span>` : ''}
+                `;
+
+                btn.addEventListener('click', () => {
+                    cSeg.active = !cSeg.active;
+                    state.beatClickStates[cSeg.beatKey] = cSeg.active;
+                    renderNerdBeatClickBar();
+                });
+
+                nerdBeatClickTrack.appendChild(btn);
+            });
+        }
+
+        function createInsertPlusButton(insertIndex) {
+            const wrapper = document.createElement('div');
+            // Collapsed width (w-2) by default so blocks sit tightly together; smoothly expands (hover:w-11) to push blocks apart when hovering near the gap
+            wrapper.className = 'group/plus relative flex items-center justify-center w-2 hover:w-11 focus-within:w-11 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20';
+
+            // Invisible hover sensor slightly wider than the 8px gap so hovering near the seam reliably triggers expansion without jitter
+            const hitZone = document.createElement('div');
+            hitZone.className = 'absolute inset-y-0 -left-2.5 -right-2.5 z-10';
+            wrapper.appendChild(hitZone);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.title = 'Insert Block Here';
+            btn.className = 'relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus:opacity-100 focus:scale-100 focus:pointer-events-auto hover:!scale-110';
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>`;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openBlockModal('add', insertIndex);
+            });
+
+            wrapper.appendChild(btn);
+            return wrapper;
+        }
+
+        function renderNerdLine() {
+            buildNerdSegments();
+            nerdTrackContent.innerHTML = '';
+
+            // If no blocks exist yet, show the centered rectangular "Add Block" button on the line
+            if (state.nerdBlocks.length === 0) {
+                const emptyContainer = document.createElement('div');
+                emptyContainer.className = 'w-full flex items-center justify-center py-8';
+
+                const addBlockBtn = document.createElement('button');
+                addBlockBtn.type = 'button';
+                addBlockBtn.className = 'px-6 py-3.5 bg-[#181822] hover:bg-[#222230] border-2 border-dashed border-sky-400/60 hover:border-sky-400 rounded-2xl text-slate-200 hover:text-white font-semibold text-sm tracking-wide shadow-xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2.5';
+                addBlockBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>Add Block</span>
+                `;
+                addBlockBtn.addEventListener('click', () => openBlockModal('add', 0));
+
+                emptyContainer.appendChild(addBlockBtn);
+                nerdTrackContent.appendChild(emptyContainer);
+                return;
+            }
+
+            // Leading circle '+' button at start of line
+            nerdTrackContent.appendChild(createInsertPlusButton(0));
+
+            const secondsPerBeat = 60.0 / state.bpm;
+
+            // Render each Block
+            state.nerdBlocks.forEach((block, bIdx) => {
+                const actualNotesCount = block.subdivCount !== undefined ? block.subdivCount : block.numNotes;
+                const blockSec = ((block.numNotes / block.tupletRate) * secondsPerBeat).toFixed(2);
+
+                const blockCard = document.createElement('div');
+                blockCard.id = `nerd_block_card_${block.id}`;
+                blockCard.className = 'group/block relative flex flex-col bg-[#14141d]/90 hover:bg-[#181824] border border-borderSubtle hover:border-slate-700 rounded-2xl px-3.5 pt-8 pb-6 transition-all shadow-lg shrink-0';
+
+                // Top Header Bar inside block: Ratio label + Edit/Delete controls (visible on hover)
+                const blockHeader = document.createElement('div');
+                blockHeader.className = 'absolute top-2 left-3 right-3 flex items-center justify-between gap-3 text-[11px]';
+
+                const badgeLabel = document.createElement('div');
+                badgeLabel.className = 'flex items-center gap-1.5 font-mono font-bold text-slate-300 truncate';
+                const squeezeTag = actualNotesCount !== block.numNotes
+                    ? `<span class="text-purple-400">${actualNotesCount} in</span> `
+                    : '';
+                badgeLabel.innerHTML = `
+                    <span class="px-1.5 py-0.5 rounded bg-sky-500/15 text-sky-400 border border-sky-500/30">#${bIdx + 1}</span>
+                    <span class="text-slate-200">${squeezeTag}${block.numNotes}:${block.tupletRate}</span>
+                    <span class="text-[10px] text-emerald-400/90 font-normal">(${blockSec}s)</span>
+                `;
+
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'flex items-center gap-1 opacity-20 group-hover/block:opacity-100 transition-opacity shrink-0';
+
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.title = 'Edit Block Parameters';
+                editBtn.className = 'px-2 py-0.5 rounded bg-[#222230] hover:bg-sky-500 hover:text-slate-950 text-slate-300 text-[10px] font-semibold border border-borderSubtle transition-colors';
+                editBtn.textContent = 'Edit Block';
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openBlockModal('edit', bIdx, block.id);
+                });
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.title = 'Delete Block';
+                delBtn.className = 'px-1.5 py-0.5 rounded bg-[#222230] hover:bg-rose-500 hover:text-white text-slate-400 text-[10px] font-bold border border-borderSubtle transition-colors';
+                delBtn.innerHTML = '&times;';
+                delBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteNerdBlock(block.id);
+                });
+
+                actionsDiv.appendChild(editBtn);
+                actionsDiv.appendChild(delBtn);
+                blockHeader.appendChild(badgeLabel);
+                blockHeader.appendChild(actionsDiv);
+                blockCard.appendChild(blockHeader);
+
+                // Notes Row aligned along the horizontal line
+                const notesRow = document.createElement('div');
+                notesRow.className = 'flex items-center gap-2.5 my-auto pt-2 pb-1';
+
+                for (let n = 0; n < actualNotesCount; n++) {
+                    const l2Count = block.subDivs[n] || 1;
+
+                    // Note group container (holds primary note + any green L2 subdivisions)
+                    const noteGroup = document.createElement('div');
+                    noteGroup.className = 'relative flex items-center gap-1 px-1.5 py-1 rounded-xl bg-[#0c0c12]/60 border border-transparent hover:border-slate-800 transition-all';
+
+                    for (let s = 0; s < l2Count; s++) {
+                        const stateKey = `${n}_${s}`;
+                        const isActive = block.activeStates[stateKey] !== false;
+                        const isFirstNoteDownbeat = (n === 0 && s === 0);
+                        const isPinkNote = (n > 0 && s === 0);
+
+                        // Heights & Colors per specification:
+                        // First note of block (blue, tall) -> h-28 (112px)
+                        // Subsequent notes of block (pink, slightly shorter) -> h-20 (80px)
+                        // Second layer subdivisions (green, slightly shorter than pink) -> h-14 (56px)
+                        let heightClass = 'h-14';
+                        let widthClass = l2Count > 4 ? 'w-3.5' : 'w-5';
+                        let activeColorClasses = '';
+                        let inactiveColorClasses = 'bg-[#1a1a24] border-slate-800 opacity-45 hover:opacity-75';
+
+                        if (isFirstNoteDownbeat) {
+                            heightClass = 'h-28';
+                            widthClass = l2Count > 4 ? 'w-5' : 'w-7';
+                            activeColorClasses = 'bg-[#38bdf8] border-sky-200 shadow-[0_0_12px_rgba(56,189,248,0.35)]';
+                        } else if (isPinkNote) {
+                            heightClass = 'h-20';
+                            widthClass = l2Count > 4 ? 'w-4' : 'w-6';
+                            activeColorClasses = 'bg-[#f472b6] border-pink-200 shadow-[0_0_10px_rgba(244,114,182,0.3)]';
+                        } else {
+                            heightClass = 'h-14';
+                            widthClass = l2Count > 6 ? 'w-3' : 'w-4';
+                            activeColorClasses = 'bg-[#34d399] border-emerald-200 shadow-[0_0_8px_rgba(52,211,153,0.3)]';
+                        }
+
+                        const barBtn = document.createElement('button');
+                        barBtn.type = 'button';
+                        barBtn.id = `nerd_seg_${block.id}_${n}_${s}`;
+                        barBtn.className = `${widthClass} ${heightClass} rounded-lg border transition-all duration-100 cursor-pointer shrink-0 ${
+                            isActive ? activeColorClasses : inactiveColorClasses
+                        }`;
+
+                        barBtn.title = state.interactionMode === 'toggle'
+                            ? `Block ${bIdx + 1}, Note ${n + 1}${s > 0 ? `.${s + 1}` : ''} (Click to toggle)`
+                            : `Click to subdivide Note ${n + 1} into Layer 2 green parts`;
+
+                        barBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (state.interactionMode === 'toggle') {
+                                block.activeStates[stateKey] = !isActive;
+                                renderNerdLine();
+                            } else {
+                                openNerdSubdivPopup(block, n, e);
+                            }
+                        });
+
+                        noteGroup.appendChild(barBtn);
+                    }
+
+                    // If in Subdivision Mode (or if L2Count > 1), show a compact L2 badge below the note group
+                    if (state.interactionMode === 'subdivision' || l2Count > 1) {
+                        const l2Badge = document.createElement('button');
+                        l2Badge.type = 'button';
+                        l2Badge.className = `absolute -bottom-5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[9px] font-bold border transition-all z-20 whitespace-nowrap ${
+                            state.interactionMode === 'subdivision'
+                                ? 'bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-300 shadow-md cursor-pointer scale-100 hover:scale-110'
+                                : 'bg-emerald-950/80 text-emerald-300 border-emerald-700/50 pointer-events-none'
+                        }`;
+                        l2Badge.textContent = l2Count > 1 ? `L2: ×${l2Count}` : 'L2+';
+                        l2Badge.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            openNerdSubdivPopup(block, n, e);
+                        });
+                        noteGroup.appendChild(l2Badge);
+                    }
+
+                    notesRow.appendChild(noteGroup);
+                }
+
+                blockCard.appendChild(notesRow);
+                nerdTrackContent.appendChild(blockCard);
+
+                // Circle '+' button after every block (between adjacent blocks and at the right end)
+                nerdTrackContent.appendChild(createInsertPlusButton(bIdx + 1));
+            });
+        }
+
+        function openNerdSubdivPopup(block, noteIndex, e) {
+            activePopupSegment = null;
+            activeNerdSubdivTarget = { blockId: block.id, noteIndex: noteIndex };
+            const currentCount = block.subDivs[noteIndex] || 1;
+
+            popupBeatTitle.textContent = `Layer 2 Split (Note ${noteIndex + 1})`;
+            popupLayerDesc.textContent = 'Splits note into equal green subdivisions';
+            popupSubdivVal.textContent = currentCount;
+            popupSlider.value = currentCount;
+
+            const popupWidth = 208;
+            const popupHeight = 128;
+            const leftPos = Math.min(window.innerWidth - popupWidth - 12, Math.max(12, e.clientX - popupWidth / 2));
+            const topPos = Math.min(window.innerHeight - popupHeight - 12, Math.max(12, e.clientY - popupHeight - 12));
+
+            beatEditorPopup.style.left = `${leftPos}px`;
+            beatEditorPopup.style.top = `${topPos}px`;
+            beatEditorPopup.classList.remove('hidden');
+        }
+
+        function updateBlockModalPreview() {
+            let y = parseInt(blockNotesInput.value) || 1;
+            let r = parseInt(blockTupletInput.value) || 1;
+            let x = parseInt(blockSubdivInput.value) || 1;
+            y = Math.max(1, Math.min(20, y));
+            r = Math.max(1, Math.min(20, r));
+            x = Math.max(1, Math.min(20, x));
+
+            const beatEquiv = y / r;
+            const totalSec = beatEquiv * (60 / state.bpm);
+            const eachNoteSec = totalSec / x;
+
+            blockMathPreview.innerHTML = `
+                <div>
+                    The duration of <span class="text-sky-400 font-semibold">${y}</span> note${y > 1 ? 's' : ''} played at a <span class="text-pink-400 font-semibold">${r}-tuplet</span> rate.
+                </div>
+                <div class="text-slate-400">
+                    Block consists of <span class="text-purple-400 font-semibold">${x}</span> evenly spaced note${x > 1 ? 's' : ''} (${eachNoteSec.toFixed(2)}s per note).
+                </div>
+                <div class="pt-1 mt-0.5 border-t border-borderSubtle/60 text-slate-300">
+                    Total Block Duration: <span class="text-emerald-400 font-bold">${totalSec.toFixed(2)}s</span> <span class="text-slate-500">(${beatEquiv.toFixed(2)} beat${beatEquiv === 1 ? '' : 's'} at ${state.bpm} BPM)</span>
+                </div>
+            `;
+        }
+
+        function openBlockModal(mode, index, blockId = null) {
+            blockModalContext = {
+                mode,
+                insertIndex: index,
+                editBlockId: blockId,
+                subdivManuallyChanged: false
+            };
+
+            if (mode === 'edit' && blockId !== null) {
+                const blk = state.nerdBlocks.find(b => b.id === blockId);
+                if (!blk) return;
+                blockModalTitle.textContent = 'Edit Tuplet Block';
+                blockNotesInput.value = blk.numNotes;
+                blockTupletInput.value = blk.tupletRate;
+                const sCount = blk.subdivCount !== undefined ? blk.subdivCount : blk.numNotes;
+                blockSubdivInput.value = sCount;
+                blockModalContext.subdivManuallyChanged = (sCount !== blk.numNotes);
+            } else {
+                blockModalTitle.textContent = 'Add Tuplet Block';
+                blockNotesInput.value = 5;
+                blockTupletInput.value = 5;
+                blockSubdivInput.value = 5;
+                blockModalContext.subdivManuallyChanged = false;
+            }
+
+            updateBlockModalPreview();
+            blockConfigModal.classList.remove('hidden');
+            blockConfigModal.classList.add('flex');
+        }
+
+        function closeBlockModal() {
+            blockConfigModal.classList.add('hidden');
+            blockConfigModal.classList.remove('flex');
+        }
+
+        closeBlockModalBtn.addEventListener('click', closeBlockModal);
+        cancelBlockModalBtn.addEventListener('click', closeBlockModal);
+
+        function syncSubdivWithNotesIfDefault() {
+            if (!blockModalContext.subdivManuallyChanged) {
+                blockSubdivInput.value = blockNotesInput.value;
+            }
+            updateBlockModalPreview();
+        }
+
+        blockNotesInput.addEventListener('input', syncSubdivWithNotesIfDefault);
+        blockTupletInput.addEventListener('input', updateBlockModalPreview);
+        blockSubdivInput.addEventListener('input', () => {
+            blockModalContext.subdivManuallyChanged = true;
+            updateBlockModalPreview();
+        });
+
+        decBlockNotesBtn.addEventListener('click', () => {
+            let v = parseInt(blockNotesInput.value) || 1;
+            blockNotesInput.value = Math.max(1, v - 1);
+            syncSubdivWithNotesIfDefault();
+        });
+        incBlockNotesBtn.addEventListener('click', () => {
+            let v = parseInt(blockNotesInput.value) || 1;
+            blockNotesInput.value = Math.min(20, v + 1);
+            syncSubdivWithNotesIfDefault();
+        });
+        decBlockTupletBtn.addEventListener('click', () => {
+            let v = parseInt(blockTupletInput.value) || 1;
+            blockTupletInput.value = Math.max(1, v - 1);
+            updateBlockModalPreview();
+        });
+        incBlockTupletBtn.addEventListener('click', () => {
+            let v = parseInt(blockTupletInput.value) || 1;
+            blockTupletInput.value = Math.min(20, v + 1);
+            updateBlockModalPreview();
+        });
+        decBlockSubdivBtn.addEventListener('click', () => {
+            let v = parseInt(blockSubdivInput.value) || 1;
+            blockSubdivInput.value = Math.max(1, v - 1);
+            blockModalContext.subdivManuallyChanged = true;
+            updateBlockModalPreview();
+        });
+        incBlockSubdivBtn.addEventListener('click', () => {
+            let v = parseInt(blockSubdivInput.value) || 1;
+            blockSubdivInput.value = Math.min(20, v + 1);
+            blockModalContext.subdivManuallyChanged = true;
+            updateBlockModalPreview();
+        });
+
+        saveBlockModalBtn.addEventListener('click', () => {
+            let numNotes = Math.max(1, Math.min(20, parseInt(blockNotesInput.value) || 1));
+            let tupletRate = Math.max(1, Math.min(20, parseInt(blockTupletInput.value) || 1));
+            let subdivCount = Math.max(1, Math.min(20, parseInt(blockSubdivInput.value) || numNotes));
+
+            if (blockModalContext.mode === 'edit' && blockModalContext.editBlockId !== null) {
+                const blk = state.nerdBlocks.find(b => b.id === blockModalContext.editBlockId);
+                if (blk) {
+                    blk.numNotes = numNotes;
+                    blk.tupletRate = tupletRate;
+                    blk.subdivCount = subdivCount;
+                }
+            } else {
+                const newBlock = {
+                    id: state.nextBlockId++,
+                    numNotes: numNotes,
+                    tupletRate: tupletRate,
+                    subdivCount: subdivCount,
+                    subDivs: {},
+                    activeStates: {}
+                };
+                state.nerdBlocks.splice(blockModalContext.insertIndex, 0, newBlock);
+            }
+
+            closeBlockModal();
+            ensurePerBeatSettings();
+            renderNerdLine();
+        });
+
+        function deleteNerdBlock(blockId) {
+            state.nerdBlocks = state.nerdBlocks.filter(b => b.id !== blockId);
+            if (state.isPlaying && state.nerdBlocks.length === 0) {
+                togglePlay();
+            }
+            ensurePerBeatSettings();
+            renderNerdLine();
+        }
+
+        // Beat-Click Checkbox Handler in Ultra-nerd Mode
+        if (beatClickCheckbox) {
+            beatClickCheckbox.addEventListener('change', (e) => {
+                if (state.isPlaying) {
+                    togglePlay();
+                }
+                state.beatClickEnabled = e.target.checked;
+                if (state.beatClickEnabled) {
+                    beatClickStatusBadge.textContent = 'On';
+                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                } else {
+                    beatClickStatusBadge.textContent = 'Off';
+                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
+                }
+                renderNerdLine();
+            });
+        }
+
+        // Toggle between Standard Circular Mode and Ultra-nerd Mode
+        ultraNerdModeBtn.addEventListener('click', () => {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+            state.ultraNerdMode = !state.ultraNerdMode;
+
+            if (state.ultraNerdMode) {
+                // Transform page into Ultra-nerd Mode
+                mainContainer.classList.remove('max-w-xl');
+                mainContainer.classList.add('max-w-3xl');
+                canvasContainer.classList.add('hidden');
+                nerdLineWrapper.classList.remove('hidden');
+                nerdLineWrapper.classList.add('flex');
+                nerdModeBadge.classList.remove('hidden');
+
+                // Hide circular-only controls ("Beats", "Uniform Subdivision", "Custom Recursive Subdivision", and "Polyrhythm")
+                beatsControlSection.classList.add('hidden');
+                uniformSubdivSection.classList.add('hidden');
+                customSubdivSection.classList.add('hidden');
+                polyrhythmSection.classList.add('hidden');
+
+                // Show Beat-Click section for Ultra-nerd Mode
+                nerdBeatClickSection.classList.remove('hidden');
+                nerdBeatClickSection.classList.add('flex');
+
+                // Always show Interaction Mode switcher (Toggle Mode vs Subdivision Mode)
+                interactionModeWrapper.classList.remove('hidden');
+
+                ultraNerdBtnText.textContent = 'Exit Ultra-nerd Mode';
+                resetBtnText.textContent = 'Clear Blocks';
+                updateInstructionHint();
+                ensurePerBeatSettings();
+                renderNerdLine();
+            } else {
+                // Transform back to Standard Circular Mode
+                mainContainer.classList.remove('max-w-3xl');
+                mainContainer.classList.add('max-w-xl');
+                nerdLineWrapper.classList.add('hidden');
+                nerdLineWrapper.classList.remove('flex');
+                canvasContainer.classList.remove('hidden');
+                nerdModeBadge.classList.add('hidden');
+
+                beatsControlSection.classList.remove('hidden');
+                uniformSubdivSection.classList.remove('hidden');
+                customSubdivSection.classList.remove('hidden');
+                polyrhythmSection.classList.remove('hidden');
+
+                nerdBeatClickSection.classList.add('hidden');
+                nerdBeatClickSection.classList.remove('flex');
+
+                if (!state.customSubdivEnabled) {
+                    interactionModeWrapper.classList.add('hidden');
+                    state.interactionMode = 'toggle';
+                    modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+                    modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                }
+
+                ultraNerdBtnText.textContent = 'Activate Ultra-nerd Mode';
+                resetBtnText.textContent = 'Reset 4/4';
+                updateInstructionHint();
+                ensurePerBeatSettings();
+                initSegments();
+                drawStaticSequencer();
+            }
+        });
+
+        /* ==========================================
+         * CIRCULAR MODE INITIALIZATION & SCHEDULING
+         * ========================================== */
+
+        function initSegments() {
+            state.segments = [];
+            state.polySegments = [];
+            const twoPi = 2 * Math.PI;
+            const beatAngleSpan = twoPi / state.totalBeats;
+            const startOffset = -3 * Math.PI / 4;
+
+            let maxSubdivs = state.subdivEnabled ? state.subdivCount : 1;
+            if (state.customSubdivEnabled) {
+                let counts = Object.values(state.beatSubdivCounts);
+                if (counts.length > 0) maxSubdivs = Math.max(...counts);
+            }
+
+            const hiddenClass = state.ultraNerdMode ? " hidden" : "";
+            if (maxSubdivs >= 10) {
+                canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.12]" + hiddenClass;
+            } else if (maxSubdivs >= 5) {
+                canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.08]" + hiddenClass;
+            } else {
+                canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]" + hiddenClass;
+            }
+
+            for (let b = 0; b < state.totalBeats; b++) {
+                const beatStartAngle = startOffset + (b * beatAngleSpan);
+                let l1Count = state.customSubdivEnabled ? (state.beatSubdivCounts[b] || 1) : (state.subdivEnabled ? state.subdivCount : 1);
+                const l1AngleSpan = beatAngleSpan / l1Count;
+
+                for (let s = 0; s < l1Count; s++) {
+                    const subKey = `${b}_${s}`;
+                    const l1StartAngle = beatStartAngle + (s * l1AngleSpan);
+                    let l2Count = state.customSubdivEnabled ? (state.subSubdivCounts[subKey] || 1) : 1;
+                    const l2AngleSpan = l1AngleSpan / l2Count;
+
+                    for (let ss = 0; ss < l2Count; ss++) {
+                        const segKey = `${b}_${s}_${ss}`;
+                        if (state.beatStates[segKey] === undefined) {
+                            state.beatStates[segKey] = true;
+                        }
+
+                        const absStartAngle = l1StartAngle + (ss * l2AngleSpan);
+                        const absEndAngle = absStartAngle + l2AngleSpan;
+                        const midAngle = absStartAngle + (absEndAngle - absStartAngle) / 2;
+
+                        let colorType = 'blue';
+                        if (s > 0 && ss === 0) colorType = 'pink';
+                        else if (ss > 0) colorType = 'green';
+
+                        let rOuter = (s === 0 && ss === 0) ? 166 : 160;
+                        let rInner = 92;
+                        if (colorType === 'pink') {
+                            rOuter = 156;
+                            rInner = 108;
+                        } else if (colorType === 'green') {
+                            rOuter = 150;
+                            rInner = 118;
+                        }
+
+                        state.segments.push({
+                            beatIndex: b,
+                            subIndex: s,
+                            subSubIndex: ss,
+                            subKey: subKey,
+                            segKey: segKey,
+                            isDownbeat: (s === 0 && ss === 0),
+                            colorType: colorType,
+                            active: state.beatStates[segKey],
+                            startAngle: absStartAngle,
+                            endAngle: absEndAngle,
+                            midAngle: midAngle,
+                            rOuter: rOuter,
+                            rInner: rInner,
+                            spanAngle: l2AngleSpan,
+                            textX: 240 + Math.cos(midAngle) * 192,
+                            textY: 240 + Math.sin(midAngle) * 192
+                        });
+                    }
+                }
+            }
+
+            if (state.polyrhythmEnabled && state.polyBeats > 0) {
+                const polyAngleSpan = twoPi / state.polyBeats;
+                for (let p = 0; p < state.polyBeats; p++) {
+                    const pKey = `poly_${p}`;
+                    if (state.polyStates[pKey] === undefined) {
+                        state.polyStates[pKey] = true;
+                    }
+                    const pStart = startOffset + (p * polyAngleSpan);
+                    const pEnd = pStart + polyAngleSpan;
+                    state.polySegments.push({
+                        polyIndex: p,
+                        polyKey: pKey,
+                        isPoly: true,
+                        active: state.polyStates[pKey],
+                        startAngle: pStart,
+                        endAngle: pEnd,
+                        rOuter: 228,
+                        rInner: 210,
+                        spanAngle: polyAngleSpan
+                    });
+                }
+            }
+
+            updateCustomBadges();
+        }
+
+        function scheduleNote() {
+            if (!state.audioCtx) return;
+            const secondsPerBeat = 60.0 / state.bpm;
+
+            if (state.ultraNerdMode) {
+                if (state.nerdSegments.length === 0) return;
+
+                while (state.nextNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                    const segIdx = state.currentSegmentIndex % state.nerdSegments.length;
+
+                    // Synchronize Beat-Click cycle start with the start of the block sequence loop
+                    if (segIdx === 0) {
+                        state.nextBeatClickTime = state.nextNoteTime;
+                        state.currentBeatClickIndex = 0;
+                    }
+
+                    const seg = state.nerdSegments[segIdx];
+                    if (!seg) break;
+
+                    const duration = secondsPerBeat * seg.beatFraction;
+                    if (seg.active) {
+                        playToneAtTime(seg.isDownbeat, seg.colorType, seg.blockIndex, state.nextNoteTime);
+                    }
+                    seg.scheduledTime = state.nextNoteTime;
+                    seg.scheduledDuration = duration;
+
+                    state.nextNoteTime += duration;
+                    state.currentSegmentIndex = (segIdx + 1) % state.nerdSegments.length;
+                }
+
+                // Schedule Beat-Click quarter notes (with the final beat cut short if total duration is non-integer beats)
+                if (state.beatClickEnabled && state.beatClickSegments.length > 0) {
+                    while (state.nextBeatClickTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                        const cIdx = state.currentBeatClickIndex % state.beatClickSegments.length;
+                        const cSeg = state.beatClickSegments[cIdx];
+                        if (!cSeg) break;
+
+                        const clickDuration = secondsPerBeat * cSeg.durationBeats;
+                        if (cSeg.active) {
+                            playPolyToneAtTime(state.nextBeatClickTime);
+                        }
+                        cSeg.scheduledTime = state.nextBeatClickTime;
+                        cSeg.scheduledDuration = clickDuration;
+
+                        state.nextBeatClickTime += clickDuration;
+                        state.currentBeatClickIndex = (cIdx + 1) % state.beatClickSegments.length;
+                    }
+                }
+                return;
+            }
+
+            // Standard Circular Mode scheduling
+            if (state.segments.length === 0) return;
+            const twoPi = 2 * Math.PI;
+
+            while (state.nextNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                if (state.segments.length === 0) break;
+                state.currentSegmentIndex = state.currentSegmentIndex % state.segments.length;
+                const seg = state.segments[state.currentSegmentIndex];
+                if (!seg) break;
+
+                if (seg.active) {
+                    playToneAtTime(seg.isDownbeat, seg.colorType, seg.beatIndex, state.nextNoteTime);
+                }
+                seg.scheduledTime = state.nextNoteTime;
+
+                const standardBeatSpan = twoPi / state.totalBeats;
+                const ratio = seg.spanAngle / standardBeatSpan;
+                const duration = secondsPerBeat * ratio;
+
+                state.nextNoteTime += duration;
+                state.currentSegmentIndex = (state.currentSegmentIndex + 1) % state.segments.length;
+            }
+
+            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
+                const cycleDuration = secondsPerBeat * state.totalBeats;
+                const polyDuration = cycleDuration / state.polyBeats;
+                while (state.nextPolyNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
+                    const pSeg = state.polySegments[state.currentPolyIndex % state.polySegments.length];
+                    if (pSeg && pSeg.active) {
+                        playPolyToneAtTime(state.nextPolyNoteTime);
+                    }
+                    if (pSeg) {
+                        pSeg.scheduledTime = state.nextPolyNoteTime;
+                    }
+                    state.nextPolyNoteTime += polyDuration;
+                    state.currentPolyIndex = (state.currentPolyIndex + 1) % state.polySegments.length;
+                }
+            }
+        }
+
+        function scheduler() {
+            if (!state.isPlaying) return;
+            scheduleNote();
+            state.timerID = setTimeout(scheduler, state.lookahead);
+        }
+
+        function animationLoop() {
+            if (!state.isPlaying) return;
+            const currentTime = state.audioCtx ? state.audioCtx.currentTime : 0;
+
+            if (state.ultraNerdMode) {
+                let activeIdx = -1;
+                for (let i = 0, len = state.nerdSegments.length; i < len; i++) {
+                    const seg = state.nerdSegments[i];
+                    const highlightWindow = Math.min(0.12, Math.max(0.05, (seg.scheduledDuration || 0.1) * 0.85));
+                    const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + highlightWindow);
+                    const el = document.getElementById(seg.domId);
+                    if (el) {
+                        if (isCurrent) {
+                            activeIdx = i;
+                            el.classList.add('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
+                        } else {
+                            el.classList.remove('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
+                        }
+                    }
+                }
+
+                // Auto-scroll the horizontal line smoothly to follow the active block/segment
+                if (activeIdx !== -1 && activeIdx !== lastScrolledSegIdx) {
+                    lastScrolledSegIdx = activeIdx;
+                    const activeSeg = state.nerdSegments[activeIdx];
+                    const activeEl = document.getElementById(activeSeg.domId);
+                    if (activeEl && nerdScrollContainer) {
+                        const containerRect = nerdScrollContainer.getBoundingClientRect();
+                        const elRect = activeEl.getBoundingClientRect();
+                        const offsetInsideContainer = (elRect.left - containerRect.left) + nerdScrollContainer.scrollLeft;
+                        const targetScroll = offsetInsideContainer - (containerRect.width / 2) + (elRect.width / 2);
+                        nerdScrollContainer.scrollTo({
+                            left: Math.max(0, targetScroll),
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+
+                // Highlight active Beat-Click segment on the Pulse Metronome Bar
+                if (state.beatClickEnabled && state.beatClickSegments.length > 0) {
+                    for (let c = 0, clen = state.beatClickSegments.length; c < clen; c++) {
+                        const cSeg = state.beatClickSegments[c];
+                        const highlightWin = Math.min(0.14, Math.max(0.05, (cSeg.scheduledDuration || 0.1) * 0.85));
+                        const isCurrentClick = cSeg.scheduledTime && (currentTime >= cSeg.scheduledTime && currentTime < cSeg.scheduledTime + highlightWin);
+                        const cEl = document.getElementById(`nerd_beatclick_${c}`);
+                        if (cEl) {
+                            if (isCurrentClick) {
+                                cEl.classList.add('ring-2', 'ring-white', 'brightness-125', 'scale-[1.02]');
+                            } else {
+                                cEl.classList.remove('ring-2', 'ring-white', 'brightness-125', 'scale-[1.02]');
+                            }
+                        }
+                    }
+                }
+
+                requestAnimationFrame(animationLoop);
+                return;
+            }
+
+            // Standard Circular Mode Canvas rendering
+            ctx.fillStyle = '#0f0f14';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                const seg = state.segments[i];
+                const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + 0.08);
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, seg.rOuter, seg.startAngle, seg.endAngle, false);
+                ctx.arc(centerX, centerY, seg.rInner, seg.endAngle, seg.startAngle, true);
+                ctx.closePath();
+
+                let fillColor = '#14141c';
+                if (seg.active) {
+                    if (seg.colorType === 'blue') fillColor = '#38bdf8';
+                    else if (seg.colorType === 'pink') fillColor = '#f472b6';
+                    else fillColor = '#34d399';
+                }
+
+                if (isCurrent) {
+                    fillColor = seg.active ? '#93c5fd' : '#262633';
+                } else if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
+                    fillColor = seg.active ? '#e0f2fe' : '#222233';
+                }
+
+                ctx.fillStyle = fillColor;
+                ctx.fill();
+
+                ctx.lineWidth = seg.isDownbeat ? 2 : 1;
+                ctx.strokeStyle = isCurrent ? '#fbbf24' : '#22222c';
+                ctx.stroke();
+
+                if (seg.isDownbeat) {
+                    ctx.fillStyle = seg.active ? '#38bdf8' : '#64748b';
+                    ctx.font = '600 13px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                }
+            }
+
+            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    const pSeg = state.polySegments[p];
+                    const isCurrentPoly = pSeg.scheduledTime && (currentTime >= pSeg.scheduledTime && currentTime < pSeg.scheduledTime + 0.08);
+
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, pSeg.rOuter, pSeg.startAngle, pSeg.endAngle, false);
+                    ctx.arc(centerX, centerY, pSeg.rInner, pSeg.endAngle, pSeg.startAngle, true);
+                    ctx.closePath();
+
+                    let pFill = pSeg.active ? '#f59e0b' : '#14141c';
+                    if (isCurrentPoly) {
+                        pFill = pSeg.active ? '#fde68a' : '#262633';
+                    } else if (p === hoveredPolyIndex && state.interactionMode === 'toggle') {
+                        pFill = pSeg.active ? '#fde68a' : '#222233';
+                    }
+
+                    ctx.fillStyle = pFill;
+                    ctx.fill();
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = isCurrentPoly ? '#fde68a' : '#22222c';
+                    ctx.stroke();
+                }
+            }
+
+            requestAnimationFrame(animationLoop);
+        }
+
+        function updateCustomBadges() {
+            const container = document.getElementById('customBadgesContainer');
+            if (state.ultraNerdMode || state.interactionMode !== 'subdivision' || !state.customSubdivEnabled || !hoveredSegmentKey) {
+                if (container.children.length > 0) container.innerHTML = '';
+                return;
+            }
+
+            const containerWidth = canvas.clientWidth;
+            const containerHeight = canvas.clientHeight;
+            const centerX = containerWidth / 2;
+            const centerY = containerHeight / 2;
+            
+            const seg = state.segments.find(s => s.segKey === hoveredSegmentKey);
+            if (!seg) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const bx1 = centerX + Math.cos(seg.midAngle) * 104;
+            const by1 = centerY + Math.sin(seg.midAngle) * 104;
+            const bx2 = centerX + Math.cos(seg.midAngle) * 126;
+            const by2 = centerY + Math.sin(seg.midAngle) * 126;
+
+            let html = `
+                <button id="badgeLayer1" class="absolute pointer-events-auto px-2 py-0.5 bg-pink-600 hover:bg-pink-500 border border-pink-300 text-white text-[10px] font-bold rounded-md shadow-xl transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 flex items-center gap-1 z-50" style="left: ${bx1}px; top: ${by1}px;">
+                    <span>L1+</span>
+                </button>
+            `;
+
+            const l1Count = state.beatSubdivCounts[seg.beatIndex] || 1;
+            if (l1Count > 1) {
+                html += `
+                    <button id="badgeLayer2" class="absolute pointer-events-auto px-2 py-0.5 bg-emerald-600 hover:bg-emerald-500 border border-emerald-300 text-white text-[10px] font-bold rounded-md shadow-xl transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 flex items-center gap-1 z-50" style="left: ${bx2}px; top: ${by2}px;">
+                        <span>L2+</span>
+                    </button>
+                `;
+            }
+
+            container.innerHTML = html;
+
+            const btn1 = document.getElementById('badgeLayer1');
+            if (btn1) {
+                btn1.addEventListener('pointerdown', (e) => { e.stopPropagation(); openPopupForSegment(seg, 1, e); });
+                btn1.addEventListener('click', (e) => { e.stopPropagation(); openPopupForSegment(seg, 1, e); });
+            }
+            const btn2 = document.getElementById('badgeLayer2');
+            if (btn2) {
+                btn2.addEventListener('pointerdown', (e) => { e.stopPropagation(); openPopupForSegment(seg, 2, e); });
+                btn2.addEventListener('click', (e) => { e.stopPropagation(); openPopupForSegment(seg, 2, e); });
+            }
+        }
+
+        function openPopupForSegment(seg, layer, e) {
+            activeNerdSubdivTarget = null;
+            activePopupSegment = seg;
+            activePopupLayer = layer;
+            const currentCount = (layer === 1) ? (state.beatSubdivCounts[seg.beatIndex] || 1) : (state.subSubdivCounts[seg.subKey] || 1);
+
+            popupBeatTitle.textContent = layer === 1 ? `Layer 1 Split (Beat ${seg.beatIndex + 1})` : `Layer 2 Split (${seg.beatIndex + 1}.${seg.subIndex + 1})`;
+            popupLayerDesc.textContent = layer === 1 ? 'Splits beat into equal pink parts' : 'Splits subsegment into equal green parts';
+            popupSubdivVal.textContent = currentCount;
+            popupSlider.value = currentCount;
+
+            const popupWidth = 208;
+            const popupHeight = 128;
+            const leftPos = Math.min(window.innerWidth - popupWidth - 12, Math.max(12, e.clientX - popupWidth / 2));
+            const topPos = Math.min(window.innerHeight - popupHeight - 12, Math.max(12, e.clientY - popupHeight - 12));
+
+            beatEditorPopup.style.left = `${leftPos}px`;
+            beatEditorPopup.style.top = `${topPos}px`;
+            beatEditorPopup.classList.remove('hidden');
+        }
+
+        function applyPopupSubdivValue(val) {
+            popupSubdivVal.textContent = val;
+            if (state.ultraNerdMode && activeNerdSubdivTarget !== null) {
+                const blk = state.nerdBlocks.find(b => b.id === activeNerdSubdivTarget.blockId);
+                if (blk) {
+                    blk.subDivs[activeNerdSubdivTarget.noteIndex] = val;
+                    renderNerdLine();
+                }
+                return;
+            }
+            if (activePopupSegment !== null) {
+                if (activePopupLayer === 1) {
+                    state.beatSubdivCounts[activePopupSegment.beatIndex] = val;
+                } else {
+                    state.subSubdivCounts[activePopupSegment.subKey] = val;
+                }
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        }
+
+        popupSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            applyPopupSubdivValue(val);
+        });
+
+        popupDecBtn.addEventListener('click', () => {
+            let val = parseInt(popupSlider.value);
+            if (val > 1) {
+                val--;
+                popupSlider.value = val;
+                applyPopupSubdivValue(val);
+            }
+        });
+
+        popupIncBtn.addEventListener('click', () => {
+            let val = parseInt(popupSlider.value);
+            if (val < 19) {
+                val++;
+                popupSlider.value = val;
+                applyPopupSubdivValue(val);
+            }
+        });
+
+        closePopupBtn.addEventListener('click', () => {
+            beatEditorPopup.classList.add('hidden');
+        });
+
+        document.addEventListener('pointerdown', (e) => {
+            if (!beatEditorPopup.classList.contains('hidden')) {
+                if (!beatEditorPopup.contains(e.target) && !e.target.closest('#badgeLayer1') && !e.target.closest('#badgeLayer2')) {
+                    beatEditorPopup.classList.add('hidden');
+                }
+            }
+        });
+
+        function clearNerdVisualHighlights() {
+            state.nerdSegments.forEach(seg => {
+                seg.scheduledTime = null;
+                const el = document.getElementById(seg.domId);
+                if (el) {
+                    el.classList.remove('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
+                }
+            });
+            state.beatClickSegments.forEach((cSeg, idx) => {
+                cSeg.scheduledTime = null;
+                const cEl = document.getElementById(`nerd_beatclick_${idx}`);
+                if (cEl) {
+                    cEl.classList.remove('ring-2', 'ring-white', 'brightness-125', 'scale-[1.02]');
+                }
+            });
+            lastScrolledSegIdx = -1;
+        }
+
+        function togglePlay() {
+            if (state.ultraNerdMode && state.nerdSegments.length === 0 && !state.isPlaying) {
+                // If user clicks Play with no blocks on the Ultra-nerd line, prompt Add Block modal
+                openBlockModal('add', 0);
+                return;
+            }
+
+            initAudioContext();
+            state.isPlaying = !state.isPlaying;
+
+            if (state.isPlaying) {
+                playBtnText.textContent = 'Pause';
+                playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                playBtn.classList.remove('bg-slate-100', 'text-slate-900', 'hover:bg-white');
+                playBtn.classList.add('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
+                
+                const startTime = state.audioCtx.currentTime + 0.05;
+                state.nextNoteTime = startTime;
+                state.currentSegmentIndex = 0;
+                state.nextPolyNoteTime = startTime;
+                state.currentPolyIndex = 0;
+                state.nextBeatClickTime = startTime;
+                state.currentBeatClickIndex = 0;
+                lastScrolledSegIdx = -1;
+                scheduler();
+                requestAnimationFrame(animationLoop);
+            } else {
+                playBtnText.textContent = 'Play';
+                playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                playBtn.classList.remove('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
+                playBtn.classList.add('bg-slate-100', 'text-slate-900', 'hover:bg-white');
+                
+                clearTimeout(state.timerID);
+                if (state.ultraNerdMode) {
+                    clearNerdVisualHighlights();
+                } else {
+                    for (let i = 0, len = state.segments.length; i < len; i++) {
+                        state.segments[i].scheduledTime = null;
+                    }
+                    for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                        state.polySegments[p].scheduledTime = null;
+                    }
+                    drawStaticSequencer();
+                }
+            }
+        }
+
+        playBtn.addEventListener('click', togglePlay);
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Escape') {
+                if (!beatEditorPopup.classList.contains('hidden')) {
+                    beatEditorPopup.classList.add('hidden');
+                    return;
+                }
+                if (!blockConfigModal.classList.contains('hidden')) {
+                    closeBlockModal();
+                    return;
+                }
+            }
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA') {
+                if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
+                    e.preventDefault();
+                    togglePlay();
+                } else if (e.code === 'KeyT' && !e.repeat && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                    e.preventDefault();
+                    handleTapTempo();
+                }
+            }
+        });
+
+        function drawStaticSequencer() {
+            if (state.ultraNerdMode) return;
+            ctx.fillStyle = '#0f0f14';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                const seg = state.segments[i];
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, seg.rOuter, seg.startAngle, seg.endAngle, false);
+                ctx.arc(centerX, centerY, seg.rInner, seg.endAngle, seg.startAngle, true);
+                ctx.closePath();
+
+                let fillColor = '#14141c';
+                if (seg.active) {
+                    if (seg.colorType === 'blue') fillColor = '#38bdf8';
+                    else if (seg.colorType === 'pink') fillColor = '#f472b6';
+                    else fillColor = '#34d399';
+                }
+                if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
+                    fillColor = seg.active ? '#e0f2fe' : '#222233';
+                }
+
+                ctx.fillStyle = fillColor;
+                ctx.fill();
+
+                ctx.lineWidth = seg.isDownbeat ? 2 : 1;
+                ctx.strokeStyle = '#22222c';
+                ctx.stroke();
+
+                if (seg.isDownbeat) {
+                    ctx.fillStyle = seg.active ? '#38bdf8' : '#64748b';
+                    ctx.font = '600 13px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                }
+            }
+
+            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    const pSeg = state.polySegments[p];
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, pSeg.rOuter, pSeg.startAngle, pSeg.endAngle, false);
+                    ctx.arc(centerX, centerY, pSeg.rInner, pSeg.endAngle, pSeg.startAngle, true);
+                    ctx.closePath();
+
+                    let pFill = pSeg.active ? '#f59e0b' : '#14141c';
+                    if (p === hoveredPolyIndex && state.interactionMode === 'toggle') {
+                        pFill = pSeg.active ? '#fde68a' : '#222233';
+                    }
+
+                    ctx.fillStyle = pFill;
+                    ctx.fill();
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = '#22222c';
+                    ctx.stroke();
+                }
+            }
+        }
+
+        bpmSlider.addEventListener('input', (e) => {
+            if ((state.polyrhythmEnabled || state.beatClickEnabled) && state.isPlaying) {
+                togglePlay();
+            }
+            state.bpm = parseInt(e.target.value);
+            bpmText.textContent = state.bpm;
+            centerBpmDisplay.textContent = state.bpm;
+            if (state.ultraNerdMode) {
+                updateNerdStats();
+                renderNerdLine();
+            }
+        });
+
+        decBpmBtn.addEventListener('click', () => {
+            if ((state.polyrhythmEnabled || state.beatClickEnabled) && state.isPlaying) {
+                togglePlay();
+            }
+            if (state.bpm > 30) {
+                state.bpm--;
+                bpmSlider.value = state.bpm;
+                bpmText.textContent = state.bpm;
+                centerBpmDisplay.textContent = state.bpm;
+                if (state.ultraNerdMode) {
+                    updateNerdStats();
+                    renderNerdLine();
+                }
+            }
+        });
+
+        incBpmBtn.addEventListener('click', () => {
+            if ((state.polyrhythmEnabled || state.beatClickEnabled) && state.isPlaying) {
+                togglePlay();
+            }
+            if (state.bpm < 300) {
+                state.bpm++;
+                bpmSlider.value = state.bpm;
+                bpmText.textContent = state.bpm;
+                centerBpmDisplay.textContent = state.bpm;
+                if (state.ultraNerdMode) {
+                    updateNerdStats();
+                    renderNerdLine();
+                }
+            }
+        });
+
+        beatsSlider.addEventListener('input', (e) => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
+            state.totalBeats = parseInt(e.target.value);
+            beatsText.textContent = state.totalBeats;
+            ensurePerBeatSettings();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        decBeatsBtn.addEventListener('click', () => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
+            if (state.totalBeats > 1) {
+                state.totalBeats--;
+                beatsSlider.value = state.totalBeats;
+                beatsText.textContent = state.totalBeats;
+                ensurePerBeatSettings();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        incBeatsBtn.addEventListener('click', () => {
+            if (state.polyrhythmEnabled && state.isPlaying) {
+                togglePlay();
+            }
+            if (state.totalBeats < 25) {
+                state.totalBeats++;
+                beatsSlider.value = state.totalBeats;
+                beatsText.textContent = state.totalBeats;
+                ensurePerBeatSettings();
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        subdivCheckbox.addEventListener('change', (e) => {
+            state.subdivEnabled = e.target.checked;
+            if (state.subdivEnabled) {
+                if (state.customSubdivEnabled) {
+                    state.customSubdivEnabled = false;
+                    customSubdivCheckbox.checked = false;
+                    customSubdivHint.classList.add('hidden');
+                    interactionModeWrapper.classList.add('hidden');
+                    state.interactionMode = 'toggle';
+                    modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+                    modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                    updateInstructionHint();
+                    beatEditorPopup.classList.add('hidden');
+                }
+                subdivText.classList.remove('opacity-40');
+                subdivControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                decSubdivBtn.removeAttribute('disabled');
+                incSubdivBtn.removeAttribute('disabled');
+                subdivSlider.removeAttribute('disabled');
+            } else {
+                subdivText.classList.add('opacity-40');
+                subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                decSubdivBtn.setAttribute('disabled', 'true');
+                incSubdivBtn.setAttribute('disabled', 'true');
+                subdivSlider.setAttribute('disabled', 'true');
+            }
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        subdivSlider.addEventListener('input', (e) => {
+            state.subdivCount = parseInt(e.target.value);
+            subdivText.textContent = state.subdivCount;
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        decSubdivBtn.addEventListener('click', () => {
+            if (state.subdivCount > 1) {
+                state.subdivCount--;
+                subdivSlider.value = state.subdivCount;
+                subdivText.textContent = state.subdivCount;
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        incSubdivBtn.addEventListener('click', () => {
+            if (state.subdivCount < 20) {
+                state.subdivCount++;
+                subdivSlider.value = state.subdivCount;
+                subdivText.textContent = state.subdivCount;
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        customSubdivCheckbox.addEventListener('change', (e) => {
+            state.customSubdivEnabled = e.target.checked;
+            if (state.customSubdivEnabled) {
+                if (state.subdivEnabled) {
+                    state.subdivEnabled = false;
+                    subdivCheckbox.checked = false;
+                    subdivText.classList.add('opacity-40');
+                    subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                }
+                customSubdivHint.classList.remove('hidden');
+                interactionModeWrapper.classList.remove('hidden');
+            } else {
+                customSubdivHint.classList.add('hidden');
+                beatEditorPopup.classList.add('hidden');
+                interactionModeWrapper.classList.add('hidden');
+                state.interactionMode = 'toggle';
+                modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+                modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                updateInstructionHint();
+            }
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        if (flashingLightsNotice) {
+            flashingLightsNotice.addEventListener('click', () => {
+                flashingLightsNotice.classList.add('opacity-0', 'scale-95', 'pointer-events-none', 'transition-all', 'duration-300');
+                setTimeout(() => {
+                    flashingLightsNotice.style.display = 'none';
+                }, 300);
+            });
+        }
+
+        polyrhythmCheckbox.addEventListener('change', (e) => {
+            state.polyrhythmEnabled = e.target.checked;
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            if (state.polyrhythmEnabled) {
+                polyBeatsText.classList.remove('opacity-40');
+                polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                decPolyBtn.removeAttribute('disabled');
+                incPolyBtn.removeAttribute('disabled');
+                polySlider.removeAttribute('disabled');
+            } else {
+                polyBeatsText.classList.add('opacity-40');
+                polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                decPolyBtn.setAttribute('disabled', 'true');
+                incPolyBtn.setAttribute('disabled', 'true');
+                polySlider.setAttribute('disabled', 'true');
+                hoveredPolyIndex = null;
+            }
+            if (state.ultraNerdMode) {
+                renderNerdLine();
+            } else {
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        polySlider.addEventListener('input', (e) => {
+            state.polyBeats = parseInt(e.target.value);
+            polyBeatsText.textContent = state.polyBeats;
+            if (state.ultraNerdMode) {
+                renderNerdLine();
+            } else {
+                initSegments();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        decPolyBtn.addEventListener('click', () => {
+            if (state.polyBeats > 1) {
+                state.polyBeats--;
+                polySlider.value = state.polyBeats;
+                polyBeatsText.textContent = state.polyBeats;
+                if (state.ultraNerdMode) {
+                    renderNerdLine();
+                } else {
+                    initSegments();
+                    if (!state.isPlaying) drawStaticSequencer();
+                }
+            }
+        });
+
+        incPolyBtn.addEventListener('click', () => {
+            if (state.polyBeats < 25) {
+                state.polyBeats++;
+                polySlider.value = state.polyBeats;
+                polyBeatsText.textContent = state.polyBeats;
+                if (state.ultraNerdMode) {
+                    renderNerdLine();
+                } else {
+                    initSegments();
+                    if (!state.isPlaying) drawStaticSequencer();
+                }
+            }
+        });
+
+        resetStandardBtn.addEventListener('click', () => {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+
+            if (state.ultraNerdMode) {
+                state.nerdBlocks = [];
+                state.nerdSegments = [];
+                state.beatClickSegments = [];
+                state.beatClickStates = {};
+                ensurePerBeatSettings();
+                renderNerdLine();
+                return;
+            }
+
+            state.totalBeats = 4;
+            beatsSlider.value = 4;
+            beatsText.textContent = '4';
+
+            state.subdivEnabled = false;
+            subdivCheckbox.checked = false;
+            state.subdivCount = 1;
+            subdivSlider.value = 1;
+            subdivText.textContent = '1';
+            subdivText.classList.add('opacity-40');
+            subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
+
+            state.customSubdivEnabled = false;
+            customSubdivCheckbox.checked = false;
+            customSubdivHint.classList.add('hidden');
+
+            state.polyrhythmEnabled = false;
+            polyrhythmCheckbox.checked = false;
+            state.polyBeats = 3;
+            polySlider.value = 3;
+            polyBeatsText.textContent = '3';
+            polyBeatsText.classList.add('opacity-40');
+            polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+            decPolyBtn.setAttribute('disabled', 'true');
+            incPolyBtn.setAttribute('disabled', 'true');
+            polySlider.setAttribute('disabled', 'true');
+            state.polyStates = {};
+            
+            state.advancedDownbeatEnabled = false;
+            advancedDownbeatCheckbox.checked = false;
+            advancedDownbeatPanel.classList.add('hidden');
+            state.perBeatSettings = {};
+
+            interactionModeWrapper.classList.add('hidden');
+            state.interactionMode = 'toggle';
+            modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+            modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+            updateInstructionHint();
+
+            state.beatSubdivCounts = {};
+            state.subSubdivCounts = {};
+            state.beatStates = {};
+            hoveredSegmentKey = null;
+            hoveredSegmentIndex = null;
+            hoveredPolyIndex = null;
+
+            canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]";
+
+            ensurePerBeatSettings();
+            initSegments();
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        document.getElementById('allOnBtn').addEventListener('click', () => {
+            if (state.ultraNerdMode) {
+                state.nerdBlocks.forEach(blk => {
+                    Object.keys(blk.activeStates).forEach(k => { blk.activeStates[k] = true; });
+                });
+                for (let c = 0, clen = state.beatClickSegments.length; c < clen; c++) {
+                    state.beatClickSegments[c].active = true;
+                    state.beatClickStates[state.beatClickSegments[c].beatKey] = true;
+                }
+                renderNerdLine();
+                return;
+            }
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                state.segments[i].active = true;
+                state.beatStates[state.segments[i].segKey] = true;
+            }
+            for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                state.polySegments[p].active = true;
+                state.polyStates[state.polySegments[p].polyKey] = true;
+            }
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        document.getElementById('allOffBtn').addEventListener('click', () => {
+            if (state.ultraNerdMode) {
+                state.nerdBlocks.forEach(blk => {
+                    Object.keys(blk.activeStates).forEach(k => { blk.activeStates[k] = false; });
+                });
+                for (let c = 0, clen = state.beatClickSegments.length; c < clen; c++) {
+                    state.beatClickSegments[c].active = false;
+                    state.beatClickStates[state.beatClickSegments[c].beatKey] = false;
+                }
+                renderNerdLine();
+                return;
+            }
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                state.segments[i].active = true;
+                state.beatStates[state.segments[i].segKey] = true;
+            }
+            for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                state.polySegments[p].active = true;
+                state.polyStates[state.polySegments[p].polyKey] = true;
+            }
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        document.getElementById('allOffBtn').addEventListener('click', () => {
+            if (state.ultraNerdMode) {
+                state.nerdBlocks.forEach(blk => {
+                    Object.keys(blk.activeStates).forEach(k => { blk.activeStates[k] = false; });
+                });
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    state.polySegments[p].active = false;
+                    state.polyStates[state.polySegments[p].polyKey] = false;
+                }
+                renderNerdLine();
+                return;
+            }
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                state.segments[i].active = false;
+                state.beatStates[state.segments[i].segKey] = false;
+            }
+            for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                state.polySegments[p].active = false;
+                state.polyStates[state.polySegments[p].polyKey] = false;
+            }
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        document.getElementById('clearSubdivBtn').addEventListener('click', () => {
+            if (state.ultraNerdMode) {
+                state.nerdBlocks.forEach(blk => {
+                    Object.keys(blk.activeStates).forEach(k => {
+                        if (k !== '0_0') blk.activeStates[k] = false;
+                    });
+                });
+                renderNerdLine();
+                return;
+            }
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                if (!state.segments[i].isDownbeat) {
+                    state.segments[i].active = false;
+                    state.beatStates[state.segments[i].segKey] = false;
+                }
+            }
+            if (!state.isPlaying) drawStaticSequencer();
+        });
+
+        toggleSoundsMenu.addEventListener('click', () => {
+            soundsMenuContent.classList.toggle('hidden');
+            soundsChevron.classList.toggle('rotate-180');
+        });
+
+        downbeatType.addEventListener('change', (e) => { state.downbeat.type = e.target.value; });
+        downbeatPitch.addEventListener('input', (e) => {
+            state.downbeat.pitch = parseInt(e.target.value);
+            downbeatPitchVal.textContent = state.downbeat.pitch;
+        });
+        downbeatVolume.addEventListener('input', (e) => {
+            state.downbeat.volume = parseFloat(e.target.value);
+            downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
+        });
+
+        subdivType.addEventListener('change', (e) => { state.subdivision.type = e.target.value; });
+        subdivPitch.addEventListener('input', (e) => {
+            state.subdivision.pitch = parseInt(e.target.value);
+            subdivPitchVal.textContent = state.subdivision.pitch;
+        });
+        subdivVolume.addEventListener('input', (e) => {
+            state.subdivision.volume = parseFloat(e.target.value);
+            subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
+        });
+
+        polyType.addEventListener('change', (e) => { state.polyrhythm.type = e.target.value; });
+        polyPitch.addEventListener('input', (e) => {
+            state.polyrhythm.pitch = parseInt(e.target.value);
+            polyPitchVal.textContent = state.polyrhythm.pitch;
+        });
+        polyVolume.addEventListener('input', (e) => {
+            state.polyrhythm.volume = parseFloat(e.target.value);
+            polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
+        });
+
+        const copyEmailBtn = document.getElementById('copyEmailBtn');
+        const copyEmailText = document.getElementById('copyEmailText');
+        const obfuscatedEmailDisplay = document.getElementById('obfuscatedEmailDisplay');
+
+        if (copyEmailBtn) {
+            copyEmailBtn.addEventListener('click', () => {
+                const fullEmail = "josiahghudock" + "@" + "gmail.com";
+                if (obfuscatedEmailDisplay) obfuscatedEmailDisplay.textContent = fullEmail;
+
+                const textarea = document.createElement('textarea');
+                textarea.value = fullEmail;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    if (copyEmailText) copyEmailText.textContent = "Copied!";
+                    copyEmailBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                    setTimeout(() => {
+                        if (copyEmailText) copyEmailText.textContent = "Copy Email";
+                        copyEmailBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                    }, 2000);
+                } catch (err) {
+                    console.debug('Copy failed', err);
+                }
+                document.body.removeChild(textarea);
+            });
+        }
+
+        function getSegmentFromEvent(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = (e.clientX - rect.left) * scaleX;
+            const y = (e.clientY - rect.top) * scaleY;
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const dx = x - centerX;
+            const dy = y - centerY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            let angle = Math.atan2(dy, dx);
+            const startOffset = -3 * Math.PI / 4;
+            let relativeAngle = angle - startOffset;
+            if (relativeAngle < 0) relativeAngle += 2 * Math.PI;
+            while (relativeAngle >= 2 * Math.PI) relativeAngle -= 2 * Math.PI;
+
+            if (state.polyrhythmEnabled && distance >= 204 && distance <= 236) {
+                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
+                    const pSeg = state.polySegments[p];
+                    let sStart = pSeg.startAngle - startOffset;
+                    let sEnd = pSeg.endAngle - startOffset;
+
+                    while (sStart < 0) sStart += 2 * Math.PI;
+                    while (sStart >= 2 * Math.PI) sStart -= 2 * Math.PI;
+                    while (sEnd < 0) sEnd += 2 * Math.PI;
+                    while (sEnd >= 2 * Math.PI) sEnd -= 2 * Math.PI;
+
+                    if (sStart < sEnd) {
+                        if (relativeAngle >= sStart && relativeAngle <= sEnd) return pSeg;
+                    } else {
+                        if (relativeAngle >= sStart || relativeAngle <= sEnd) return pSeg;
+                    }
+                }
+                return null;
+            }
+
+            if (distance < 80 || distance > 190) return null;
+
+            for (let i = 0, len = state.segments.length; i < len; i++) {
+                const seg = state.segments[i];
+                let sStart = seg.startAngle - startOffset;
+                let sEnd = seg.endAngle - startOffset;
+                
+                while (sStart < 0) sStart += 2 * Math.PI;
+                while (sStart >= 2 * Math.PI) sStart -= 2 * Math.PI;
+                while (sEnd < 0) sEnd += 2 * Math.PI;
+                while (sEnd >= 2 * Math.PI) sEnd -= 2 * Math.PI;
+
+                if (sStart < sEnd) {
+                    if (relativeAngle >= sStart && relativeAngle <= sEnd) return seg;
+                } else {
+                    if (relativeAngle >= sStart || relativeAngle <= sEnd) return seg;
+                }
+            }
+            return null;
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (state.interactionMode === 'subdivision') {
+                return; 
+            }
+            const seg = getSegmentFromEvent(e);
+            if (seg) {
+                seg.active = !seg.active;
+                if (seg.isPoly) {
+                    state.polyStates[seg.polyKey] = seg.active;
+                } else {
+                    state.beatStates[seg.segKey] = seg.active;
+                }
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const seg = getSegmentFromEvent(e);
+            const newHoverKey = (seg && !seg.isPoly) ? seg.segKey : null;
+            const newPolyIdx = (seg && seg.isPoly) ? seg.polyIndex : null;
+            if (newHoverKey !== hoveredSegmentKey || newPolyIdx !== hoveredPolyIndex) {
+                hoveredSegmentKey = newHoverKey;
+                hoveredSegmentIndex = (seg && !seg.isPoly) ? state.segments.indexOf(seg) : null;
+                hoveredPolyIndex = newPolyIdx;
+                updateCustomBadges();
+                if (!state.isPlaying) drawStaticSequencer();
+            }
+        });
+
+        window.onload = function() {
+            ensurePerBeatSettings();
+            initSegments();
+            drawStaticSequencer();
+        };
+    </script>
+</body>
+</html>
