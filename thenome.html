@@ -1445,20 +1445,26 @@
             });
         }
 
-        function createInsertPlusButton(insertIndex) {
+        function createInsertPlusButton(insertIndex, isAlwaysVisible = false) {
             const wrapper = document.createElement('div');
             // Collapsed width (w-2) by default so blocks sit tightly together; smoothly expands (hover:w-11) to push blocks apart when hovering near the gap
-            wrapper.className = 'group/plus relative flex items-center justify-center w-2 hover:w-11 focus-within:w-11 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20';
+            wrapper.className = isAlwaysVisible 
+                ? 'relative flex items-center justify-center w-11 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20'
+                : 'group/plus relative flex items-center justify-center w-2 hover:w-11 focus-within:w-11 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20';
 
             // Invisible hover sensor slightly wider than the 8px gap so hovering near the seam reliably triggers expansion without jitter
-            const hitZone = document.createElement('div');
-            hitZone.className = 'absolute inset-y-0 -left-2.5 -right-2.5 z-10';
-            wrapper.appendChild(hitZone);
+            if (!isAlwaysVisible) {
+                const hitZone = document.createElement('div');
+                hitZone.className = 'absolute inset-y-0 -left-2.5 -right-2.5 z-10';
+                wrapper.appendChild(hitZone);
+            }
 
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.title = 'Insert Block Here';
-            btn.className = 'relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus:opacity-100 focus:scale-100 focus:pointer-events-auto hover:!scale-110';
+            btn.className = isAlwaysVisible
+                ? 'relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out opacity-100 scale-100 pointer-events-auto hover:!scale-110'
+                : 'relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus:opacity-100 focus:scale-100 focus:pointer-events-auto hover:!scale-110';
             btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>`;
 
             btn.addEventListener('click', (e) => {
@@ -1639,7 +1645,7 @@
                 nerdTrackContent.appendChild(blockCard);
 
                 // Circle '+' button after every block (between adjacent blocks and at the right end)
-                nerdTrackContent.appendChild(createInsertPlusButton(bIdx + 1));
+                nerdTrackContent.appendChild(createInsertPlusButton(bIdx + 1, bIdx + 1 === state.nerdBlocks.length));
             });
 
             // Add a trailing spacer to prevent the last plus button from being cut off
