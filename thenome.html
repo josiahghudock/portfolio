@@ -429,6 +429,28 @@
                 </button>
             </div>
 
+            <!-- Save & Load Setup Hash System -->
+            <div class="pt-4 border-t border-borderSubtle flex flex-col gap-3 text-xs">
+                <div class="flex items-center justify-between">
+                    <span class="font-semibold uppercase tracking-wider text-slate-400">Save & Load Setup</span>
+                    <span id="hashFeedbackMsg" class="text-[11px] font-medium text-emerald-400 hidden"></span>
+                </div>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <button id="saveSetupBtn" type="button" class="px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                        <span id="saveSetupBtnText">Save Setup (Copy Code)</span>
+                    </button>
+                    <div class="flex flex-1 items-center gap-1.5">
+                        <input id="setupHashInput" type="text" placeholder="Paste setup code here..." class="w-full bg-[#16161c] border border-borderSubtle rounded-xl px-3 py-2 text-slate-200 placeholder-slate-500 font-mono text-[11px] focus:outline-none focus:border-accent select-all">
+                        <button id="loadSetupBtn" type="button" class="px-3.5 py-2 bg-accent hover:bg-sky-300 text-slate-950 font-bold rounded-xl transition-all shadow-sm active:scale-95 shrink-0">
+                            Generate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- About Section -->
@@ -484,7 +506,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="decBlockNotesBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
-                        <input id="blockNotesInput" type="number" min="1" max="20" value="5" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-sky-400 focus:outline-none focus:border-accent">
+                        <input id="blockNotesInput" type="number" min="1" max="20" value="4" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-sky-400 focus:outline-none focus:border-accent">
                         <button id="incBlockNotesBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
                     </div>
                 </div>
@@ -497,7 +519,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="decBlockTupletBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
-                        <input id="blockTupletInput" type="number" min="1" max="20" value="5" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-pink-400 focus:outline-none focus:border-pink-400">
+                        <input id="blockTupletInput" type="number" min="1" max="20" value="4" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-pink-400 focus:outline-none focus:border-pink-400">
                         <button id="incBlockTupletBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
                     </div>
                 </div>
@@ -518,7 +540,7 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="decBlockSubdivBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
-                        <input id="blockSubdivInput" type="number" min="1" max="20" value="5" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-purple-400 focus:outline-none focus:border-purple-400">
+                        <input id="blockSubdivInput" type="number" min="1" max="20" value="4" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-purple-400 focus:outline-none focus:border-purple-400">
                         <button id="incBlockSubdivBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
                     </div>
                 </div>
@@ -1439,9 +1461,9 @@
                 blockModalContext.subdivManuallyChanged = (sCount !== blk.numNotes);
             } else {
                 blockModalTitle.textContent = 'Add Tuplet Block';
-                blockNotesInput.value = 5;
-                blockTupletInput.value = 5;
-                blockSubdivInput.value = 5;
+                blockNotesInput.value = 4;
+                blockTupletInput.value = 4;
+                blockSubdivInput.value = 4;
                 blockModalContext.subdivManuallyChanged = false;
             }
 
@@ -2593,29 +2615,6 @@
                 return;
             }
             for (let i = 0, len = state.segments.length; i < len; i++) {
-                state.segments[i].active = true;
-                state.beatStates[state.segments[i].segKey] = true;
-            }
-            for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
-                state.polySegments[p].active = true;
-                state.polyStates[state.polySegments[p].polyKey] = true;
-            }
-            if (!state.isPlaying) drawStaticSequencer();
-        });
-
-        document.getElementById('allOffBtn').addEventListener('click', () => {
-            if (state.ultraNerdMode) {
-                state.nerdBlocks.forEach(blk => {
-                    Object.keys(blk.activeStates).forEach(k => { blk.activeStates[k] = false; });
-                });
-                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
-                    state.polySegments[p].active = false;
-                    state.polyStates[state.polySegments[p].polyKey] = false;
-                }
-                renderNerdLine();
-                return;
-            }
-            for (let i = 0, len = state.segments.length; i < len; i++) {
                 state.segments[i].active = false;
                 state.beatStates[state.segments[i].segKey] = false;
             }
@@ -2705,6 +2704,352 @@
                     console.debug('Copy failed', err);
                 }
                 document.body.removeChild(textarea);
+            });
+        }
+
+        /* ==========================================
+         * HASH SAVE & LOAD SYSTEM
+         * ========================================== */
+        const saveSetupBtn = document.getElementById('saveSetupBtn');
+        const saveSetupBtnText = document.getElementById('saveSetupBtnText');
+        const setupHashInput = document.getElementById('setupHashInput');
+        const loadSetupBtn = document.getElementById('loadSetupBtn');
+        const hashFeedbackMsg = document.getElementById('hashFeedbackMsg');
+        let hashFeedbackTimeout = null;
+
+        function showHashFeedback(message, isError = false) {
+            if (!hashFeedbackMsg) return;
+            hashFeedbackMsg.textContent = message;
+            hashFeedbackMsg.className = `text-[11px] font-medium ${isError ? 'text-rose-400' : 'text-emerald-400'}`;
+            hashFeedbackMsg.classList.remove('hidden');
+            clearTimeout(hashFeedbackTimeout);
+            hashFeedbackTimeout = setTimeout(() => {
+                hashFeedbackMsg.classList.add('hidden');
+            }, 3500);
+        }
+
+        function generateSetupHash() {
+            const payload = {
+                u: state.ultraNerdMode ? 1 : 0,
+                b: state.bpm,
+                tb: state.totalBeats,
+                se: state.subdivEnabled ? 1 : 0,
+                sc: state.subdivCount,
+                ce: state.customSubdivEnabled ? 1 : 0,
+                pe: state.polyrhythmEnabled ? 1 : 0,
+                pb: state.polyBeats,
+                ps: state.polyStates,
+                bsc: state.beatSubdivCounts,
+                ssc: state.subSubdivCounts,
+                bs: state.beatStates,
+                ade: state.advancedDownbeatEnabled ? 1 : 0,
+                pbs: state.perBeatSettings,
+                nb: state.nerdBlocks.map(blk => ({
+                    id: blk.id,
+                    n: blk.numNotes,
+                    r: blk.tupletRate,
+                    x: blk.subdivCount !== undefined ? blk.subdivCount : blk.numNotes,
+                    sd: blk.subDivs || {},
+                    as: blk.activeStates || {}
+                })),
+                bce: state.beatClickEnabled ? 1 : 0,
+                bcs: state.beatClickStates,
+                db: state.downbeat,
+                sb: state.subdivision,
+                pl: state.polyrhythm
+            };
+
+            const jsonStr = JSON.stringify(payload);
+            const b64 = btoa(unescape(encodeURIComponent(jsonStr)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=+$/, '');
+            return `NOME1-${b64}`;
+        }
+
+        function applyModeUI() {
+            if (state.ultraNerdMode) {
+                mainContainer.classList.remove('max-w-xl');
+                mainContainer.classList.add('max-w-3xl');
+                canvasContainer.classList.add('hidden');
+                nerdLineWrapper.classList.remove('hidden');
+                nerdLineWrapper.classList.add('flex');
+                nerdModeBadge.classList.remove('hidden');
+
+                beatsControlSection.classList.add('hidden');
+                uniformSubdivSection.classList.add('hidden');
+                customSubdivSection.classList.add('hidden');
+                polyrhythmSection.classList.add('hidden');
+
+                nerdBeatClickSection.classList.remove('hidden');
+                nerdBeatClickSection.classList.add('flex');
+
+                interactionModeWrapper.classList.remove('hidden');
+
+                ultraNerdBtnText.textContent = 'Exit Ultra-nerd Mode';
+                resetBtnText.textContent = 'Clear Blocks';
+                updateInstructionHint();
+                ensurePerBeatSettings();
+                renderNerdLine();
+            } else {
+                mainContainer.classList.remove('max-w-3xl');
+                mainContainer.classList.add('max-w-xl');
+                nerdLineWrapper.classList.add('hidden');
+                nerdLineWrapper.classList.remove('flex');
+                canvasContainer.classList.remove('hidden');
+                nerdModeBadge.classList.add('hidden');
+
+                beatsControlSection.classList.remove('hidden');
+                uniformSubdivSection.classList.remove('hidden');
+                customSubdivSection.classList.remove('hidden');
+                polyrhythmSection.classList.remove('hidden');
+
+                nerdBeatClickSection.classList.add('hidden');
+                nerdBeatClickSection.classList.remove('flex');
+
+                if (state.customSubdivEnabled) {
+                    interactionModeWrapper.classList.remove('hidden');
+                } else {
+                    interactionModeWrapper.classList.add('hidden');
+                    state.interactionMode = 'toggle';
+                    modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+                    modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                }
+
+                ultraNerdBtnText.textContent = 'Activate Ultra-nerd Mode';
+                resetBtnText.textContent = 'Reset 4/4';
+                updateInstructionHint();
+                ensurePerBeatSettings();
+                initSegments();
+                drawStaticSequencer();
+            }
+        }
+
+        function loadSetupFromHash(rawCode) {
+            if (!rawCode || typeof rawCode !== 'string') {
+                showHashFeedback('Please paste a setup code first.', true);
+                return;
+            }
+            const trimmed = rawCode.trim();
+            if (!trimmed.startsWith('NOME1-')) {
+                showHashFeedback('Invalid code format (missing NOME1- prefix).', true);
+                return;
+            }
+
+            try {
+                let b64 = trimmed.slice(6).replace(/-/g, '+').replace(/_/g, '/');
+                while (b64.length % 4 !== 0) {
+                    b64 += '=';
+                }
+                const jsonStr = decodeURIComponent(escape(atob(b64)));
+                const data = JSON.parse(jsonStr);
+
+                if (!data || typeof data !== 'object') {
+                    throw new Error('Malformed setup data');
+                }
+
+                if (state.isPlaying) {
+                    togglePlay();
+                }
+                beatEditorPopup.classList.add('hidden');
+                closeBlockModal();
+
+                state.ultraNerdMode = Boolean(data.u);
+                state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
+                state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
+                state.subdivEnabled = Boolean(data.se);
+                state.subdivCount = Math.max(1, Math.min(20, parseInt(data.sc) || 1));
+                state.customSubdivEnabled = Boolean(data.ce);
+                state.polyrhythmEnabled = Boolean(data.pe);
+                state.polyBeats = Math.max(1, Math.min(25, parseInt(data.pb) || 3));
+                state.polyStates = (data.ps && typeof data.ps === 'object') ? data.ps : {};
+                state.beatSubdivCounts = (data.bsc && typeof data.bsc === 'object') ? data.bsc : {};
+                state.subSubdivCounts = (data.ssc && typeof data.ssc === 'object') ? data.ssc : {};
+                state.beatStates = (data.bs && typeof data.bs === 'object') ? data.bs : {};
+                state.advancedDownbeatEnabled = Boolean(data.ade);
+                state.perBeatSettings = (data.pbs && typeof data.pbs === 'object') ? data.pbs : {};
+
+                if (Array.isArray(data.nb)) {
+                    let maxId = 0;
+                    state.nerdBlocks = data.nb.map((b, idx) => {
+                        const bid = parseInt(b.id) || (idx + 1);
+                        if (bid > maxId) maxId = bid;
+                        const nNotes = Math.max(1, Math.min(20, parseInt(b.n) || 4));
+                        const tRate = Math.max(1, Math.min(20, parseInt(b.r) || 4));
+                        const sCount = Math.max(1, Math.min(20, parseInt(b.x !== undefined ? b.x : nNotes) || nNotes));
+                        return {
+                            id: bid,
+                            numNotes: nNotes,
+                            tupletRate: tRate,
+                            subdivCount: sCount,
+                            subDivs: (b.sd && typeof b.sd === 'object') ? b.sd : {},
+                            activeStates: (b.as && typeof b.as === 'object') ? b.as : {}
+                        };
+                    });
+                    state.nextBlockId = maxId + 1;
+                } else {
+                    state.nerdBlocks = [];
+                    state.nextBlockId = 1;
+                }
+
+                state.beatClickEnabled = Boolean(data.bce);
+                state.beatClickStates = (data.bcs && typeof data.bcs === 'object') ? data.bcs : {};
+
+                if (data.db && typeof data.db === 'object') {
+                    state.downbeat = {
+                        type: data.db.type || 'triangle',
+                        pitch: Math.max(100, Math.min(1200, parseInt(data.db.pitch) || 440)),
+                        volume: Math.max(0, Math.min(1, parseFloat(data.db.volume) ?? 0.45))
+                    };
+                }
+                if (data.sb && typeof data.sb === 'object') {
+                    state.subdivision = {
+                        type: data.sb.type || 'triangle',
+                        pitch: Math.max(150, Math.min(1000, parseInt(data.sb.pitch) || 330)),
+                        volume: Math.max(0, Math.min(1, parseFloat(data.sb.volume) ?? 0.35))
+                    };
+                }
+                if (data.pl && typeof data.pl === 'object') {
+                    state.polyrhythm = {
+                        type: data.pl.type || 'sine',
+                        pitch: Math.max(150, Math.min(1200, parseInt(data.pl.pitch) || 587)),
+                        volume: Math.max(0, Math.min(1, parseFloat(data.pl.volume) ?? 0.40))
+                    };
+                }
+
+                // Sync DOM inputs & labels
+                bpmSlider.value = state.bpm;
+                bpmText.textContent = state.bpm;
+                centerBpmDisplay.textContent = state.bpm;
+
+                beatsSlider.value = state.totalBeats;
+                beatsText.textContent = state.totalBeats;
+
+                subdivCheckbox.checked = state.subdivEnabled;
+                subdivSlider.value = state.subdivCount;
+                subdivText.textContent = state.subdivCount;
+                if (state.subdivEnabled) {
+                    subdivText.classList.remove('opacity-40');
+                    subdivControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                    decSubdivBtn.removeAttribute('disabled');
+                    incSubdivBtn.removeAttribute('disabled');
+                    subdivSlider.removeAttribute('disabled');
+                } else {
+                    subdivText.classList.add('opacity-40');
+                    subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                    decSubdivBtn.setAttribute('disabled', 'true');
+                    incSubdivBtn.setAttribute('disabled', 'true');
+                    subdivSlider.setAttribute('disabled', 'true');
+                }
+
+                customSubdivCheckbox.checked = state.customSubdivEnabled;
+                if (state.customSubdivEnabled) {
+                    customSubdivHint.classList.remove('hidden');
+                } else {
+                    customSubdivHint.classList.add('hidden');
+                }
+
+                polyrhythmCheckbox.checked = state.polyrhythmEnabled;
+                polySlider.value = state.polyBeats;
+                polyBeatsText.textContent = state.polyBeats;
+                if (state.polyrhythmEnabled) {
+                    polyBeatsText.classList.remove('opacity-40');
+                    polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                    decPolyBtn.removeAttribute('disabled');
+                    incPolyBtn.removeAttribute('disabled');
+                    polySlider.removeAttribute('disabled');
+                } else {
+                    polyBeatsText.classList.add('opacity-40');
+                    polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                    decPolyBtn.setAttribute('disabled', 'true');
+                    incPolyBtn.setAttribute('disabled', 'true');
+                    polySlider.setAttribute('disabled', 'true');
+                }
+
+                if (beatClickCheckbox) {
+                    beatClickCheckbox.checked = state.beatClickEnabled;
+                    if (state.beatClickEnabled) {
+                        beatClickStatusBadge.textContent = 'On';
+                        beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                    } else {
+                        beatClickStatusBadge.textContent = 'Off';
+                        beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
+                    }
+                }
+
+                downbeatType.value = state.downbeat.type;
+                downbeatPitch.value = state.downbeat.pitch;
+                downbeatPitchVal.textContent = state.downbeat.pitch;
+                downbeatVolume.value = state.downbeat.volume;
+                downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
+
+                subdivType.value = state.subdivision.type;
+                subdivPitch.value = state.subdivision.pitch;
+                subdivPitchVal.textContent = state.subdivision.pitch;
+                subdivVolume.value = state.subdivision.volume;
+                subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
+
+                polyType.value = state.polyrhythm.type;
+                polyPitch.value = state.polyrhythm.pitch;
+                polyPitchVal.textContent = state.polyrhythm.pitch;
+                polyVolume.value = state.polyrhythm.volume;
+                polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
+
+                advancedDownbeatCheckbox.checked = state.advancedDownbeatEnabled;
+                if (state.advancedDownbeatEnabled) {
+                    advancedDownbeatPanel.classList.remove('hidden');
+                } else {
+                    advancedDownbeatPanel.classList.add('hidden');
+                }
+
+                applyModeUI();
+                showHashFeedback('Setup loaded!', false);
+            } catch (err) {
+                console.debug('Failed to decode setup hash:', err);
+                showHashFeedback('Invalid or corrupted setup code.', true);
+            }
+        }
+
+        if (saveSetupBtn) {
+            saveSetupBtn.addEventListener('click', () => {
+                const hash = generateSetupHash();
+                if (setupHashInput) {
+                    setupHashInput.value = hash;
+                }
+
+                const textarea = document.createElement('textarea');
+                textarea.value = hash;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    if (saveSetupBtnText) saveSetupBtnText.textContent = 'Code Copied to Clipboard!';
+                    saveSetupBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                    showHashFeedback('Setup code generated & copied!', false);
+                    setTimeout(() => {
+                        if (saveSetupBtnText) saveSetupBtnText.textContent = 'Save Setup (Copy Code)';
+                        saveSetupBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                    }, 2000);
+                } catch (err) {
+                    console.debug('Copy failed', err);
+                    showHashFeedback('Code generated in box below!', false);
+                }
+                document.body.removeChild(textarea);
+            });
+        }
+
+        if (loadSetupBtn) {
+            loadSetupBtn.addEventListener('click', () => {
+                loadSetupFromHash(setupHashInput ? setupHashInput.value : '');
+            });
+        }
+
+        if (setupHashInput) {
+            setupHashInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    loadSetupFromHash(setupHashInput.value);
+                }
             });
         }
 
