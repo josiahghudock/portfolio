@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NW6XGCBV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The 'Nome - Precision Beat Sequencer</title>
@@ -192,7 +186,7 @@
                 <div class="flex justify-between items-center text-[10px] uppercase tracking-wider text-amber-400 font-semibold">
                     <div class="flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                        <span>Pulse Metronome Bar (Quarter Note Beat-Click @ <span id="nerdBeatClickBpmLabel">100</span> BPM)</span>
+                        <span>Pulse Metronome Bar (<span id="nerdBeatClickRateLabel">4-tuplet / Quarter Note</span> Beat-Click @ <span id="nerdBeatClickBpmLabel">100</span> BPM)</span>
                     </div>
                     <span id="nerdBeatClickSummary" class="text-slate-400 font-mono normal-case">0 beats</span>
                 </div>
@@ -322,16 +316,27 @@
             </div>
 
             <!-- Beat-Click Toggle (Shown ONLY in Ultra-nerd mode) -->
-            <div id="nerdBeatClickSection" class="hidden flex-col gap-2 pt-3 border-t border-borderSubtle">
+            <div id="nerdBeatClickSection" class="hidden flex-col gap-3 pt-3 border-t border-borderSubtle">
                 <div class="flex justify-between items-center text-sm font-medium">
                     <label class="flex items-center gap-2.5 cursor-pointer">
                         <input id="beatClickCheckbox" type="checkbox" class="w-4 h-4 rounded bg-[#1a1a22] border-borderSubtle text-amber-400 accent-amber-400 cursor-pointer">
-                        <span class="text-slate-300">Beat-Click (Quarter Note Pulse)</span>
+                        <span class="text-slate-300">Beat-Click Pulse</span>
                     </label>
-                    <span id="beatClickStatusBadge" class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle">Off</span>
+                    <div class="flex items-center gap-2">
+                        <span id="beatClickRateText" class="text-amber-400 font-bold text-base opacity-40">4</span>
+                        <span id="beatClickRateUnit" class="text-xs text-slate-400 opacity-40">tuplet rate (quarter)</span>
+                        <span id="beatClickStatusBadge" class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle">Off</span>
+                    </div>
+                </div>
+                <div id="beatClickControlContainer" class="flex items-center gap-3 opacity-40 pointer-events-none transition-opacity duration-200">
+                    <button id="decBeatClickRateBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">-</button>
+                    <div class="relative flex-1 flex items-center">
+                        <input id="beatClickRateSlider" type="range" min="1" max="20" value="4" disabled class="w-full h-2 bg-[#1a1a22] rounded-lg appearance-none cursor-pointer accent-amber-400 border border-borderSubtle">
+                    </div>
+                    <button id="incBeatClickRateBtn" disabled class="w-10 h-10 rounded-lg bg-[#1a1a22] border border-borderSubtle flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-600 active:scale-95 transition-all text-lg font-bold">+</button>
                 </div>
                 <p class="text-[11px] text-slate-500 leading-relaxed">
-                    Displays a pulse metronome bar that plays steady quarter notes at the current BPM, cutting the final beat short if your block sequence is a non-integer number of beats and restarting with the loop.
+                    Displays a pulse metronome bar that plays steady pulses at the selected tuplet rate relative to the BPM (4 = quarter note pulse, 3 = triplet rate, 5 = quintuplet rate, etc.), cutting the final pulse short if your block sequence is a non-integer multiple and restarting with the loop.
                 </p>
             </div>
 
@@ -862,6 +867,41 @@
         </div>
     </div>
 
+    <!-- Repeat End Count Modal for Ultra-nerd Mode -->
+    <div id="repeatConfigModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-[#16161c] border border-borderSubtle rounded-2xl p-5 shadow-2xl w-full max-w-xs flex flex-col gap-4 text-xs">
+            <div class="flex justify-between items-center border-b border-borderSubtle pb-2.5">
+                <h3 class="text-sm font-bold text-slate-100 tracking-wide">Set Repeat End</h3>
+                <button id="closeRepeatModalBtn" type="button" class="text-slate-400 hover:text-white text-lg leading-none">&times;</button>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <div class="flex flex-col gap-1.5">
+                    <div class="flex justify-between items-center">
+                        <label for="repeatCountInput" class="text-slate-300 font-medium">Number of Repeats (<span class="text-amber-400 font-mono">x</span>)</label>
+                        <span class="text-[10px] text-slate-500">1 to 10</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="decRepeatCountBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">-</button>
+                        <input id="repeatCountInput" type="number" min="1" max="10" value="2" class="w-full bg-[#121216] border border-borderSubtle rounded-lg px-3 py-1.5 text-center text-sm font-bold text-amber-400 focus:outline-none focus:border-amber-400">
+                        <button id="incRepeatCountBtn" type="button" class="w-8 h-8 rounded-lg bg-[#1a1a22] border border-borderSubtle text-slate-200 hover:text-white font-bold">+</button>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                    The bracketed subsequence <span class="text-amber-300 font-mono font-bold">[ ... ]</span> will be repeated <span id="repeatModalPreviewVal" class="text-amber-400 font-bold">2</span> times, and then playback will continue as normal until the end.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 pt-2 border-t border-borderSubtle">
+                <button id="removeRepeatEndBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold transition-all">Remove</button>
+                <div class="flex items-center gap-2 ml-auto">
+                    <button id="cancelRepeatModalBtn" type="button" class="px-3.5 py-2 rounded-lg bg-[#1a1a22] hover:bg-[#22222c] text-slate-300 font-semibold transition-all">Cancel</button>
+                    <button id="saveRepeatModalBtn" type="button" class="px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold transition-all shadow-md">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="w-full max-w-xl text-center py-4 text-xs text-slate-500 flex flex-col gap-1.5">
         <div>The 'Nome v2.0</div>
@@ -883,6 +923,7 @@
         const nerdBeatClickWrapper = document.getElementById('nerdBeatClickWrapper');
         const nerdBeatClickTrack = document.getElementById('nerdBeatClickTrack');
         const nerdBeatClickBpmLabel = document.getElementById('nerdBeatClickBpmLabel');
+        const nerdBeatClickRateLabel = document.getElementById('nerdBeatClickRateLabel');
         const nerdBeatClickSummary = document.getElementById('nerdBeatClickSummary');
         const nerdModeBadge = document.getElementById('nerdModeBadge');
         const ultraNerdModeBtn = document.getElementById('ultraNerdModeBtn');
@@ -896,6 +937,12 @@
         const nerdBeatClickSection = document.getElementById('nerdBeatClickSection');
         const beatClickCheckbox = document.getElementById('beatClickCheckbox');
         const beatClickStatusBadge = document.getElementById('beatClickStatusBadge');
+        const beatClickRateText = document.getElementById('beatClickRateText');
+        const beatClickRateUnit = document.getElementById('beatClickRateUnit');
+        const beatClickControlContainer = document.getElementById('beatClickControlContainer');
+        const beatClickRateSlider = document.getElementById('beatClickRateSlider');
+        const decBeatClickRateBtn = document.getElementById('decBeatClickRateBtn');
+        const incBeatClickRateBtn = document.getElementById('incBeatClickRateBtn');
 
         const centerBpmDisplay = document.getElementById('centerBpmDisplay');
         const playBtn = document.getElementById('playBtn');
@@ -977,6 +1024,18 @@
         const incBlockSubdivBtn = document.getElementById('incBlockSubdivBtn');
         const blockMathPreview = document.getElementById('blockMathPreview');
 
+        // Repeat Modal Elements
+        const repeatConfigModal = document.getElementById('repeatConfigModal');
+        const closeRepeatModalBtn = document.getElementById('closeRepeatModalBtn');
+        const cancelRepeatModalBtn = document.getElementById('cancelRepeatModalBtn');
+        const saveRepeatModalBtn = document.getElementById('saveRepeatModalBtn');
+        const removeRepeatEndBtn = document.getElementById('removeRepeatEndBtn');
+        const repeatCountInput = document.getElementById('repeatCountInput');
+        const decRepeatCountBtn = document.getElementById('decRepeatCountBtn');
+        const incRepeatCountBtn = document.getElementById('incRepeatCountBtn');
+        const repeatModalPreviewVal = document.getElementById('repeatModalPreviewVal');
+        let pendingRepeatEndGapIndex = null;
+
         // Application State
         const state = {
             isPlaying: false,
@@ -1002,8 +1061,10 @@
             // Ultra-nerd Mode specific state
             nerdBlocks: [], // Array of { id, numNotes, tupletRate, subdivCount, subDivs: { noteIdx: count }, activeStates: { "noteIdx_subIdx": bool } }
             nerdSegments: [],
+            nerdRepeat: { startIdx: null, endIdx: null, count: 2 },
             beatClickEnabled: false,
-            beatClickSegments: [], // Array of { index, beatKey, active, durationBeats, scheduledTime, scheduledDuration }
+            beatClickRate: 4,
+            beatClickSegments: [], // Array of { index, beatKey, active, durationBeats, pulseFraction, scheduledTime, scheduledDuration }
             beatClickStates: {},
             nextBeatClickTime: 0.0,
             currentBeatClickIndex: 0,
@@ -1420,11 +1481,52 @@
          * ULTRA-NERD MODE LOGIC & RENDERING
          * ========================================== */
 
+        function isRepeatActive() {
+            const r = state.nerdRepeat;
+            return (
+                r &&
+                r.startIdx !== null &&
+                r.endIdx !== null &&
+                r.endIdx > r.startIdx &&
+                r.startIdx >= 0 &&
+                r.startIdx < state.nerdBlocks.length
+            );
+        }
+
+        function getExpandedNerdBlockSequence() {
+            const total = state.nerdBlocks.length;
+            if (total === 0) return [];
+
+            if (!isRepeatActive()) {
+                return state.nerdBlocks.map((block, bIdx) => ({ block, bIdx }));
+            }
+
+            const start = Math.max(0, Math.min(total - 1, state.nerdRepeat.startIdx));
+            const end = Math.max(start + 1, Math.min(total, state.nerdRepeat.endIdx));
+            const count = Math.max(1, Math.min(10, parseInt(state.nerdRepeat.count) || 1));
+
+            const seq = [];
+            for (let i = 0; i < start; i++) {
+                seq.push({ block: state.nerdBlocks[i], bIdx: i });
+            }
+            for (let rep = 0; rep < count; rep++) {
+                for (let i = start; i < end; i++) {
+                    seq.push({ block: state.nerdBlocks[i], bIdx: i });
+                }
+            }
+            for (let i = end; i < total; i++) {
+                seq.push({ block: state.nerdBlocks[i], bIdx: i });
+            }
+            return seq;
+        }
+
         function buildNerdSegments() {
             state.nerdSegments = [];
             state.beatClickSegments = [];
 
-            state.nerdBlocks.forEach((block, bIdx) => {
+            const playbackSequence = getExpandedNerdBlockSequence();
+
+            playbackSequence.forEach(({ block, bIdx }) => {
                 const actualNotesCount = block.subdivCount !== undefined ? block.subdivCount : block.numNotes;
                 // Total duration of this block in beats is (numNotes / tupletRate)
                 const blockTotalBeats = block.numNotes / block.tupletRate;
@@ -1465,26 +1567,33 @@
                 }
             });
 
-            // Build Beat-Click quarter-note segments across the total block sequence duration
+            // Build Beat-Click pulse segments across the total block sequence duration
+            // Tuplet rate 4 corresponds to quarter-note pulse (1 beat per click).
+            // General rate R corresponds to (4 / R) quarter-note beats per click.
             const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
             if (state.beatClickEnabled && totalBeatsEquiv > 0) {
+                const rate = Math.max(1, Math.min(20, parseInt(state.beatClickRate) || 4));
+                const pulseBeats = 4.0 / rate;
                 const eps = 1e-7;
-                const numClickBeats = Math.ceil(totalBeatsEquiv - eps);
+                const totalPulsesEquiv = totalBeatsEquiv / pulseBeats;
+                const numClickPulses = Math.ceil(totalPulsesEquiv - eps);
                 let remainingBeats = totalBeatsEquiv;
 
-                for (let i = 0; i < numClickBeats; i++) {
+                for (let i = 0; i < numClickPulses; i++) {
                     const beatKey = `click_${i}`;
                     if (state.beatClickStates[beatKey] === undefined) {
                         state.beatClickStates[beatKey] = true;
                     }
-                    const durBeats = remainingBeats >= 1 - eps ? 1.0 : Math.max(0.001, remainingBeats);
-                    const isPartial = durBeats < (1.0 - 1e-4);
+                    const durBeats = remainingBeats >= pulseBeats - eps ? pulseBeats : Math.max(0.001, remainingBeats);
+                    const pulseFraction = durBeats / pulseBeats;
+                    const isPartial = pulseFraction < (1.0 - 1e-4);
 
                     state.beatClickSegments.push({
                         index: i,
                         beatKey: beatKey,
                         active: state.beatClickStates[beatKey],
                         durationBeats: durBeats,
+                        pulseFraction: pulseFraction,
                         isPartial: isPartial,
                         scheduledTime: null,
                         scheduledDuration: 0
@@ -1498,9 +1607,21 @@
             renderNerdBeatClickBar();
         }
 
+        function getBeatClickRateDescription(rate) {
+            const r = parseInt(rate) || 4;
+            if (r === 4) return 'tuplet rate (quarter)';
+            if (r === 3) return 'tuplet rate (triplet)';
+            if (r === 5) return 'tuplet rate (quintuplet)';
+            if (r === 6) return 'tuplet rate (sextuplet)';
+            if (r === 7) return 'tuplet rate (septuplet)';
+            if (r === 8) return 'tuplet rate (eighth)';
+            return 'tuplet rate';
+        }
+
         function getTotalNerdBeatsEquivalent() {
+            const playbackSequence = getExpandedNerdBlockSequence();
             let totalBeatsEquiv = 0;
-            for (const block of state.nerdBlocks) {
+            for (const { block } of playbackSequence) {
                 totalBeatsEquiv += (block.numNotes / block.tupletRate);
             }
             return totalBeatsEquiv;
@@ -1524,11 +1645,15 @@
             }
             nerdBeatClickWrapper.classList.remove('hidden');
             nerdBeatClickBpmLabel.textContent = state.bpm;
+            const rate = Math.max(1, Math.min(20, parseInt(state.beatClickRate) || 4));
+            if (nerdBeatClickRateLabel) {
+                nerdBeatClickRateLabel.textContent = rate === 4 ? 'Quarter Note / 4-tuplet' : `${rate}-tuplet Rate`;
+            }
             nerdBeatClickTrack.innerHTML = '';
 
             const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
             if (totalBeatsEquiv <= 0 || state.beatClickSegments.length === 0) {
-                nerdBeatClickSummary.textContent = 'Add blocks to generate quarter-note pulse';
+                nerdBeatClickSummary.textContent = 'Add blocks to generate beat-click pulse';
                 const emptyHint = document.createElement('div');
                 emptyHint.className = 'w-full text-center text-[10px] text-slate-500 italic';
                 emptyHint.textContent = 'No blocks in sequence yet';
@@ -1538,13 +1663,15 @@
 
             const fullCount = state.beatClickSegments.filter(s => !s.isPartial).length;
             const partialSeg = state.beatClickSegments.find(s => s.isPartial);
+            const unitLabel = rate === 4 ? 'beat' : 'pulse';
             if (partialSeg) {
-                nerdBeatClickSummary.textContent = `${fullCount} full beat${fullCount !== 1 ? 's' : ''} + ${(partialSeg.durationBeats).toFixed(2)} cut beat (${totalBeatsEquiv.toFixed(2)} beats total)`;
+                nerdBeatClickSummary.textContent = `${fullCount} full ${unitLabel}${fullCount !== 1 ? 's' : ''} + ${(partialSeg.pulseFraction).toFixed(2)} cut ${unitLabel} (${totalBeatsEquiv.toFixed(2)} beats total)`;
             } else {
-                nerdBeatClickSummary.textContent = `${fullCount} equal quarter-note beat${fullCount !== 1 ? 's' : ''}`;
+                nerdBeatClickSummary.textContent = `${fullCount} equal ${rate === 4 ? 'quarter-note beat' : `${rate}-tuplet pulse`}${fullCount !== 1 ? 's' : ''}`;
             }
 
             const secPerBeat = 60.0 / state.bpm;
+            const badgePrefix = rate === 4 ? 'Q' : 'P';
 
             state.beatClickSegments.forEach((cSeg, idx) => {
                 const btn = document.createElement('button');
@@ -1556,8 +1683,8 @@
 
                 const secDur = (cSeg.durationBeats * secPerBeat).toFixed(2);
                 btn.title = cSeg.isPartial
-                    ? `Beat ${idx + 1} (Cut short: ${cSeg.durationBeats.toFixed(2)} of a beat / ${secDur}s) - Click to toggle`
-                    : `Beat ${idx + 1} (1.00 beat / ${secDur}s) - Click to toggle`;
+                    ? `Pulse ${idx + 1} (Cut short: ${cSeg.pulseFraction.toFixed(2)} of pulse / ${secDur}s) - Click to toggle`
+                    : `Pulse ${idx + 1} (${cSeg.durationBeats.toFixed(2)} beats / ${secDur}s) - Click to toggle`;
 
                 btn.className = `h-full rounded-md border text-[10px] font-mono font-bold flex items-center justify-center gap-1 transition-all overflow-hidden px-1 ${
                     cSeg.active
@@ -1568,8 +1695,8 @@
                 }`;
 
                 btn.innerHTML = `
-                    <span>Q${idx + 1}</span>
-                    ${cSeg.isPartial ? `<span class="text-[9px] opacity-80">(${cSeg.durationBeats.toFixed(2)}b)</span>` : ''}
+                    <span>${badgePrefix}${idx + 1}</span>
+                    ${cSeg.isPartial ? `<span class="text-[9px] opacity-80">(${cSeg.pulseFraction.toFixed(2)})</span>` : ''}
                 `;
 
                 btn.addEventListener('click', () => {
@@ -1582,26 +1709,133 @@
             });
         }
 
-        function createInsertPlusButton(insertIndex, isAlwaysVisible = false) {
-            const wrapper = document.createElement('div');
-            // Collapsed width (w-2) by default so blocks sit tightly together; smoothly expands (hover:w-11) to push blocks apart when hovering near the gap
-            wrapper.className = isAlwaysVisible 
-                ? 'relative flex items-center justify-center w-11 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20'
-                : 'group/plus relative flex items-center justify-center w-2 hover:w-11 focus-within:w-11 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20';
+        function openRepeatModal(gapIndex) {
+            pendingRepeatEndGapIndex = gapIndex;
+            const currentCount = (state.nerdRepeat && state.nerdRepeat.count) ? state.nerdRepeat.count : 2;
+            repeatCountInput.value = currentCount;
+            if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = currentCount;
 
-            // Invisible hover sensor slightly wider than the 8px gap so hovering near the seam reliably triggers expansion without jitter
-            if (!isAlwaysVisible) {
+            if (removeRepeatEndBtn) {
+                if (state.nerdRepeat.endIdx === gapIndex) {
+                    removeRepeatEndBtn.classList.remove('hidden');
+                } else {
+                    removeRepeatEndBtn.classList.add('hidden');
+                }
+            }
+
+            repeatConfigModal.classList.remove('hidden');
+            repeatConfigModal.classList.add('flex');
+        }
+
+        function closeRepeatModal() {
+            repeatConfigModal.classList.add('hidden');
+            repeatConfigModal.classList.remove('flex');
+            pendingRepeatEndGapIndex = null;
+        }
+
+        if (closeRepeatModalBtn) closeRepeatModalBtn.addEventListener('click', closeRepeatModal);
+        if (cancelRepeatModalBtn) cancelRepeatModalBtn.addEventListener('click', closeRepeatModal);
+
+        if (repeatCountInput) {
+            repeatCountInput.addEventListener('input', () => {
+                let v = parseInt(repeatCountInput.value) || 1;
+                v = Math.max(1, Math.min(10, v));
+                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
+            });
+        }
+
+        if (decRepeatCountBtn) {
+            decRepeatCountBtn.addEventListener('click', () => {
+                let v = parseInt(repeatCountInput.value) || 1;
+                v = Math.max(1, v - 1);
+                repeatCountInput.value = v;
+                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
+            });
+        }
+
+        if (incRepeatCountBtn) {
+            incRepeatCountBtn.addEventListener('click', () => {
+                let v = parseInt(repeatCountInput.value) || 1;
+                v = Math.min(10, v + 1);
+                repeatCountInput.value = v;
+                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
+            });
+        }
+
+        if (saveRepeatModalBtn) {
+            saveRepeatModalBtn.addEventListener('click', () => {
+                if (pendingRepeatEndGapIndex !== null) {
+                    if (state.isPlaying) togglePlay();
+                    const count = Math.max(1, Math.min(10, parseInt(repeatCountInput.value) || 2));
+                    state.nerdRepeat.endIdx = pendingRepeatEndGapIndex;
+                    state.nerdRepeat.count = count;
+                    closeRepeatModal();
+                    renderNerdLine();
+                }
+            });
+        }
+
+        if (removeRepeatEndBtn) {
+            removeRepeatEndBtn.addEventListener('click', () => {
+                if (state.isPlaying) togglePlay();
+                state.nerdRepeat.endIdx = null;
+                closeRepeatModal();
+                renderNerdLine();
+            });
+        }
+
+        function createInsertPlusButton(insertIndex, isAlwaysVisible = false) {
+            const hasStartBracket = state.nerdRepeat.startIdx === insertIndex;
+            const hasEndBracket = state.nerdRepeat.endIdx === insertIndex;
+            const hasBracket = hasStartBracket || hasEndBracket;
+            const canStartHere = insertIndex < state.nerdBlocks.length;
+            const canEndHere = state.nerdRepeat.startIdx !== null && insertIndex > state.nerdRepeat.startIdx;
+
+            const forceExpanded = isAlwaysVisible || hasBracket;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = forceExpanded
+                ? 'group/plus relative flex flex-col items-center justify-center w-14 hover:w-20 focus-within:w-20 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20'
+                : 'group/plus relative flex flex-col items-center justify-center w-2 hover:w-20 focus-within:w-20 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20';
+
+            if (!forceExpanded) {
                 const hitZone = document.createElement('div');
                 hitZone.className = 'absolute inset-y-0 -left-2.5 -right-2.5 z-10';
                 wrapper.appendChild(hitZone);
             }
 
+            // Left Repeat Bracket '[' Visual
+            if (hasStartBracket) {
+                const startBracketEl = document.createElement('div');
+                startBracketEl.className = 'pointer-events-none absolute inset-y-1 left-1/2 -translate-x-1/2 flex items-center justify-center z-10';
+                startBracketEl.innerHTML = `
+                    <div class="w-4 h-[156px] border-l-[4px] border-t-[4px] border-b-[4px] border-amber-400 rounded-l-md shadow-[0_0_12px_rgba(251,191,36,0.35)]"></div>
+                `;
+                wrapper.appendChild(startBracketEl);
+            }
+
+            // Right Repeat Bracket ']' Visual + Repeat Count Badge
+            if (hasEndBracket) {
+                const endBracketEl = document.createElement('div');
+                endBracketEl.className = 'pointer-events-none absolute inset-y-1 left-1/2 -translate-x-1/2 flex items-center justify-center z-10';
+                endBracketEl.innerHTML = `
+                    <div class="relative w-4 h-[156px] border-r-[4px] border-t-[4px] border-b-[4px] border-amber-400 rounded-r-md shadow-[0_0_12px_rgba(251,191,36,0.35)]">
+                        <span class="absolute -top-3 right-0 px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono font-extrabold text-[10px] leading-none shadow-md">×${state.nerdRepeat.count}</span>
+                    </div>
+                `;
+                wrapper.appendChild(endBracketEl);
+            }
+
+            // Controls Stack: Circle '+' button and Repeat Start / Repeat End buttons underneath
+            const controlsStack = document.createElement('div');
+            controlsStack.className = forceExpanded
+                ? 'relative z-20 flex flex-col items-center gap-1.5 transition-all duration-200 ease-out opacity-100 scale-100 pointer-events-auto'
+                : 'relative z-20 flex flex-col items-center gap-1.5 transition-all duration-200 ease-out opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus-within:opacity-100 focus-within:scale-100 focus-within:pointer-events-auto';
+
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.title = 'Insert Block Here';
-            btn.className = isAlwaysVisible
-                ? 'relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out opacity-100 scale-100 pointer-events-auto hover:!scale-110'
-                : 'relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus:opacity-100 focus:scale-100 focus:pointer-events-auto hover:!scale-110';
+            btn.className = 'w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out hover:!scale-110';
             btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>`;
 
             btn.addEventListener('click', (e) => {
@@ -1609,7 +1843,63 @@
                 openBlockModal('add', insertIndex);
             });
 
-            wrapper.appendChild(btn);
+            controlsStack.appendChild(btn);
+
+            // Repeat Start & Repeat End buttons underneath the circle '+' button
+            const repeatBtnsContainer = document.createElement('div');
+            repeatBtnsContainer.className = forceExpanded
+                ? 'flex flex-col items-center gap-1 opacity-90 group-hover/plus:opacity-100 transition-opacity'
+                : 'flex flex-col items-center gap-1';
+
+            if (canStartHere) {
+                const startBtn = document.createElement('button');
+                startBtn.type = 'button';
+                startBtn.title = hasStartBracket ? 'Remove Repeat Start [' : 'Place Repeat Start [ here';
+                startBtn.className = hasStartBracket
+                    ? 'px-1.5 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-[9px] uppercase tracking-tight border border-amber-200 shadow-md whitespace-nowrap transition-all active:scale-95'
+                    : 'px-1.5 py-0.5 rounded bg-[#181822]/95 hover:bg-amber-400 text-amber-300 hover:text-slate-950 font-semibold text-[9px] uppercase tracking-tight border border-amber-500/40 hover:border-amber-300 shadow-md whitespace-nowrap transition-all active:scale-95';
+                startBtn.textContent = hasStartBracket ? '[ Start ×' : 'Repeat Start';
+
+                startBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (state.isPlaying) togglePlay();
+                    if (state.nerdRepeat.startIdx === insertIndex) {
+                        state.nerdRepeat.startIdx = null;
+                        state.nerdRepeat.endIdx = null;
+                    } else {
+                        state.nerdRepeat.startIdx = insertIndex;
+                        if (state.nerdRepeat.endIdx !== null && state.nerdRepeat.endIdx <= insertIndex) {
+                            state.nerdRepeat.endIdx = null;
+                        }
+                    }
+                    renderNerdLine();
+                });
+
+                repeatBtnsContainer.appendChild(startBtn);
+            }
+
+            if (canEndHere) {
+                const endBtn = document.createElement('button');
+                endBtn.type = 'button';
+                endBtn.title = hasEndBracket ? 'Edit or Remove Repeat End ]' : 'Place Repeat End ] here';
+                endBtn.className = hasEndBracket
+                    ? 'px-1.5 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-[9px] uppercase tracking-tight border border-amber-200 shadow-md whitespace-nowrap transition-all active:scale-95'
+                    : 'px-1.5 py-0.5 rounded bg-[#181822]/95 hover:bg-amber-400 text-amber-300 hover:text-slate-950 font-semibold text-[9px] uppercase tracking-tight border border-amber-500/40 hover:border-amber-300 shadow-md whitespace-nowrap transition-all active:scale-95';
+                endBtn.textContent = hasEndBracket ? `End ×${state.nerdRepeat.count} ]` : 'Repeat End';
+
+                endBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openRepeatModal(insertIndex);
+                });
+
+                repeatBtnsContainer.appendChild(endBtn);
+            }
+
+            if (repeatBtnsContainer.children.length > 0) {
+                controlsStack.appendChild(repeatBtnsContainer);
+            }
+
+            wrapper.appendChild(controlsStack);
             return wrapper;
         }
 
@@ -1942,7 +2232,15 @@
                     subDivs: {},
                     activeStates: {}
                 };
-                state.nerdBlocks.splice(blockModalContext.insertIndex, 0, newBlock);
+                const idx = blockModalContext.insertIndex;
+                state.nerdBlocks.splice(idx, 0, newBlock);
+
+                if (state.nerdRepeat.startIdx !== null && idx <= state.nerdRepeat.startIdx) {
+                    state.nerdRepeat.startIdx++;
+                }
+                if (state.nerdRepeat.endIdx !== null && idx < state.nerdRepeat.endIdx) {
+                    state.nerdRepeat.endIdx++;
+                }
             }
 
             closeBlockModal();
@@ -1951,7 +2249,29 @@
         });
 
         function deleteNerdBlock(blockId) {
-            state.nerdBlocks = state.nerdBlocks.filter(b => b.id !== blockId);
+            const delIdx = state.nerdBlocks.findIndex(b => b.id === blockId);
+            if (delIdx === -1) return;
+
+            state.nerdBlocks.splice(delIdx, 1);
+
+            if (state.nerdRepeat.startIdx !== null) {
+                if (delIdx < state.nerdRepeat.startIdx) {
+                    state.nerdRepeat.startIdx--;
+                }
+                if (state.nerdRepeat.startIdx >= state.nerdBlocks.length) {
+                    state.nerdRepeat.startIdx = null;
+                    state.nerdRepeat.endIdx = null;
+                }
+            }
+            if (state.nerdRepeat.endIdx !== null) {
+                if (delIdx < state.nerdRepeat.endIdx) {
+                    state.nerdRepeat.endIdx--;
+                }
+                if (state.nerdRepeat.startIdx === null || state.nerdRepeat.endIdx <= state.nerdRepeat.startIdx) {
+                    state.nerdRepeat.endIdx = null;
+                }
+            }
+
             if (state.isPlaying && state.nerdBlocks.length === 0) {
                 togglePlay();
             }
@@ -1959,21 +2279,80 @@
             renderNerdLine();
         }
 
-        // Beat-Click Checkbox Handler in Ultra-nerd Mode
+        // Beat-Click Checkbox & Tuplet Rate Controls in Ultra-nerd Mode
+        function updateBeatClickControlUI() {
+            if (!beatClickCheckbox) return;
+            beatClickCheckbox.checked = state.beatClickEnabled;
+            if (beatClickRateSlider) beatClickRateSlider.value = state.beatClickRate;
+            if (beatClickRateText) beatClickRateText.textContent = state.beatClickRate;
+            if (beatClickRateUnit) beatClickRateUnit.textContent = getBeatClickRateDescription(state.beatClickRate);
+
+            if (state.beatClickEnabled) {
+                beatClickStatusBadge.textContent = 'On';
+                beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                if (beatClickRateText) beatClickRateText.classList.remove('opacity-40');
+                if (beatClickRateUnit) beatClickRateUnit.classList.remove('opacity-40');
+                if (beatClickControlContainer) beatClickControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                if (decBeatClickRateBtn) decBeatClickRateBtn.removeAttribute('disabled');
+                if (incBeatClickRateBtn) incBeatClickRateBtn.removeAttribute('disabled');
+                if (beatClickRateSlider) beatClickRateSlider.removeAttribute('disabled');
+            } else {
+                beatClickStatusBadge.textContent = 'Off';
+                beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
+                if (beatClickRateText) beatClickRateText.classList.add('opacity-40');
+                if (beatClickRateUnit) beatClickRateUnit.classList.add('opacity-40');
+                if (beatClickControlContainer) beatClickControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                if (decBeatClickRateBtn) decBeatClickRateBtn.setAttribute('disabled', 'true');
+                if (incBeatClickRateBtn) incBeatClickRateBtn.setAttribute('disabled', 'true');
+                if (beatClickRateSlider) beatClickRateSlider.setAttribute('disabled', 'true');
+            }
+        }
+
         if (beatClickCheckbox) {
             beatClickCheckbox.addEventListener('change', (e) => {
                 if (state.isPlaying) {
                     togglePlay();
                 }
                 state.beatClickEnabled = e.target.checked;
-                if (state.beatClickEnabled) {
-                    beatClickStatusBadge.textContent = 'On';
-                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-                } else {
-                    beatClickStatusBadge.textContent = 'Off';
-                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
-                }
+                updateBeatClickControlUI();
                 renderNerdLine();
+            });
+        }
+
+        if (beatClickRateSlider) {
+            beatClickRateSlider.addEventListener('input', (e) => {
+                if (state.isPlaying) {
+                    togglePlay();
+                }
+                state.beatClickRate = parseInt(e.target.value) || 4;
+                updateBeatClickControlUI();
+                renderNerdLine();
+            });
+        }
+
+        if (decBeatClickRateBtn) {
+            decBeatClickRateBtn.addEventListener('click', () => {
+                if (state.beatClickRate > 1) {
+                    if (state.isPlaying) {
+                        togglePlay();
+                    }
+                    state.beatClickRate--;
+                    updateBeatClickControlUI();
+                    renderNerdLine();
+                }
+            });
+        }
+
+        if (incBeatClickRateBtn) {
+            incBeatClickRateBtn.addEventListener('click', () => {
+                if (state.beatClickRate < 20) {
+                    if (state.isPlaying) {
+                        togglePlay();
+                    }
+                    state.beatClickRate++;
+                    updateBeatClickControlUI();
+                    renderNerdLine();
+                }
             });
         }
 
@@ -2257,14 +2636,25 @@
 
             if (state.ultraNerdMode) {
                 let activeIdx = -1;
+                const activeDomIds = new Set();
                 for (let i = 0, len = state.nerdSegments.length; i < len; i++) {
                     const seg = state.nerdSegments[i];
                     const highlightWindow = Math.min(0.12, Math.max(0.05, (seg.scheduledDuration || 0.1) * 0.85));
                     const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + highlightWindow);
-                    const el = document.getElementById(seg.domId);
+                    if (isCurrent) {
+                        activeIdx = i;
+                        activeDomIds.add(seg.domId);
+                    }
+                }
+
+                const visitedDomIds = new Set();
+                for (let i = 0, len = state.nerdSegments.length; i < len; i++) {
+                    const domId = state.nerdSegments[i].domId;
+                    if (visitedDomIds.has(domId)) continue;
+                    visitedDomIds.add(domId);
+                    const el = document.getElementById(domId);
                     if (el) {
-                        if (isCurrent) {
-                            activeIdx = i;
+                        if (activeDomIds.has(domId)) {
                             el.classList.add('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
                         } else {
                             el.classList.remove('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
@@ -2602,6 +2992,10 @@
                     closeBlockModal();
                     return;
                 }
+                if (!repeatConfigModal.classList.contains('hidden')) {
+                    closeRepeatModal();
+                    return;
+                }
             }
             if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'SELECT' && e.target.tagName !== 'TEXTAREA') {
                 if (e.code === 'Space' && e.target.tagName !== 'BUTTON') {
@@ -2926,8 +3320,11 @@
             if (state.ultraNerdMode) {
                 state.nerdBlocks = [];
                 state.nerdSegments = [];
+                state.nerdRepeat = { startIdx: null, endIdx: null, count: 2 };
+                state.beatClickRate = 4;
                 state.beatClickSegments = [];
                 state.beatClickStates = {};
+                updateBeatClickControlUI();
                 ensurePerBeatSettings();
                 renderNerdLine();
                 return;
@@ -3142,6 +3539,7 @@
             }
             beatEditorPopup.classList.add('hidden');
             closeBlockModal();
+            closeRepeatModal();
             mainContainer.classList.add('hidden');
             if (headerActionButtons) headerActionButtons.classList.add('hidden');
             articleView.classList.remove('hidden');
@@ -3248,8 +3646,19 @@
                     });
                 }
 
+                if (state.nerdRepeat && state.nerdRepeat.startIdx !== null) {
+                    p.nr = [
+                        state.nerdRepeat.startIdx,
+                        state.nerdRepeat.endIdx,
+                        state.nerdRepeat.count || 2
+                    ];
+                }
+
                 if (state.beatClickEnabled) {
                     p.bce = 1;
+                    if (state.beatClickRate !== 4) {
+                        p.bcr = state.beatClickRate;
+                    }
                     const bcOff = [];
                     for (const [k, v] of Object.entries(state.beatClickStates)) {
                         if (v === false) {
@@ -3480,14 +3889,7 @@
             }
 
             if (beatClickCheckbox) {
-                beatClickCheckbox.checked = state.beatClickEnabled;
-                if (state.beatClickEnabled) {
-                    beatClickStatusBadge.textContent = 'On';
-                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
-                } else {
-                    beatClickStatusBadge.textContent = 'Off';
-                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
-                }
+                updateBeatClickControlUI();
             }
 
             downbeatType.value = state.downbeat.type;
@@ -3550,6 +3952,7 @@
                 }
                 beatEditorPopup.classList.add('hidden');
                 closeBlockModal();
+                closeRepeatModal();
 
                 if (isV2) {
                     // Decode compact N2- format (with clean defaults for omitted properties)
@@ -3603,43 +4006,67 @@
                         state.nextBlockId = 1;
                     }
 
+                    if (Array.isArray(data.nr)) {
+                        state.nerdRepeat = {
+                            startIdx: data.nr[0] !== null && data.nr[0] !== undefined ? parseInt(data.nr[0]) : null,
+                            endIdx: data.nr[1] !== null && data.nr[1] !== undefined ? parseInt(data.nr[1]) : null,
+                            count: Math.max(1, Math.min(10, parseInt(data.nr[2]) || 2))
+                        };
+                    } else {
+                        state.nerdRepeat = { startIdx: null, endIdx: null, count: 2 };
+                    }
+
                     state.beatClickEnabled = Boolean(data.bce);
+                    state.beatClickRate = Math.max(1, Math.min(20, parseInt(data.bcr) || 4));
                     state.beatClickStates = {};
                     if (Array.isArray(data.bco)) {
                         data.bco.forEach(idx => { state.beatClickStates[`click_${idx}`] = false; });
                     }
 
-                    state.downbeat = Array.isArray(data.db) ? {
-                        type: INT_TO_WAVE[data.db[0]] || 'triangle',
-                        pitch: Math.max(100, Math.min(1200, parseInt(data.db[1]) || 440)),
-                        volume: Math.max(0, Math.min(1, parseFloat(data.db[2]) ?? 0.45))
-                    } : { type: 'triangle', pitch: 440, volume: 0.45 };
-
-                    state.subdivision = Array.isArray(data.sb) ? {
-                        type: INT_TO_WAVE[data.sb[0]] || 'triangle',
-                        pitch: Math.max(150, Math.min(1000, parseInt(data.sb[1]) || 330)),
-                        volume: Math.max(0, Math.min(1, parseFloat(data.sb[2]) ?? 0.35))
-                    } : { type: 'triangle', pitch: 330, volume: 0.35 };
-
-                    state.polyrhythm = Array.isArray(data.pl) ? {
-                        type: INT_TO_WAVE[data.pl[0]] || 'sine',
-                        pitch: Math.max(150, Math.min(1200, parseInt(data.pl[1]) || 587)),
-                        volume: Math.max(0, Math.min(1, parseFloat(data.pl[2]) ?? 0.40))
-                    } : { type: 'sine', pitch: 587, volume: 0.40 };
-
                     state.advancedDownbeatEnabled = Boolean(data.ade);
                     state.perBeatSettings = {};
                     if (data.pbs && typeof data.pbs === 'object') {
-                        for (const [k, v] of Object.entries(data.pbs)) {
-                            if (Array.isArray(v)) {
-                                state.perBeatSettings[k] = { pitch: v[0], volume: v[1] };
-                            } else if (v && typeof v === 'object') {
-                                state.perBeatSettings[k] = v;
+                        for (const [k, arr] of Object.entries(data.pbs)) {
+                            if (Array.isArray(arr)) {
+                                state.perBeatSettings[k] = {
+                                    pitch: Math.max(100, Math.min(1200, parseInt(arr[0]) || 440)),
+                                    volume: Math.max(0, Math.min(1, parseFloat(arr[1]) ?? 0.45))
+                                };
                             }
                         }
                     }
+
+                    if (Array.isArray(data.db)) {
+                        state.downbeat = {
+                            type: INT_TO_WAVE[data.db[0]] || 'triangle',
+                            pitch: Math.max(100, Math.min(1200, parseInt(data.db[1]) || 440)),
+                            volume: Math.max(0, Math.min(1, parseFloat(data.db[2]) ?? 0.45))
+                        };
+                    } else {
+                        state.downbeat = { type: 'triangle', pitch: 440, volume: 0.45 };
+                    }
+
+                    if (Array.isArray(data.sb)) {
+                        state.subdivision = {
+                            type: INT_TO_WAVE[data.sb[0]] || 'triangle',
+                            pitch: Math.max(150, Math.min(1000, parseInt(data.sb[1]) || 330)),
+                            volume: Math.max(0, Math.min(1, parseFloat(data.sb[2]) ?? 0.35))
+                        };
+                    } else {
+                        state.subdivision = { type: 'triangle', pitch: 330, volume: 0.35 };
+                    }
+
+                    if (Array.isArray(data.pl)) {
+                        state.polyrhythm = {
+                            type: INT_TO_WAVE[data.pl[0]] || 'sine',
+                            pitch: Math.max(150, Math.min(1200, parseInt(data.pl[1]) || 587)),
+                            volume: Math.max(0, Math.min(1, parseFloat(data.pl[2]) ?? 0.40))
+                        };
+                    } else {
+                        state.polyrhythm = { type: 'sine', pitch: 587, volume: 0.40 };
+                    }
                 } else {
-                    // Legacy NOME1- decoder (preserves 100% compatibility with all existing hashes)
+                    // Decode Legacy NOME1- format
                     state.ultraNerdMode = Boolean(data.u);
                     state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
                     state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
@@ -3656,29 +4083,28 @@
                     state.perBeatSettings = (data.pbs && typeof data.pbs === 'object') ? data.pbs : {};
 
                     if (Array.isArray(data.nb)) {
-                        let maxId = 0;
-                        state.nerdBlocks = data.nb.map((b, idx) => {
-                            const bid = parseInt(b.id) || (idx + 1);
-                            if (bid > maxId) maxId = bid;
-                            const nNotes = Math.max(1, Math.min(20, parseInt(b.n) || 4));
-                            const tRate = Math.max(1, Math.min(20, parseInt(b.r) || 4));
-                            const sCount = Math.max(1, Math.min(20, parseInt(b.x !== undefined ? b.x : nNotes) || nNotes));
+                        state.nerdBlocks = data.nb.map((blk, idx) => {
+                            const nNotes = Math.max(1, Math.min(20, parseInt(blk.n) || 4));
+                            const tRate = Math.max(1, Math.min(20, parseInt(blk.r) || 4));
+                            const sCount = Math.max(1, Math.min(20, parseInt(blk.x !== undefined ? blk.x : nNotes) || nNotes));
                             return {
-                                id: bid,
+                                id: idx + 1,
                                 numNotes: nNotes,
                                 tupletRate: tRate,
                                 subdivCount: sCount,
-                                subDivs: (b.sd && typeof b.sd === 'object') ? b.sd : {},
-                                activeStates: (b.as && typeof b.as === 'object') ? b.as : {}
+                                subDivs: (blk.sd && typeof blk.sd === 'object') ? blk.sd : {},
+                                activeStates: (blk.as && typeof blk.as === 'object') ? blk.as : {}
                             };
                         });
-                        state.nextBlockId = maxId + 1;
+                        state.nextBlockId = state.nerdBlocks.length + 1;
                     } else {
                         state.nerdBlocks = [];
                         state.nextBlockId = 1;
                     }
 
+                    state.nerdRepeat = { startIdx: null, endIdx: null, count: 2 };
                     state.beatClickEnabled = Boolean(data.bce);
+                    state.beatClickRate = Math.max(1, Math.min(20, parseInt(data.bcr) || 4));
                     state.beatClickStates = (data.bcs && typeof data.bcs === 'object') ? data.bcs : {};
 
                     if (data.db && typeof data.db === 'object') {
