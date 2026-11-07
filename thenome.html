@@ -727,7 +727,7 @@
                             </a>
                             <span> in <strong>The Unapologetic Yogi</strong> by Alon Tamir:</span>
                         </div>
-                        <button type="button" data-preset-hash="N2-eyJiIjoxMTYsInUiOjEsIm5iIjpbWzUsNV0sWzUsNV0sWzUsNV0sWzUsNV0sWzIsNV0sWzMsNV0sWzQsNSwzXSxbNCw1LDNdLFs1LDUsM10sWzUsNSwzXSxbNCw1LDNdLFs0LDUsM10sWzMsNV0sWzMsNV0sWzMsNV0sWzUsNV0sWzUsNV0sWzUsNV0sWzUsNV1dLCJzYiI6WzEsMzMwLDAuMl19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-hash="N2-eyJiIjo4NywidSI6MSwibmIiOltbNSw1XSxbNSw1XSxbNSw1XSxbNSw1XSxbMiw1XSxbMyw1XSxbNCw1LDNdLFs0LDUsM10sWzUsNSwzXSxbNSw1LDNdLFs0LDUsM10sWzQsNSwzXSxbMyw1XSxbMyw1XSxbMyw1XSxbNSw1XSxbNSw1XSxbNSw1XSxbNSw1XV0sInNiIjpbMSwzMzAsMC4yXX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Yogi Break</span>
                         </button>
@@ -1253,15 +1253,93 @@
             }
         });
 
+        let iosAudioUnlocked = false;
+        let silentHtmlAudio = null;
+
         function initAudioContext() {
+            try {
+                // 1. iOS 17+ Hardware Mute Switch Bypass: force media playback session
+                if (navigator.audioSession) {
+                    navigator.audioSession.type = 'playback';
+                }
+            } catch (e) {
+                console.debug('AudioSession API not supported:', e);
+            }
+
             if (!state.audioCtx) {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
                 state.audioCtx = new AudioContext();
+
+                // Automatically recover if iOS interrupts the AudioContext
+                state.audioCtx.onstatechange = () => {
+                    if (state.isPlaying && state.audioCtx && state.audioCtx.state !== 'running') {
+                        state.audioCtx.resume().catch(() => {});
+                    }
+                };
             }
-            if (state.audioCtx.state === 'suspended') {
-                state.audioCtx.resume();
+
+            // 4. Handle both 'suspended' and iOS-specific 'interrupted' states
+            if (state.audioCtx.state !== 'running') {
+                state.audioCtx.resume().catch(() => {});
+            }
+
+            // 2. iOS Silent Buffer & HTML5 Audio Unlock (routes WebAudio to media channel & unlocks WebKit)
+            if (!iosAudioUnlocked && state.audioCtx) {
+                try {
+                    const buffer = state.audioCtx.createBuffer(1, 1, 22050);
+                    const source = state.audioCtx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(state.audioCtx.destination);
+                    if (source.start) {
+                        source.start(0);
+                    } else if (source.noteOn) {
+                        source.noteOn(0);
+                    }
+
+                    if (!silentHtmlAudio) {
+                        // Tiny 1-sample silent WAV to force iOS<17 out of ringer/ambient channel into media playback
+                        silentHtmlAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+                        silentHtmlAudio.setAttribute('playsinline', '');
+                        silentHtmlAudio.volume = 0.01;
+                    }
+                    const playPromise = silentHtmlAudio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            iosAudioUnlocked = true;
+                        }).catch(() => {});
+                    } else {
+                        iosAudioUnlocked = true;
+                    }
+                } catch (e) {
+                    console.debug('iOS audio unlock error:', e);
+                }
             }
         }
+
+        // Unlock audio context on first user touch/pointer interaction anywhere on the page
+        const unlockOnFirstInteraction = () => {
+            initAudioContext();
+            if (state.audioCtx && state.audioCtx.state === 'running' && iosAudioUnlocked) {
+                window.removeEventListener('touchstart', unlockOnFirstInteraction, true);
+                window.removeEventListener('touchend', unlockOnFirstInteraction, true);
+                window.removeEventListener('pointerdown', unlockOnFirstInteraction, true);
+            }
+        };
+        window.addEventListener('touchstart', unlockOnFirstInteraction, { capture: true, passive: true });
+        window.addEventListener('touchend', unlockOnFirstInteraction, { capture: true, passive: true });
+        window.addEventListener('pointerdown', unlockOnFirstInteraction, { capture: true, passive: true });
+
+        // Re-verify audio session and context state when returning to the tab on iOS
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && state.isPlaying && state.audioCtx) {
+                if (navigator.audioSession) {
+                    try { navigator.audioSession.type = 'playback'; } catch (e) {}
+                }
+                if (state.audioCtx.state !== 'running') {
+                    state.audioCtx.resume().catch(() => {});
+                }
+            }
+        });
 
         function playToneAtTime(isDownbeat, colorType, beatIndex, time) {
             try {
@@ -2462,16 +2540,26 @@
                 playBtn.classList.remove('bg-slate-100', 'text-slate-900', 'hover:bg-white');
                 playBtn.classList.add('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
                 
-                const startTime = state.audioCtx.currentTime + 0.05;
-                state.nextNoteTime = startTime;
-                state.currentSegmentIndex = 0;
-                state.nextPolyNoteTime = startTime;
-                state.currentPolyIndex = 0;
-                state.nextBeatClickTime = startTime;
-                state.currentBeatClickIndex = 0;
-                lastScrolledSegIdx = -1;
-                scheduler();
-                requestAnimationFrame(animationLoop);
+                const startPlaybackLoop = () => {
+                    if (!state.isPlaying || !state.audioCtx) return;
+                    const startTime = state.audioCtx.currentTime + 0.05;
+                    state.nextNoteTime = startTime;
+                    state.currentSegmentIndex = 0;
+                    state.nextPolyNoteTime = startTime;
+                    state.currentPolyIndex = 0;
+                    state.nextBeatClickTime = startTime;
+                    state.currentBeatClickIndex = 0;
+                    lastScrolledSegIdx = -1;
+                    scheduler();
+                    requestAnimationFrame(animationLoop);
+                };
+
+                // 3. Ensure AudioContext is running before reading currentTime to prevent dropped notes on iOS
+                if (state.audioCtx.state !== 'running') {
+                    state.audioCtx.resume().then(startPlaybackLoop).catch(startPlaybackLoop);
+                } else {
+                    startPlaybackLoop();
+                }
             } else {
                 playBtnText.textContent = 'Play';
                 playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
@@ -2493,6 +2581,9 @@
             }
         }
 
+        // Pre-unlock audio synchronously on touchstart/pointerdown on the Play button for iOS Safari
+        playBtn.addEventListener('touchstart', () => { initAudioContext(); }, { passive: true });
+        playBtn.addEventListener('pointerdown', () => { initAudioContext(); }, { passive: true });
         playBtn.addEventListener('click', togglePlay);
 
         window.addEventListener('keydown', (e) => {
