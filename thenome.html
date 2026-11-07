@@ -432,22 +432,28 @@
             <!-- Save & Load Setup Hash System -->
             <div class="pt-4 border-t border-borderSubtle flex flex-col gap-3 text-xs">
                 <div class="flex items-center justify-between">
-                    <span class="font-semibold uppercase tracking-wider text-slate-400">Save & Load Setup</span>
+                    <span class="font-semibold uppercase tracking-wider text-slate-400">Save & Share Setup</span>
                     <span id="hashFeedbackMsg" class="text-[11px] font-medium text-emerald-400 hidden"></span>
                 </div>
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                    <button id="saveSetupBtn" type="button" class="px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="saveSetupBtn" type="button" class="flex-1 sm:flex-initial px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                         </svg>
-                        <span id="saveSetupBtnText">Save Setup (Copy Code)</span>
+                        <span id="saveSetupBtnText">Copy Short Code</span>
                     </button>
-                    <div class="flex flex-1 items-center gap-1.5">
-                        <input id="setupHashInput" type="text" placeholder="Paste setup code here..." class="w-full bg-[#16161c] border border-borderSubtle rounded-xl px-3 py-2 text-slate-200 placeholder-slate-500 font-mono text-[11px] focus:outline-none focus:border-accent select-all">
-                        <button id="loadSetupBtn" type="button" class="px-3.5 py-2 bg-accent hover:bg-sky-300 text-slate-950 font-bold rounded-xl transition-all shadow-sm active:scale-95 shrink-0">
-                            Generate
-                        </button>
-                    </div>
+                    <button id="shareLinkBtn" type="button" class="flex-1 sm:flex-initial px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-purple-500/40 text-purple-300 hover:text-white font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <span id="shareLinkBtnText">Copy Shareable Link</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <input id="setupHashInput" type="text" placeholder="Paste setup code (N2-... or NOME1-...) or shareable link..." class="w-full bg-[#16161c] border border-borderSubtle rounded-xl px-3 py-2 text-slate-200 placeholder-slate-500 font-mono text-[11px] focus:outline-none focus:border-accent select-all">
+                    <button id="loadSetupBtn" type="button" class="px-3.5 py-2 bg-accent hover:bg-sky-300 text-slate-950 font-bold rounded-xl transition-all shadow-sm active:scale-95 shrink-0">
+                        Generate
+                    </button>
                 </div>
             </div>
 
@@ -3061,14 +3067,19 @@
         });
 
         /* ==========================================
-         * HASH SAVE & LOAD SYSTEM
+         * HASH SAVE & LOAD SYSTEM (Compact N2- + Legacy NOME1- + URL Sharing)
          * ========================================== */
         const saveSetupBtn = document.getElementById('saveSetupBtn');
         const saveSetupBtnText = document.getElementById('saveSetupBtnText');
+        const shareLinkBtn = document.getElementById('shareLinkBtn');
+        const shareLinkBtnText = document.getElementById('shareLinkBtnText');
         const setupHashInput = document.getElementById('setupHashInput');
         const loadSetupBtn = document.getElementById('loadSetupBtn');
         const hashFeedbackMsg = document.getElementById('hashFeedbackMsg');
         let hashFeedbackTimeout = null;
+
+        const WAVE_TO_INT = { sine: 0, triangle: 1, square: 2, sawtooth: 3 };
+        const INT_TO_WAVE = ['sine', 'triangle', 'square', 'sawtooth'];
 
         function showHashFeedback(message, isError = false) {
             if (!hashFeedbackMsg) return;
@@ -3081,43 +3092,172 @@
             }, 3500);
         }
 
+        // Generates ultra-compact N2- hash by omitting default values and storing only muted (off) note keys
         function generateSetupHash() {
-            const payload = {
-                u: state.ultraNerdMode ? 1 : 0,
-                b: state.bpm,
-                tb: state.totalBeats,
-                se: state.subdivEnabled ? 1 : 0,
-                sc: state.subdivCount,
-                ce: state.customSubdivEnabled ? 1 : 0,
-                pe: state.polyrhythmEnabled ? 1 : 0,
-                pb: state.polyBeats,
-                ps: state.polyStates,
-                bsc: state.beatSubdivCounts,
-                ssc: state.subSubdivCounts,
-                bs: state.beatStates,
-                ade: state.advancedDownbeatEnabled ? 1 : 0,
-                pbs: state.perBeatSettings,
-                nb: state.nerdBlocks.map(blk => ({
-                    id: blk.id,
-                    n: blk.numNotes,
-                    r: blk.tupletRate,
-                    x: blk.subdivCount !== undefined ? blk.subdivCount : blk.numNotes,
-                    sd: blk.subDivs || {},
-                    as: blk.activeStates || {}
-                })),
-                bce: state.beatClickEnabled ? 1 : 0,
-                bcs: state.beatClickStates,
-                db: state.downbeat,
-                sb: state.subdivision,
-                pl: state.polyrhythm
-            };
+            const p = {};
 
-            const jsonStr = JSON.stringify(payload);
+            if (state.bpm !== 100) p.b = state.bpm;
+
+            if (state.ultraNerdMode) {
+                p.u = 1;
+                if (state.nerdBlocks.length > 0) {
+                    p.nb = state.nerdBlocks.map(blk => {
+                        const n = blk.numNotes;
+                        const r = blk.tupletRate;
+                        const x = blk.subdivCount !== undefined ? blk.subdivCount : n;
+
+                        const sd = {};
+                        let hasSd = false;
+                        if (blk.subDivs) {
+                            for (const [k, v] of Object.entries(blk.subDivs)) {
+                                if (v > 1) {
+                                    sd[k] = v;
+                                    hasSd = true;
+                                }
+                            }
+                        }
+
+                        const off = [];
+                        for (let ni = 0; ni < x; ni++) {
+                            const l2 = (blk.subDivs && blk.subDivs[ni]) ? blk.subDivs[ni] : 1;
+                            for (let si = 0; si < l2; si++) {
+                                const key = `${ni}_${si}`;
+                                if (blk.activeStates && blk.activeStates[key] === false) {
+                                    off.push(si === 0 ? `${ni}` : key);
+                                }
+                            }
+                        }
+
+                        const arr = [n, r];
+                        if (x !== n || hasSd || off.length > 0) arr.push(x);
+                        if (hasSd || off.length > 0) arr.push(hasSd ? sd : 0);
+                        if (off.length > 0) arr.push(off);
+                        return arr;
+                    });
+                }
+
+                if (state.beatClickEnabled) {
+                    p.bce = 1;
+                    const bcOff = [];
+                    for (const [k, v] of Object.entries(state.beatClickStates)) {
+                        if (v === false) {
+                            bcOff.push(k.replace('click_', ''));
+                        }
+                    }
+                    if (bcOff.length > 0) p.bco = bcOff;
+                }
+            } else {
+                if (state.totalBeats !== 4) p.tb = state.totalBeats;
+                if (state.subdivEnabled && state.subdivCount > 1) {
+                    p.se = state.subdivCount;
+                }
+                if (state.customSubdivEnabled) {
+                    p.ce = 1;
+                    const bsc = {};
+                    for (const [k, v] of Object.entries(state.beatSubdivCounts)) {
+                        if (parseInt(k) < state.totalBeats && v > 1) bsc[k] = v;
+                    }
+                    if (Object.keys(bsc).length > 0) p.bsc = bsc;
+
+                    const ssc = {};
+                    for (const [k, v] of Object.entries(state.subSubdivCounts)) {
+                        const parts = k.split('_');
+                        const bIdx = parseInt(parts[0]);
+                        const sIdx = parseInt(parts[1]);
+                        const l1 = state.beatSubdivCounts[bIdx] || 1;
+                        if (bIdx < state.totalBeats && sIdx < l1 && v > 1) ssc[k] = v;
+                    }
+                    if (Object.keys(ssc).length > 0) p.ssc = ssc;
+                }
+
+                // Store only muted (false) segment keys for active segments in the current circle
+                const bsOff = [];
+                for (const seg of state.segments) {
+                    if (!seg.active) {
+                        bsOff.push(seg.segKey);
+                    }
+                }
+                if (bsOff.length > 0) p.bo = bsOff;
+
+                if (state.polyrhythmEnabled) {
+                    p.pe = state.polyBeats;
+                    const psOff = [];
+                    for (let i = 0; i < state.polyBeats; i++) {
+                        if (state.polyStates[`poly_${i}`] === false) {
+                            psOff.push(i);
+                        }
+                    }
+                    if (psOff.length > 0) p.po = psOff;
+                }
+            }
+
+            if (state.advancedDownbeatEnabled) {
+                p.ade = 1;
+                const count = state.ultraNerdMode ? state.nerdBlocks.length : state.totalBeats;
+                const pbs = {};
+                for (let i = 0; i < count; i++) {
+                    const cfg = state.perBeatSettings[i];
+                    if (cfg && (cfg.pitch !== state.downbeat.pitch || cfg.volume !== state.downbeat.volume)) {
+                        pbs[i] = [cfg.pitch, cfg.volume];
+                    }
+                }
+                if (Object.keys(pbs).length > 0) p.pbs = pbs;
+            }
+
+            if (state.downbeat.type !== 'triangle' || state.downbeat.pitch !== 440 || state.downbeat.volume !== 0.45) {
+                p.db = [WAVE_TO_INT[state.downbeat.type] ?? 1, state.downbeat.pitch, state.downbeat.volume];
+            }
+            if (state.subdivision.type !== 'triangle' || state.subdivision.pitch !== 330 || state.subdivision.volume !== 0.35) {
+                p.sb = [WAVE_TO_INT[state.subdivision.type] ?? 1, state.subdivision.pitch, state.subdivision.volume];
+            }
+            if (state.polyrhythm.type !== 'sine' || state.polyrhythm.pitch !== 587 || state.polyrhythm.volume !== 0.4) {
+                p.pl = [WAVE_TO_INT[state.polyrhythm.type] ?? 0, state.polyrhythm.pitch, state.polyrhythm.volume];
+            }
+
+            const jsonStr = JSON.stringify(p);
             const b64 = btoa(unescape(encodeURIComponent(jsonStr)))
                 .replace(/\+/g, '-')
                 .replace(/\//g, '_')
                 .replace(/=+$/, '');
-            return `NOME1-${b64}`;
+            return `N2-${b64}`;
+        }
+
+        function generateShareableUrl(hashCode) {
+            const code = hashCode || generateSetupHash();
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set('s', code);
+                return url.toString();
+            } catch (e) {
+                const base = window.location.href.split('?')[0].split('#')[0];
+                return `${base}?s=${encodeURIComponent(code)}`;
+            }
+        }
+
+        // Extracts N2-... or NOME1-... token from either a raw code or a full URL
+        function extractHashToken(rawInput) {
+            if (!rawInput || typeof rawInput !== 'string') return '';
+            const trimmed = rawInput.trim();
+            if (trimmed.startsWith('N2-') || trimmed.startsWith('NOME1-')) {
+                return trimmed;
+            }
+            try {
+                if (trimmed.includes('?s=') || trimmed.includes('&s=') || trimmed.includes('?setup=') || trimmed.startsWith('http')) {
+                    const url = new URL(trimmed, window.location.origin);
+                    const sParam = url.searchParams.get('s') || url.searchParams.get('setup');
+                    if (sParam && (sParam.startsWith('N2-') || sParam.startsWith('NOME1-'))) {
+                        return sParam.trim();
+                    }
+                    if (url.hash) {
+                        const h = url.hash.slice(1).trim();
+                        if (h.startsWith('N2-') || h.startsWith('NOME1-')) return h;
+                    }
+                }
+            } catch (e) {
+                // Fallback regex extraction if URL constructor fails
+            }
+            const match = trimmed.match(/(N2-[A-Za-z0-9_-]+|NOME1-[A-Za-z0-9_-]+)/);
+            return match ? match[1] : trimmed;
         }
 
         function applyModeUI() {
@@ -3178,19 +3318,111 @@
             }
         }
 
+        function syncAllControlsFromState() {
+            bpmSlider.value = state.bpm;
+            bpmText.textContent = state.bpm;
+            centerBpmDisplay.textContent = state.bpm;
+
+            beatsSlider.value = state.totalBeats;
+            beatsText.textContent = state.totalBeats;
+
+            subdivCheckbox.checked = state.subdivEnabled;
+            subdivSlider.value = state.subdivCount;
+            subdivText.textContent = state.subdivCount;
+            if (state.subdivEnabled) {
+                subdivText.classList.remove('opacity-40');
+                subdivControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                decSubdivBtn.removeAttribute('disabled');
+                incSubdivBtn.removeAttribute('disabled');
+                subdivSlider.removeAttribute('disabled');
+            } else {
+                subdivText.classList.add('opacity-40');
+                subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                decSubdivBtn.setAttribute('disabled', 'true');
+                incSubdivBtn.setAttribute('disabled', 'true');
+                subdivSlider.setAttribute('disabled', 'true');
+            }
+
+            customSubdivCheckbox.checked = state.customSubdivEnabled;
+            if (state.customSubdivEnabled) {
+                customSubdivHint.classList.remove('hidden');
+            } else {
+                customSubdivHint.classList.add('hidden');
+            }
+
+            polyrhythmCheckbox.checked = state.polyrhythmEnabled;
+            polySlider.value = state.polyBeats;
+            polyBeatsText.textContent = state.polyBeats;
+            if (state.polyrhythmEnabled) {
+                polyBeatsText.classList.remove('opacity-40');
+                polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                decPolyBtn.removeAttribute('disabled');
+                incPolyBtn.removeAttribute('disabled');
+                polySlider.removeAttribute('disabled');
+            } else {
+                polyBeatsText.classList.add('opacity-40');
+                polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                decPolyBtn.setAttribute('disabled', 'true');
+                incPolyBtn.setAttribute('disabled', 'true');
+                polySlider.setAttribute('disabled', 'true');
+            }
+
+            if (beatClickCheckbox) {
+                beatClickCheckbox.checked = state.beatClickEnabled;
+                if (state.beatClickEnabled) {
+                    beatClickStatusBadge.textContent = 'On';
+                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                } else {
+                    beatClickStatusBadge.textContent = 'Off';
+                    beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
+                }
+            }
+
+            downbeatType.value = state.downbeat.type;
+            downbeatPitch.value = state.downbeat.pitch;
+            downbeatPitchVal.textContent = state.downbeat.pitch;
+            downbeatVolume.value = state.downbeat.volume;
+            downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
+
+            subdivType.value = state.subdivision.type;
+            subdivPitch.value = state.subdivision.pitch;
+            subdivPitchVal.textContent = state.subdivision.pitch;
+            subdivVolume.value = state.subdivision.volume;
+            subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
+
+            polyType.value = state.polyrhythm.type;
+            polyPitch.value = state.polyrhythm.pitch;
+            polyPitchVal.textContent = state.polyrhythm.pitch;
+            polyVolume.value = state.polyrhythm.volume;
+            polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
+
+            advancedDownbeatCheckbox.checked = state.advancedDownbeatEnabled;
+            if (state.advancedDownbeatEnabled) {
+                advancedDownbeatPanel.classList.remove('hidden');
+            } else {
+                advancedDownbeatPanel.classList.add('hidden');
+            }
+
+            applyModeUI();
+        }
+
         function loadSetupFromHash(rawCode) {
-            if (!rawCode || typeof rawCode !== 'string') {
-                showHashFeedback('Please paste a setup code first.', true);
+            const token = extractHashToken(rawCode);
+            if (!token) {
+                showHashFeedback('Please paste a setup code or link first.', true);
                 return;
             }
-            const trimmed = rawCode.trim();
-            if (!trimmed.startsWith('NOME1-')) {
-                showHashFeedback('Invalid code format (missing NOME1- prefix).', true);
+
+            const isV2 = token.startsWith('N2-');
+            const isV1 = token.startsWith('NOME1-');
+            if (!isV2 && !isV1) {
+                showHashFeedback('Invalid code format (expected N2- or NOME1-).', true);
                 return;
             }
 
             try {
-                let b64 = trimmed.slice(6).replace(/-/g, '+').replace(/_/g, '/');
+                const prefixLen = isV2 ? 3 : 6;
+                let b64 = token.slice(prefixLen).replace(/-/g, '+').replace(/_/g, '/');
                 while (b64.length % 4 !== 0) {
                     b64 += '=';
                 }
@@ -3207,160 +3439,180 @@
                 beatEditorPopup.classList.add('hidden');
                 closeBlockModal();
 
-                state.ultraNerdMode = Boolean(data.u);
-                state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
-                state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
-                state.subdivEnabled = Boolean(data.se);
-                state.subdivCount = Math.max(1, Math.min(20, parseInt(data.sc) || 1));
-                state.customSubdivEnabled = Boolean(data.ce);
-                state.polyrhythmEnabled = Boolean(data.pe);
-                state.polyBeats = Math.max(1, Math.min(25, parseInt(data.pb) || 3));
-                state.polyStates = (data.ps && typeof data.ps === 'object') ? data.ps : {};
-                state.beatSubdivCounts = (data.bsc && typeof data.bsc === 'object') ? data.bsc : {};
-                state.subSubdivCounts = (data.ssc && typeof data.ssc === 'object') ? data.ssc : {};
-                state.beatStates = (data.bs && typeof data.bs === 'object') ? data.bs : {};
-                state.advancedDownbeatEnabled = Boolean(data.ade);
-                state.perBeatSettings = (data.pbs && typeof data.pbs === 'object') ? data.pbs : {};
+                if (isV2) {
+                    // Decode compact N2- format (with clean defaults for omitted properties)
+                    state.ultraNerdMode = Boolean(data.u);
+                    state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
+                    state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
+                    state.subdivEnabled = Boolean(data.se);
+                    state.subdivCount = state.subdivEnabled ? Math.max(1, Math.min(20, parseInt(data.se) || 1)) : 1;
+                    state.customSubdivEnabled = Boolean(data.ce);
+                    state.polyrhythmEnabled = Boolean(data.pe);
+                    state.polyBeats = state.polyrhythmEnabled ? Math.max(1, Math.min(25, parseInt(data.pe) || 3)) : 3;
 
-                if (Array.isArray(data.nb)) {
-                    let maxId = 0;
-                    state.nerdBlocks = data.nb.map((b, idx) => {
-                        const bid = parseInt(b.id) || (idx + 1);
-                        if (bid > maxId) maxId = bid;
-                        const nNotes = Math.max(1, Math.min(20, parseInt(b.n) || 4));
-                        const tRate = Math.max(1, Math.min(20, parseInt(b.r) || 4));
-                        const sCount = Math.max(1, Math.min(20, parseInt(b.x !== undefined ? b.x : nNotes) || nNotes));
-                        return {
-                            id: bid,
-                            numNotes: nNotes,
-                            tupletRate: tRate,
-                            subdivCount: sCount,
-                            subDivs: (b.sd && typeof b.sd === 'object') ? b.sd : {},
-                            activeStates: (b.as && typeof b.as === 'object') ? b.as : {}
-                        };
-                    });
-                    state.nextBlockId = maxId + 1;
-                } else {
-                    state.nerdBlocks = [];
-                    state.nextBlockId = 1;
-                }
+                    state.beatSubdivCounts = (data.bsc && typeof data.bsc === 'object') ? data.bsc : {};
+                    state.subSubdivCounts = (data.ssc && typeof data.ssc === 'object') ? data.ssc : {};
 
-                state.beatClickEnabled = Boolean(data.bce);
-                state.beatClickStates = (data.bcs && typeof data.bcs === 'object') ? data.bcs : {};
+                    state.beatStates = {};
+                    if (Array.isArray(data.bo)) {
+                        data.bo.forEach(k => { state.beatStates[k] = false; });
+                    }
 
-                if (data.db && typeof data.db === 'object') {
-                    state.downbeat = {
-                        type: data.db.type || 'triangle',
-                        pitch: Math.max(100, Math.min(1200, parseInt(data.db.pitch) || 440)),
-                        volume: Math.max(0, Math.min(1, parseFloat(data.db.volume) ?? 0.45))
-                    };
-                }
-                if (data.sb && typeof data.sb === 'object') {
-                    state.subdivision = {
-                        type: data.sb.type || 'triangle',
-                        pitch: Math.max(150, Math.min(1000, parseInt(data.sb.pitch) || 330)),
-                        volume: Math.max(0, Math.min(1, parseFloat(data.sb.volume) ?? 0.35))
-                    };
-                }
-                if (data.pl && typeof data.pl === 'object') {
-                    state.polyrhythm = {
-                        type: data.pl.type || 'sine',
-                        pitch: Math.max(150, Math.min(1200, parseInt(data.pl.pitch) || 587)),
-                        volume: Math.max(0, Math.min(1, parseFloat(data.pl.volume) ?? 0.40))
-                    };
-                }
+                    state.polyStates = {};
+                    if (Array.isArray(data.po)) {
+                        data.po.forEach(idx => { state.polyStates[`poly_${idx}`] = false; });
+                    }
 
-                // Sync DOM inputs & labels
-                bpmSlider.value = state.bpm;
-                bpmText.textContent = state.bpm;
-                centerBpmDisplay.textContent = state.bpm;
-
-                beatsSlider.value = state.totalBeats;
-                beatsText.textContent = state.totalBeats;
-
-                subdivCheckbox.checked = state.subdivEnabled;
-                subdivSlider.value = state.subdivCount;
-                subdivText.textContent = state.subdivCount;
-                if (state.subdivEnabled) {
-                    subdivText.classList.remove('opacity-40');
-                    subdivControlContainer.classList.remove('opacity-40', 'pointer-events-none');
-                    decSubdivBtn.removeAttribute('disabled');
-                    incSubdivBtn.removeAttribute('disabled');
-                    subdivSlider.removeAttribute('disabled');
-                } else {
-                    subdivText.classList.add('opacity-40');
-                    subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
-                    decSubdivBtn.setAttribute('disabled', 'true');
-                    incSubdivBtn.setAttribute('disabled', 'true');
-                    subdivSlider.setAttribute('disabled', 'true');
-                }
-
-                customSubdivCheckbox.checked = state.customSubdivEnabled;
-                if (state.customSubdivEnabled) {
-                    customSubdivHint.classList.remove('hidden');
-                } else {
-                    customSubdivHint.classList.add('hidden');
-                }
-
-                polyrhythmCheckbox.checked = state.polyrhythmEnabled;
-                polySlider.value = state.polyBeats;
-                polyBeatsText.textContent = state.polyBeats;
-                if (state.polyrhythmEnabled) {
-                    polyBeatsText.classList.remove('opacity-40');
-                    polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
-                    decPolyBtn.removeAttribute('disabled');
-                    incPolyBtn.removeAttribute('disabled');
-                    polySlider.removeAttribute('disabled');
-                } else {
-                    polyBeatsText.classList.add('opacity-40');
-                    polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
-                    decPolyBtn.setAttribute('disabled', 'true');
-                    incPolyBtn.setAttribute('disabled', 'true');
-                    polySlider.setAttribute('disabled', 'true');
-                }
-
-                if (beatClickCheckbox) {
-                    beatClickCheckbox.checked = state.beatClickEnabled;
-                    if (state.beatClickEnabled) {
-                        beatClickStatusBadge.textContent = 'On';
-                        beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                    if (Array.isArray(data.nb)) {
+                        state.nerdBlocks = data.nb.map((arr, idx) => {
+                            const nNotes = Math.max(1, Math.min(20, parseInt(arr[0]) || 4));
+                            const tRate = Math.max(1, Math.min(20, parseInt(arr[1]) || 4));
+                            const sCount = Math.max(1, Math.min(20, parseInt(arr[2] !== undefined ? arr[2] : nNotes) || nNotes));
+                            const sdObj = (arr[3] && typeof arr[3] === 'object') ? arr[3] : {};
+                            const activeStates = {};
+                            if (Array.isArray(arr[4])) {
+                                arr[4].forEach(offKey => {
+                                    const fullKey = String(offKey).includes('_') ? String(offKey) : `${offKey}_0`;
+                                    activeStates[fullKey] = false;
+                                });
+                            }
+                            return {
+                                id: idx + 1,
+                                numNotes: nNotes,
+                                tupletRate: tRate,
+                                subdivCount: sCount,
+                                subDivs: sdObj,
+                                activeStates: activeStates
+                            };
+                        });
+                        state.nextBlockId = state.nerdBlocks.length + 1;
                     } else {
-                        beatClickStatusBadge.textContent = 'Off';
-                        beatClickStatusBadge.className = 'text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-[#1a1a22] text-slate-500 border border-borderSubtle';
+                        state.nerdBlocks = [];
+                        state.nextBlockId = 1;
+                    }
+
+                    state.beatClickEnabled = Boolean(data.bce);
+                    state.beatClickStates = {};
+                    if (Array.isArray(data.bco)) {
+                        data.bco.forEach(idx => { state.beatClickStates[`click_${idx}`] = false; });
+                    }
+
+                    state.downbeat = Array.isArray(data.db) ? {
+                        type: INT_TO_WAVE[data.db[0]] || 'triangle',
+                        pitch: Math.max(100, Math.min(1200, parseInt(data.db[1]) || 440)),
+                        volume: Math.max(0, Math.min(1, parseFloat(data.db[2]) ?? 0.45))
+                    } : { type: 'triangle', pitch: 440, volume: 0.45 };
+
+                    state.subdivision = Array.isArray(data.sb) ? {
+                        type: INT_TO_WAVE[data.sb[0]] || 'triangle',
+                        pitch: Math.max(150, Math.min(1000, parseInt(data.sb[1]) || 330)),
+                        volume: Math.max(0, Math.min(1, parseFloat(data.sb[2]) ?? 0.35))
+                    } : { type: 'triangle', pitch: 330, volume: 0.35 };
+
+                    state.polyrhythm = Array.isArray(data.pl) ? {
+                        type: INT_TO_WAVE[data.pl[0]] || 'sine',
+                        pitch: Math.max(150, Math.min(1200, parseInt(data.pl[1]) || 587)),
+                        volume: Math.max(0, Math.min(1, parseFloat(data.pl[2]) ?? 0.40))
+                    } : { type: 'sine', pitch: 587, volume: 0.40 };
+
+                    state.advancedDownbeatEnabled = Boolean(data.ade);
+                    state.perBeatSettings = {};
+                    if (data.pbs && typeof data.pbs === 'object') {
+                        for (const [k, v] of Object.entries(data.pbs)) {
+                            if (Array.isArray(v)) {
+                                state.perBeatSettings[k] = { pitch: v[0], volume: v[1] };
+                            } else if (v && typeof v === 'object') {
+                                state.perBeatSettings[k] = v;
+                            }
+                        }
+                    }
+                } else {
+                    // Legacy NOME1- decoder (preserves 100% compatibility with all existing hashes)
+                    state.ultraNerdMode = Boolean(data.u);
+                    state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
+                    state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
+                    state.subdivEnabled = Boolean(data.se);
+                    state.subdivCount = Math.max(1, Math.min(20, parseInt(data.sc) || 1));
+                    state.customSubdivEnabled = Boolean(data.ce);
+                    state.polyrhythmEnabled = Boolean(data.pe);
+                    state.polyBeats = Math.max(1, Math.min(25, parseInt(data.pb) || 3));
+                    state.polyStates = (data.ps && typeof data.ps === 'object') ? data.ps : {};
+                    state.beatSubdivCounts = (data.bsc && typeof data.bsc === 'object') ? data.bsc : {};
+                    state.subSubdivCounts = (data.ssc && typeof data.ssc === 'object') ? data.ssc : {};
+                    state.beatStates = (data.bs && typeof data.bs === 'object') ? data.bs : {};
+                    state.advancedDownbeatEnabled = Boolean(data.ade);
+                    state.perBeatSettings = (data.pbs && typeof data.pbs === 'object') ? data.pbs : {};
+
+                    if (Array.isArray(data.nb)) {
+                        let maxId = 0;
+                        state.nerdBlocks = data.nb.map((b, idx) => {
+                            const bid = parseInt(b.id) || (idx + 1);
+                            if (bid > maxId) maxId = bid;
+                            const nNotes = Math.max(1, Math.min(20, parseInt(b.n) || 4));
+                            const tRate = Math.max(1, Math.min(20, parseInt(b.r) || 4));
+                            const sCount = Math.max(1, Math.min(20, parseInt(b.x !== undefined ? b.x : nNotes) || nNotes));
+                            return {
+                                id: bid,
+                                numNotes: nNotes,
+                                tupletRate: tRate,
+                                subdivCount: sCount,
+                                subDivs: (b.sd && typeof b.sd === 'object') ? b.sd : {},
+                                activeStates: (b.as && typeof b.as === 'object') ? b.as : {}
+                            };
+                        });
+                        state.nextBlockId = maxId + 1;
+                    } else {
+                        state.nerdBlocks = [];
+                        state.nextBlockId = 1;
+                    }
+
+                    state.beatClickEnabled = Boolean(data.bce);
+                    state.beatClickStates = (data.bcs && typeof data.bcs === 'object') ? data.bcs : {};
+
+                    if (data.db && typeof data.db === 'object') {
+                        state.downbeat = {
+                            type: data.db.type || 'triangle',
+                            pitch: Math.max(100, Math.min(1200, parseInt(data.db.pitch) || 440)),
+                            volume: Math.max(0, Math.min(1, parseFloat(data.db.volume) ?? 0.45))
+                        };
+                    }
+                    if (data.sb && typeof data.sb === 'object') {
+                        state.subdivision = {
+                            type: data.sb.type || 'triangle',
+                            pitch: Math.max(150, Math.min(1000, parseInt(data.sb.pitch) || 330)),
+                            volume: Math.max(0, Math.min(1, parseFloat(data.sb.volume) ?? 0.35))
+                        };
+                    }
+                    if (data.pl && typeof data.pl === 'object') {
+                        state.polyrhythm = {
+                            type: data.pl.type || 'sine',
+                            pitch: Math.max(150, Math.min(1200, parseInt(data.pl.pitch) || 587)),
+                            volume: Math.max(0, Math.min(1, parseFloat(data.pl.volume) ?? 0.40))
+                        };
                     }
                 }
 
-                downbeatType.value = state.downbeat.type;
-                downbeatPitch.value = state.downbeat.pitch;
-                downbeatPitchVal.textContent = state.downbeat.pitch;
-                downbeatVolume.value = state.downbeat.volume;
-                downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
-
-                subdivType.value = state.subdivision.type;
-                subdivPitch.value = state.subdivision.pitch;
-                subdivPitchVal.textContent = state.subdivision.pitch;
-                subdivVolume.value = state.subdivision.volume;
-                subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
-
-                polyType.value = state.polyrhythm.type;
-                polyPitch.value = state.polyrhythm.pitch;
-                polyPitchVal.textContent = state.polyrhythm.pitch;
-                polyVolume.value = state.polyrhythm.volume;
-                polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
-
-                advancedDownbeatCheckbox.checked = state.advancedDownbeatEnabled;
-                if (state.advancedDownbeatEnabled) {
-                    advancedDownbeatPanel.classList.remove('hidden');
-                } else {
-                    advancedDownbeatPanel.classList.add('hidden');
-                }
-
-                applyModeUI();
+                syncAllControlsFromState();
                 showHashFeedback('Setup loaded!', false);
             } catch (err) {
                 console.debug('Failed to decode setup hash:', err);
                 showHashFeedback('Invalid or corrupted setup code.', true);
             }
+        }
+
+        function copyTextToClipboard(text, onSuccess, onFallback) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                if (onSuccess) onSuccess();
+            } catch (err) {
+                console.debug('Copy failed', err);
+                if (onFallback) onFallback();
+            }
+            document.body.removeChild(textarea);
         }
 
         if (saveSetupBtn) {
@@ -3369,25 +3621,47 @@
                 if (setupHashInput) {
                     setupHashInput.value = hash;
                 }
+                copyTextToClipboard(
+                    hash,
+                    () => {
+                        if (saveSetupBtnText) saveSetupBtnText.textContent = 'Short Code Copied!';
+                        saveSetupBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                        showHashFeedback(`Short code (${hash.length} chars) copied!`, false);
+                        setTimeout(() => {
+                            if (saveSetupBtnText) saveSetupBtnText.textContent = 'Copy Short Code';
+                            saveSetupBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                        }, 2000);
+                    },
+                    () => showHashFeedback('Code generated in box below!', false)
+                );
+            });
+        }
 
-                const textarea = document.createElement('textarea');
-                textarea.value = hash;
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    if (saveSetupBtnText) saveSetupBtnText.textContent = 'Code Copied to Clipboard!';
-                    saveSetupBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
-                    showHashFeedback('Setup code generated & copied!', false);
-                    setTimeout(() => {
-                        if (saveSetupBtnText) saveSetupBtnText.textContent = 'Save Setup (Copy Code)';
-                        saveSetupBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
-                    }, 2000);
-                } catch (err) {
-                    console.debug('Copy failed', err);
-                    showHashFeedback('Code generated in box below!', false);
+        if (shareLinkBtn) {
+            shareLinkBtn.addEventListener('click', () => {
+                const hash = generateSetupHash();
+                const shareUrl = generateShareableUrl(hash);
+                if (setupHashInput) {
+                    setupHashInput.value = shareUrl;
                 }
-                document.body.removeChild(textarea);
+                try {
+                    window.history.replaceState(null, '', `?s=${encodeURIComponent(hash)}`);
+                } catch (err) {
+                    // Ignore history.replaceState restrictions in sandboxed iframes
+                }
+                copyTextToClipboard(
+                    shareUrl,
+                    () => {
+                        if (shareLinkBtnText) shareLinkBtnText.textContent = 'Share Link Copied!';
+                        shareLinkBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                        showHashFeedback('Shareable link copied to clipboard!', false);
+                        setTimeout(() => {
+                            if (shareLinkBtnText) shareLinkBtnText.textContent = 'Copy Shareable Link';
+                            shareLinkBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                        }, 2000);
+                    },
+                    () => showHashFeedback('Shareable link generated in box below!', false)
+                );
             });
         }
 
@@ -3499,6 +3773,18 @@
             ensurePerBeatSettings();
             initSegments();
             drawStaticSequencer();
+
+            // Automatically check if the page was opened with a rhythm link (?s=... or #N2-... / #NOME1-...)
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const urlSetup = params.get('s') || params.get('setup') || (window.location.hash ? window.location.hash.slice(1) : '');
+                if (urlSetup && (urlSetup.startsWith('N2-') || urlSetup.startsWith('NOME1-'))) {
+                    if (setupHashInput) setupHashInput.value = urlSetup;
+                    loadSetupFromHash(urlSetup);
+                }
+            } catch (e) {
+                console.debug('Auto-load URL check skipped:', e);
+            }
         };
     </script>
 </body>
