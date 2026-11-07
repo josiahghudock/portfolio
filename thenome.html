@@ -134,16 +134,27 @@
     <!-- Main Sequencer Area -->
     <main id="mainContainer" class="w-full max-w-xl flex flex-col items-center justify-center my-auto py-6 transition-all duration-300">
         
-        <!-- Mode Switcher -->
-        <div id="interactionModeWrapper" class="w-full flex justify-between items-center px-2 mb-3 text-xs hidden">
-            <span class="text-slate-400 font-medium">Interaction Mode:</span>
-            <div class="inline-flex p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md">
-                <button id="modeToggleBtn" class="px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm">Toggle Mode</button>
-                <button id="modeSubdivBtn" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all">Subdivision Mode</button>
+        <!-- Mode & View Switcher -->
+        <div id="interactionModeWrapper" class="w-full flex flex-wrap justify-between items-center gap-2 px-2 mb-3 text-xs hidden">
+            <div class="flex items-center gap-2">
+                <span class="text-slate-400 font-medium">Mode:</span>
+                <div class="inline-flex p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md">
+                    <button id="modeToggleBtn" class="px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm">Toggle Mode</button>
+                    <button id="modeSubdivBtn" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all">Subdivision Mode</button>
+                </div>
+            </div>
+
+            <!-- Ultra-Nerd Line vs Circle View Switcher -->
+            <div id="nerdViewModeWrapper" class="hidden items-center gap-2">
+                <span class="text-slate-400 font-medium">View:</span>
+                <div class="inline-flex p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md">
+                    <button id="nerdViewLineBtn" type="button" class="px-3 py-1.5 rounded-lg font-semibold bg-purple-500 text-slate-950 transition-all shadow-sm">Line</button>
+                    <button id="nerdViewCircleBtn" type="button" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all">Circle</button>
+                </div>
             </div>
         </div>
 
-        <!-- Circular Canvas Container (Normal Mode) -->
+        <!-- Circular Canvas Container (Normal Mode & Ultra-Nerd Circle View) -->
         <div id="canvasContainer" class="relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.04]">
             <canvas id="sequencerCanvas" width="480" height="480" class="w-full h-full cursor-pointer rounded-full shadow-2xl bg-[#0f0f14] border border-borderSubtle origin-center"></canvas>
             
@@ -609,7 +620,7 @@
                         A nested tuplet is just "a tuplet within a tuplet". Technically speaking, most musicians are very comfortable with at least one type of nested tuplet. Indeed, sixteenth notes can be thought of as "4-lets" or equivalently as "2-lets" nested inside "2-lets". Likewise, sextuplets can be thought of as "3-lets" nested within "2-lets". Check it out here!:
                     </p>
                     <div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6NCwiMSI6MiwiMiI6NiwiMyI6Mn0sInNzYyI6eyIxXzAiOjIsIjFfMSI6MiwiM18wIjozLCIzXzEiOjN9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjFfMF8xIjp0cnVlLCIxXzFfMSI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6dHJ1ZSwiMl80XzAiOnRydWUsIjJfNV8wIjp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6NCwiMSI6MiwiMiI6NiwiMyI6Mn0sInNzYyI6eyIxXzAiOjIsIjFfMSI6PiwiM18wIjozLCIzXzEiOjN9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjFfMF8xIjp0cnVlLCIxXzFfMSI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6dHJ1ZSwiMl80XzAiOnRydWUsIjJfNV8wIjp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open in The 'Nome: Nested Tuplets Comparison</span>
                         </button>
@@ -629,7 +640,7 @@
                                 </a>
                                 <span> from <strong>Zappa's Black Page</strong>:</span>
                             </div>
-                            <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo2MCwidGIiOjE2LCJzZSI6MCwic2MiOjEsImNlIjoxLCJwZSI6MSwicGIiOjgsInBzIjp7InBvbHlfMCI6dHJ1ZSwicG9seV8xIjp0cnVlLCJwb2x5XzIiOnRydWUsInBvbHlfMyI6dHJ1ZSwicG9seV80Ijp0cnVlLCJwb2x5XzUiOnRydWUsInBvbHlfNiI6dHJ1ZSwicG9seV83Ijp0cnVlLCJwb2x5XzgiOnRydWV9LCJic2MiOnsiMSI6MiwiMiI6MiwiMyI6NSwiNCI6NSwiNSI6NSwiNiI6MSwiOCI6MiwiOSI6MiwiMTAiOjEwLCIxMSI6MTEsIjEyIjozLCIxMyI6M30sInNzYyI6eyIxXzAiOjQsIjFfMSI6NCwiMl8wIjozLCIyXzEiOjUsIjhfMSI6NSwiOV8wIjo1LCI5XzEiOjR9LCJicyI6eyIwXzBfMCI6ZmFsc2UsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOmZhbHNlLCI0XzBfMCI6dHJ1ZSwiNV8wXzAiOnRydWUsIjZfMF8wIjpmYWxzZSwiN18wXzAiOmZhbHNlLCIxXzFfMCI6ZmFsc2UsIjFfMl8wIjp0cnVlLCIxXzNfMCI6dHJ1ZSwiMV80XzAiOnRydWUsIjFfNV8wIjp0cnVlLCIxXzZfMCI6dHJ1ZSwiMV83XzAiOnRydWUsIjFfMF8xIjpmYWxzZSwiMV8wXzIiOmZhbHNlLCIxXzBfMyI6ZmFsc2UsIjFfMV8xIjp0cnVlLCIxXzFfMiI6dHJ1ZSwiMV8xXzMiOnRydWUsIjJfMV8wIjp0cnVlLCIyXzBfMSI6dHJ1ZSwiMl8wXzIiOnRydWUsIjJfMV8xIjp0cnVlLCIyXzFfMiI6dHJ1ZSwiMl8xXzMiOnRydWUsIjJfMV80Ijp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfM18wIjp0cnVlLCIzXzRfMCI6dHJ1ZSwiNF8xXzAiOnRydWUsIjRfMl8wIjp0cnVlLCI0XzNfMCI6dHJ1ZSwiNF80XzAiOnRydWUsIjRfNV8wIjp0cnVlLCI1XzFfMCI6dHJ1ZSwiNV8yXzAiOnRydWUsIjVfM18wIjp0cnVlLCI1XzRfMCI6dHJ1ZSwiNl8xXzAiOnRydWUsIjZfMl8wIjp0cnVlLCI2XzNfMCI6dHJ1ZSwiNl80XzAiOnRydWUsIjZfNV8wIjp0cnVlLCI4XzBfMCI6ZmFsc2UsIjlfMF8wIjp0cnVlLCIxMF8wXzAiOnRydWUsIjExXzBfMCI6dHJ1ZSwiMTJfMF8wIjp0cnVlLCIxM18wXzAiOmZhbHNlLCIxNF8wXzAiOnRydWUsIjE1XzBfMCI6ZmFsc2UsIjhfMV8wIjpmYWxzZSwiOF8xXzEiOnRydWUsIjhfMV8yIjp0cnVlLCI4XzFfMyI6dHJ1ZSwiOF8xXzQiOnRydWUsIjlfMV8wIjp0cnVlLCI5XzJfMCI6dHJ1ZSwiOV8zXzAiOnRydWUsIjlfMF8xIjp0cnVlLCI5XzBfMiI6dHJ1ZSwiOV8wXzMiOnRydWUsIjlfMF80Ijp0cnVlLCI5XzFfMSI6dHJ1ZSwiOV8xXzIiOnRydWUsIjlfMV8zIjp0cnVlLCIxMF8xXzAiOnRydWUsIjEwXzJfMCI6dHJ1ZSwiMTBfM18wIjp0cnVlLCIxMF80XzAiOnRydWUsIjEwXzVfMCI6dHJ1ZSwiMTBfNl8wIjp0cnVlLCIxMF83XzAiOnRydWUsIjEwXzhfMCI6dHJ1ZSwiMTBfOV8wIjp0cnVlLCIxMV8xXzAiOnRydWUsIjExXzJfMCI6dHJ1ZSwiMTFfM18wIjp0cnVlLCIxMV80XzAiOnRydWUsIjExXzVfMCI6dHJ1ZSwiMTFfNl8wIjp0cnVlLCIxMV83XzAiOnRydWUsIjExXzhfMCI6dHJ1ZSwiMTFfOV8wIjp0cnVlLCIxMV8xMF8wIjp0cnVlLCIxMl8xXzAiOmZhbHNlLCIxMl8yXzAiOnRydWUsIjEzXzFfMCI6dHJ1ZSwiMTNfMl8wIjpmYWxzZSwiMTNfM18wIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjUiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI3Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjgiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo2MCwidGIiOjE2LCJzZSI6MCwic2MiOjEsImNlIjoxLCJwZSI6MSwicGIiOjgsInBzIjp7InBvbHlfMCI6dHJ1ZSwicG9seV8xIjp0cnVlLCJwb2x5XzIiOnRydWUsInBvbHlfMyI6dHJ1ZSwicG9seV80Ijp0cnVlLCJwb2x5XzUiOnRydWUsInBvbHlfNiI6dHJ1ZSwicG9seV83Ijp0cnVlLCJwb2x5XzgiOnRydWUsIm5lcnRSZXBlYXQiOnsic3RhcnRJZHgiOm51bGwsImVuZElkeCI6bnVsbCwiY291bnQiOjJ9fSwiYnNjIjp7IjEiOjIsIjIiOjIsIjMiOjUsIjQiOjUsIjUiOjUsIjYiOjEsIjgiOjIsIjkiOjIsIjEwIjoxMCwiMTEiOjExLCIxMiI6MywiMTMiOjN9LCJzc2MiOnsiMV8wIjo0LCIxXzEiOjQsIjJfMCI6MywiMl8xIjo1LCI4XzEiOjUsIjlfMCI6NSwiOV8xIjo0fSwiYnMiOnsiMF8wXzAiOmZhbHNlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjpmYWxzZSwiNF8wXzAiOnRydWUsIjVfMF8wIjp0cnVlLCI2XzBfMCI6ZmFsc2UsIjdfMF8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIxXzJfMCI6dHJ1ZSwiMV8zXzAiOnRydWUsIjFfNF8wIjp0cnVlLCIxXzVfMCI6dHJ1ZSwiMV82XzAiOnRydWUsIjFfN18wIjp0cnVlLCIxXzBfMSI6ZmFsc2UsIjFfMF8yIjpmYWxzZSwiMV8wXzMiOmZhbHNlLCIxXzFfMSI6dHJ1ZSwiMV8xXzIiOnRydWUsIjFfMV8zIjp0cnVlLCIyXzFfMCI6dHJ1ZSwiMl8wXzEiOnRydWUsIjJfMF8yIjp0cnVlLCIyXzFfMSI6dHJ1ZSwiMl8xXzIiOnRydWUsIjJfMV8zIjp0cnVlLCIyXzFfNCI6dHJ1ZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzNfMCI6dHJ1ZSwiM180XzAiOnRydWUsIjRfMV8wIjp0cnVlLCI0XzJfMCI6dHJ1ZSwiNF8zXzAiOnRydWUsIjRfNF8wIjp0cnVlLCI0XzVfMCI6dHJ1ZSwiNV8xXzAiOnRydWUsIjVfMl8wIjp0cnVlLCI1XzNfMCI6dHJ1ZSwiNV80XzAiOnRydWUsIjZfMV8wIjp0cnVlLCI2XzJfMCI6dHJ1ZSwiNl8zXzAiOnRydWUsIjZfNF8wIjp0cnVlLCI2XzVfMCI6dHJ1ZSwiOF8wXzAiOmZhbHNlLCI5XzBfMCI6dHJ1ZSwiMTBfMF8wIjp0cnVlLCIxMV8wXzAiOnRydWUsIjEyXzBfMCI6dHJ1ZSwiMTNfMF8wIjpmYWxzZSwiMTRfMF8wIjp0cnVlLCIxNV8wXzAiOmZhbHNlLCI4XzFfMCI6ZmFsc2UsIjhfMV8xIjp0cnVlLCI4XzFfMiI6dHJ1ZSwiOF8xXzMiOnRydWUsIjhfMV80Ijp0cnVlLCI5XzFfMCI6dHJ1ZSwiOV8yXzAiOnRydWUsIjlfM18wIjp0cnVlLCI5XzBfMSI6dHJ1ZSwiOV8wXzIiOnRydWUsIjlfMF8zIjp0cnVlLCI5XzBfNCI6dHJ1ZSwiOV8xXzEiOnRydWUsIjlfMV8yIjp0cnVlLCI5XzFfMyI6dHJ1ZSwiMTBfMV8wIjp0cnVlLCIxMF8yXzAiOnRydWUsIjEwXzNfMCI6dHJ1ZSwiMTBfNF8wIjp0cnVlLCIxMF81XzAiOnRydWUsIjEwXzZfMCI6dHJ1ZSwiMTBfN18wIjp0cnVlLCIxMF84XzAiOnRydWUsIjEwXzlfMCI6dHJ1ZSwiMTFfMV8wIjp0cnVlLCIxMV8yXzAiOnRydWUsIjExXzNfMCI6dHJ1ZSwiMTFfNF8wIjp0cnVlLCIxMV81XzAiOnRydWUsIjExXzZfMCI6dHJ1ZSwiMTEsN18wIjp0cnVlLCIxMV84XzAiOnRydWUsIjExXzlfMCI6dHJ1ZSwiMTEsMTBfMCI6dHJ1ZSwiMTJfMV8wIjpmYWxzZSwiMTJfMl8wIjp0cnVlLCIxM18xXzAiOnRydWUsIjEzXzJfMCI6ZmFsc2UsIjEzXzNfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0siOSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 <span>Load Preset</span>
                             </button>
@@ -643,7 +654,7 @@
                                 </a>
                                 <span> by <strong>Car Bomb</strong>:</span>
                             </div>
-                            <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MSwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6MywiMSI6NSwiMiI6NSwiMyI6Mn0sInNzYyI6eyIwXzAiOjQsIjBfMSI6NCwiMV8wIjoyLCIxXzEiOjIsIjFfMiI6MiwiMV8zIjoyLCIxXzQiOjIsIjJfMCI6MiwiMl8xIjoyLCIyXzIiOjIsIjJfMyI6MiwiMl80IjoyLCIzXzAiOjQsIjNfMSI6NH0sImJzIjp7IjBfMF8wIjp0cnVlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjp0cnVlLCIwXzFfMCI6dHJ1ZSwiMF8yXzAiOmZhbHNlLCIwXzBfMSI6dHJ1ZSwiMF8wXzIiOnRydWUsIjBfMF8zIjpmYWxzZSwiMF8xXzEiOnRydWUsIjBfMV8yIjp0cnVlLCIwXzFfMyI6ZmFsc2UsIjFfMV8wIjp0cnVlLCIxXzJfMCI6dHJ1ZSwiMV8zXzAiOnRydWUsIjFfNF8wIjp0cnVlLCIyXzFfMCI6dHJ1ZSwiMl8yXzAiOnRydWUsIjJfM18wIjpmYWxzZSwiMl80XzAiOmZhbHNlLCIxXzBfMSI6dHJ1ZSwiMV8wXzIiOnRydWUsIjFfMF8zIjpmYWxzZSwiMV8xXzEiOmZhbHNlLCIxXzJfMSI6dHJ1ZSwiMV8zXzEiOmZhbHNlLCIxXzRfMSI6dHJ1ZSwiMl8wXzEiOmZhbHNlLCIyXzFfMSI6dHJ1ZSwiMl8yXzEiOmZhbHNlLCIyXzNfMSI6ZmFsc2UsIjJfNF8xIjpmYWxzZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzBfMSI6dHJ1ZSwiM18wXzIiOnRydWUsIjNfMF8zIjpmYWxzZSwiM18wXzQiOnRydWUsIjNfMV8xIjp0cnVlLCIzXzFfMiI6dHJ1ZSwiM18xXzMiOmZhbHNlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJzcXVhcmUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuMzV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MSwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJucmV0UmVwZWF0Ijp7InN0YXJ0SWR4IjpudWxsLCJlbmRJZHgiOm51bGwsImNvdW50IjoyfSwiYnNjIjp7IjAiOjMsIjEiOjUsIjIiOjUsIjMiOjJ9LCJzc2MiOnsiMF8wIjo0LCIwXzEiOjQsIjFfMCI6MiwiMV8xIjoyLCIxXzIiOjIsIjFfMyI6MiwiMV80IjoyLCIyXzAiOjIsIjJfMSI6MiwiMl8yIjoyLCIyXzMiOjIsIjJfNCI6MiwiM18wIjo0LCIzXzEiOjR9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjpmYWxzZSwiMF8wXzEiOnRydWUsIjBfMF8yIjp0cnVlLCIwXzBfMyI6ZmFsc2UsIjBfMV8xIjp0cnVlLCIwXzFfMiI6dHJ1ZSwiMF8xXzMiOmZhbHNlLCIxXzFfMCI6dHJ1ZSwiMV8yXzAiOnRydWUsIjFfM18wIjp0cnVlLCIxXzRfMCI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6ZmFsc2UsIjJfNF8wIjpmYWxzZSwiMV8wXzEiOnRydWUsIjFfMF8yIjp0cnVlLCIxXzBfMyI6ZmFsc2UsIjFfMV8xIjpmYWxzZSwiMV8yXzEiOnRydWUsIjFfM18xIjpmYWxzZSwiMV80XzEiOnRydWUsIjJfMF8xIjpmYWxzZSwiMl8xXzEiOmZhbHNlLCIyXzJfMSI6ZmFsc2UsIjJfM18xIjpmYWxzZSwiMl80XzEiOmZhbHNlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18wXzMiOmZhbHNlLCIzXzBfNCI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlLCIzXzFfMyI6ZmFsc2V9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W10sImJjZSI6MCwiYmNzIjp7fSwiZGIiOnsidHlwZSI6InNxdWFyZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC4zNX0sInNiIjp5OnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 <span>Load Preset</span>
                             </button>
@@ -693,7 +704,7 @@
                             </a>
                             <span> in <strong>Monomyth</strong> by Animals as Leaders:</span>
                         </div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNTAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI5Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjExIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjE0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W3siaWQiOjEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjozLCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo1LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6NiwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6NywibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6OCwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjksIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEwLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEyLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTMsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjE0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjoxNSwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZSwiY2xpY2tfNyI6dHJ1ZSwiY2xpY2tfOCI6dHJ1ZSwiY2xpY2tfOSI6dHJ1ZSwiY2xpY2tfMTAiOnRydWUsImNsaWNrXzExIjp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNTAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI5Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjExIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjE0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W3siaWQiOjEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7InBvaW50ZXJzIjp7fSwiaWQiOjMsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjQsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjUsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWlffSx7ImlkIjo2LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo3LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo4LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6OSwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6MTAsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWlffSx7ImlkIjoxMSwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6MTIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWlffSx7ImlkIjoxMywibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6MTQsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjE1LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX1dLCJiY2UiOjEsImJjcyI6eyJjbGlja18wIjp0cnVlLCJjbGlja18xIjp0cnVlLCJjbGlja18yIjp0cnVlLCJjbGlja18zIjp0cnVlLCJjbGlja180Ijp0cnVlLCJjbGlja181Ijp0cnVlLCJjbGlja182Ijp0cnVlLCJjbGlja183Ijp0cnVlLCJjbGlja184Ijp0cnVlLCJjbGlja185Ijp0cnVlLCJjbGlja18xMCI6dHJ1ZSwiY2xpY2tfMTEiOnRydWV9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Monomyth Run</span>
                         </button>
@@ -708,7 +719,7 @@
                             </a>
                             <span> in <strong>Cool 7</strong> by Sungazer:</span>
                         </div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNDAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjozLCJuIjo2LCJyIjo0LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6NCwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjUsIm4iOjEsInIiOjEsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZX0sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxMzgsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiciciOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjIsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjMsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjQsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjEsInIiOjEsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZX0sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Cool 7 Groove</span>
                         </button>
@@ -723,7 +734,7 @@
                             </a>
                             <span> in <strong>Lights Out</strong> by Car Bomb:</span>
                         </div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NiwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Lights Out Groove</span>
                         </button>
@@ -893,10 +904,10 @@
             </div>
 
             <div class="flex items-center justify-between gap-2 pt-2 border-t border-borderSubtle">
-                <button id="removeRepeatEndBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold transition-all">Remove</button>
+                <button id="removeRepeatEndBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 font-semibold transition-all">Remove Repeat</button>
                 <div class="flex items-center gap-2 ml-auto">
                     <button id="cancelRepeatModalBtn" type="button" class="px-3.5 py-2 rounded-lg bg-[#1a1a22] hover:bg-[#22222c] text-slate-300 font-semibold transition-all">Cancel</button>
-                    <button id="saveRepeatModalBtn" type="button" class="px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold transition-all shadow-md">Apply</button>
+                    <button id="saveRepeatModalBtn" type="button" class="px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold transition-all shadow-md">Save Repeat</button>
                 </div>
             </div>
         </div>
@@ -914,6 +925,11 @@
         const ctx = canvas.getContext('2d', { alpha: false });
 
         const mainContainer = document.getElementById('mainContainer');
+        const articleView = document.getElementById('articleView');
+        const learnMoreBtn = document.getElementById('learnMoreBtn');
+        const backToNomeTopBtn = document.getElementById('backToNomeTopBtn');
+        const backToNomeBottomBtn = document.getElementById('backToNomeBottomBtn');
+
         const nerdLineWrapper = document.getElementById('nerdLineWrapper');
         const nerdScrollContainer = document.getElementById('nerdScrollContainer');
         const nerdTrackContent = document.getElementById('nerdTrackContent');
@@ -922,13 +938,17 @@
         const nerdTotalBeatsEquiv = document.getElementById('nerdTotalBeatsEquiv');
         const nerdBeatClickWrapper = document.getElementById('nerdBeatClickWrapper');
         const nerdBeatClickTrack = document.getElementById('nerdBeatClickTrack');
-        const nerdBeatClickBpmLabel = document.getElementById('nerdBeatClickBpmLabel');
         const nerdBeatClickRateLabel = document.getElementById('nerdBeatClickRateLabel');
+        const nerdBeatClickBpmLabel = document.getElementById('nerdBeatClickBpmLabel');
         const nerdBeatClickSummary = document.getElementById('nerdBeatClickSummary');
         const nerdModeBadge = document.getElementById('nerdModeBadge');
         const ultraNerdModeBtn = document.getElementById('ultraNerdModeBtn');
         const ultraNerdBtnText = document.getElementById('ultraNerdBtnText');
         const resetBtnText = document.getElementById('resetBtnText');
+
+        const nerdViewModeWrapper = document.getElementById('nerdViewModeWrapper');
+        const nerdViewLineBtn = document.getElementById('nerdViewLineBtn');
+        const nerdViewCircleBtn = document.getElementById('nerdViewCircleBtn');
 
         const beatsControlSection = document.getElementById('beatsControlSection');
         const uniformSubdivSection = document.getElementById('uniformSubdivSection');
@@ -1034,12 +1054,21 @@
         const decRepeatCountBtn = document.getElementById('decRepeatCountBtn');
         const incRepeatCountBtn = document.getElementById('incRepeatCountBtn');
         const repeatModalPreviewVal = document.getElementById('repeatModalPreviewVal');
-        let pendingRepeatEndGapIndex = null;
+
+        // Hash System Elements
+        const saveSetupBtn = document.getElementById('saveSetupBtn');
+        const saveSetupBtnText = document.getElementById('saveSetupBtnText');
+        const shareLinkBtn = document.getElementById('shareLinkBtn');
+        const shareLinkBtnText = document.getElementById('shareLinkBtnText');
+        const setupHashInput = document.getElementById('setupHashInput');
+        const loadSetupBtn = document.getElementById('loadSetupBtn');
+        const hashFeedbackMsg = document.getElementById('hashFeedbackMsg');
 
         // Application State
         const state = {
             isPlaying: false,
             ultraNerdMode: false,
+            nerdViewMode: 'line', // 'line' or 'circle'
             bpm: 100,
             totalBeats: 4,
             subdivEnabled: false,
@@ -1059,12 +1088,12 @@
             perBeatSettings: {},
             segments: [],
             // Ultra-nerd Mode specific state
-            nerdBlocks: [], // Array of { id, numNotes, tupletRate, subdivCount, subDivs: { noteIdx: count }, activeStates: { "noteIdx_subIdx": bool } }
+            nerdBlocks: [],
+            nerdRepeats: [], // Array of { startIdx, endIdx, count }
             nerdSegments: [],
-            nerdRepeat: { startIdx: null, endIdx: null, count: 2 },
             beatClickEnabled: false,
             beatClickRate: 4,
-            beatClickSegments: [], // Array of { index, beatKey, active, durationBeats, pulseFraction, scheduledTime, scheduledDuration }
+            beatClickSegments: [],
             beatClickStates: {},
             nextBeatClickTime: 0.0,
             currentBeatClickIndex: 0,
@@ -1084,19 +1113,91 @@
         let hoveredPolyIndex = null;
         let activePopupSegment = null;
         let activePopupLayer = 1;
-        let activeNerdSubdivTarget = null; // { blockId, noteIndex }
+        let activeNerdSubdivTarget = null;
         let hoveredSegmentKey = null;
         let tapTimestamps = [];
         let tapHighlightTimeout = null;
         let lastScrolledSegIdx = -1;
+        let pendingRepeatEndGapIndex = null;
+        let editingRepeatIndex = null;
 
-        // Modal state for adding/editing a block in Ultra-nerd Mode
         let blockModalContext = {
-            mode: 'add', // 'add' or 'edit'
+            mode: 'add',
             insertIndex: 0,
             editBlockId: null,
             subdivManuallyChanged: false
         };
+
+        /* ==========================================
+         * IOS / SAFARI WEB AUDIO UNLOCK
+         * ========================================== */
+        let iosAudioUnlocked = false;
+        let silentHtmlAudio = null;
+
+        function configureIOSAudioSession() {
+            try {
+                if (navigator.audioSession && navigator.audioSession.type !== 'playback') {
+                    navigator.audioSession.type = 'playback';
+                }
+            } catch (err) {
+                console.debug('AudioSession API not supported:', err);
+            }
+        }
+
+        function initAudioContext() {
+            configureIOSAudioSession();
+            if (!state.audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                state.audioCtx = new AudioContext();
+            }
+            if (state.audioCtx.state === 'suspended' || state.audioCtx.state === 'interrupted') {
+                state.audioCtx.resume();
+            }
+            if (!iosAudioUnlocked && state.audioCtx) {
+                try {
+                    const buffer = state.audioCtx.createBuffer(1, 1, 22050);
+                    const source = state.audioCtx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(state.audioCtx.destination);
+                    if (source.start) source.start(0);
+                    else if (source.noteOn) source.noteOn(0);
+
+                    if (!silentHtmlAudio) {
+                        silentHtmlAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+                        silentHtmlAudio.setAttribute('playsinline', '');
+                        silentHtmlAudio.volume = 0.01;
+                    }
+                    const playPromise = silentHtmlAudio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            silentHtmlAudio.pause();
+                            silentHtmlAudio.currentTime = 0;
+                        }).catch(() => {});
+                    }
+                    iosAudioUnlocked = true;
+                } catch (e) {
+                    console.debug('iOS unlock error:', e);
+                }
+            }
+        }
+
+        ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'].forEach(evtName => {
+            window.addEventListener(evtName, function unlockHandler() {
+                initAudioContext();
+                if (state.audioCtx && state.audioCtx.state === 'running' && iosAudioUnlocked) {
+                    window.removeEventListener(evtName, unlockHandler, true);
+                }
+            }, { capture: true, passive: true });
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && state.audioCtx) {
+                configureIOSAudioSession();
+                if (state.isPlaying && (state.audioCtx.state === 'suspended' || state.audioCtx.state === 'interrupted')) {
+                    state.audioCtx.resume();
+                }
+            }
+        });
 
         document.querySelectorAll('input[type=range]').forEach(slider => {
             const checkThumbTarget = (clientX) => {
@@ -1270,8 +1371,10 @@
 
         function updateInstructionHint() {
             if (state.ultraNerdMode) {
-                if (state.interactionMode === 'toggle') {
-                    instructionHint.textContent = 'Toggle Mode: Click any note bar on the line to toggle it on/off. Hover between blocks for + buttons.';
+                if (state.nerdViewMode === 'circle') {
+                    instructionHint.textContent = 'Ultra-Nerd Circle View: Displaying your sequence as a circle. Click anywhere on the circle to switch back to Line View for editing.';
+                } else if (state.interactionMode === 'toggle') {
+                    instructionHint.textContent = 'Toggle Mode: Click any note bar on the line to toggle it on/off. Hover between blocks for + and Repeat buttons.';
                 } else {
                     instructionHint.textContent = 'Subdivision Mode: Click any note or L2+ badge on the line to add green second-layer subdivisions.';
                 }
@@ -1284,6 +1387,39 @@
             }
         }
 
+        function setNerdViewMode(viewMode) {
+            state.nerdViewMode = viewMode === 'circle' ? 'circle' : 'line';
+            beatEditorPopup.classList.add('hidden');
+
+            if (state.nerdViewMode === 'circle') {
+                nerdViewCircleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-purple-500 text-slate-950 transition-all shadow-sm';
+                nerdViewLineBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                if (state.ultraNerdMode) {
+                    nerdLineWrapper.classList.add('hidden');
+                    nerdLineWrapper.classList.remove('flex');
+                    canvasContainer.classList.remove('hidden');
+                    updateCustomBadges();
+                    buildNerdSegments();
+                    if (!state.isPlaying) drawStaticSequencer();
+                }
+            } else {
+                nerdViewLineBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-purple-500 text-slate-950 transition-all shadow-sm';
+                nerdViewCircleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                if (state.ultraNerdMode) {
+                    canvasContainer.classList.add('hidden');
+                    nerdLineWrapper.classList.remove('hidden');
+                    nerdLineWrapper.classList.add('flex');
+                    renderNerdLine();
+                }
+            }
+            updateInstructionHint();
+        }
+
+        if (nerdViewLineBtn && nerdViewCircleBtn) {
+            nerdViewLineBtn.addEventListener('click', () => setNerdViewMode('line'));
+            nerdViewCircleBtn.addEventListener('click', () => setNerdViewMode('circle'));
+        }
+
         modeToggleBtn.addEventListener('click', () => {
             state.interactionMode = 'toggle';
             modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
@@ -1291,7 +1427,8 @@
             updateInstructionHint();
             beatEditorPopup.classList.add('hidden');
             if (state.ultraNerdMode) {
-                renderNerdLine();
+                if (state.nerdViewMode === 'circle') setNerdViewMode('line');
+                else renderNerdLine();
             } else {
                 updateCustomBadges();
                 if (!state.isPlaying) drawStaticSequencer();
@@ -1306,7 +1443,8 @@
             beatEditorPopup.classList.add('hidden');
 
             if (state.ultraNerdMode) {
-                renderNerdLine();
+                if (state.nerdViewMode === 'circle') setNerdViewMode('line');
+                else renderNerdLine();
             } else {
                 if (!state.customSubdivEnabled) {
                     state.customSubdivEnabled = true;
@@ -1317,94 +1455,6 @@
                     updateCustomBadges();
                 }
                 if (!state.isPlaying) drawStaticSequencer();
-            }
-        });
-
-        let iosAudioUnlocked = false;
-        let silentHtmlAudio = null;
-
-        function initAudioContext() {
-            try {
-                // 1. iOS 17+ Hardware Mute Switch Bypass: force media playback session
-                if (navigator.audioSession) {
-                    navigator.audioSession.type = 'playback';
-                }
-            } catch (e) {
-                console.debug('AudioSession API not supported:', e);
-            }
-
-            if (!state.audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                state.audioCtx = new AudioContext();
-
-                // Automatically recover if iOS interrupts the AudioContext
-                state.audioCtx.onstatechange = () => {
-                    if (state.isPlaying && state.audioCtx && state.audioCtx.state !== 'running') {
-                        state.audioCtx.resume().catch(() => {});
-                    }
-                };
-            }
-
-            // 4. Handle both 'suspended' and iOS-specific 'interrupted' states
-            if (state.audioCtx.state !== 'running') {
-                state.audioCtx.resume().catch(() => {});
-            }
-
-            // 2. iOS Silent Buffer & HTML5 Audio Unlock (routes WebAudio to media channel & unlocks WebKit)
-            if (!iosAudioUnlocked && state.audioCtx) {
-                try {
-                    const buffer = state.audioCtx.createBuffer(1, 1, 22050);
-                    const source = state.audioCtx.createBufferSource();
-                    source.buffer = buffer;
-                    source.connect(state.audioCtx.destination);
-                    if (source.start) {
-                        source.start(0);
-                    } else if (source.noteOn) {
-                        source.noteOn(0);
-                    }
-
-                    if (!silentHtmlAudio) {
-                        // Tiny 1-sample silent WAV to force iOS<17 out of ringer/ambient channel into media playback
-                        silentHtmlAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
-                        silentHtmlAudio.setAttribute('playsinline', '');
-                        silentHtmlAudio.volume = 0.01;
-                    }
-                    const playPromise = silentHtmlAudio.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            iosAudioUnlocked = true;
-                        }).catch(() => {});
-                    } else {
-                        iosAudioUnlocked = true;
-                    }
-                } catch (e) {
-                    console.debug('iOS audio unlock error:', e);
-                }
-            }
-        }
-
-        // Unlock audio context on first user touch/pointer interaction anywhere on the page
-        const unlockOnFirstInteraction = () => {
-            initAudioContext();
-            if (state.audioCtx && state.audioCtx.state === 'running' && iosAudioUnlocked) {
-                window.removeEventListener('touchstart', unlockOnFirstInteraction, true);
-                window.removeEventListener('touchend', unlockOnFirstInteraction, true);
-                window.removeEventListener('pointerdown', unlockOnFirstInteraction, true);
-            }
-        };
-        window.addEventListener('touchstart', unlockOnFirstInteraction, { capture: true, passive: true });
-        window.addEventListener('touchend', unlockOnFirstInteraction, { capture: true, passive: true });
-        window.addEventListener('pointerdown', unlockOnFirstInteraction, { capture: true, passive: true });
-
-        // Re-verify audio session and context state when returning to the tab on iOS
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && state.isPlaying && state.audioCtx) {
-                if (navigator.audioSession) {
-                    try { navigator.audioSession.type = 'playback'; } catch (e) {}
-                }
-                if (state.audioCtx.state !== 'running') {
-                    state.audioCtx.resume().catch(() => {});
-                }
             }
         });
 
@@ -1481,56 +1531,53 @@
          * ULTRA-NERD MODE LOGIC & RENDERING
          * ========================================== */
 
-        function isRepeatActive() {
-            const r = state.nerdRepeat;
-            return (
-                r &&
-                r.startIdx !== null &&
-                r.endIdx !== null &&
-                r.endIdx > r.startIdx &&
-                r.startIdx >= 0 &&
-                r.startIdx < state.nerdBlocks.length
-            );
-        }
-
         function getExpandedNerdBlockSequence() {
-            const total = state.nerdBlocks.length;
-            if (total === 0) return [];
+            const len = state.nerdBlocks.length;
+            if (len === 0) return [];
 
-            if (!isRepeatActive()) {
-                return state.nerdBlocks.map((block, bIdx) => ({ block, bIdx }));
-            }
+            let sequence = state.nerdBlocks.map((block, bIdx) => ({ block, bIdx }));
+            const validRepeats = (state.nerdRepeats || [])
+                .filter(r =>
+                    r.startIdx !== null &&
+                    r.endIdx !== null &&
+                    r.startIdx >= 0 &&
+                    r.endIdx > r.startIdx &&
+                    r.endIdx <= len &&
+                    r.count >= 1
+                )
+                .sort((a, b) => (a.endIdx - a.startIdx) - (b.endIdx - b.startIdx) || a.startIdx - b.startIdx);
 
-            const start = Math.max(0, Math.min(total - 1, state.nerdRepeat.startIdx));
-            const end = Math.max(start + 1, Math.min(total, state.nerdRepeat.endIdx));
-            const count = Math.max(1, Math.min(10, parseInt(state.nerdRepeat.count) || 1));
-
-            const seq = [];
-            for (let i = 0; i < start; i++) {
-                seq.push({ block: state.nerdBlocks[i], bIdx: i });
-            }
-            for (let rep = 0; rep < count; rep++) {
-                for (let i = start; i < end; i++) {
-                    seq.push({ block: state.nerdBlocks[i], bIdx: i });
+            // Process repeats by expanding blocks inside each active repeat range
+            // For non-overlapping or nested repeats, we expand from innermost/leftmost
+            let marks = state.nerdBlocks.map((block, bIdx) => [{ block, bIdx }]);
+            for (const rep of validRepeats) {
+                const sliceItems = [];
+                for (let k = rep.startIdx; k < rep.endIdx; k++) {
+                    sliceItems.push(...marks[k]);
+                }
+                const repeated = [];
+                for (let c = 0; c < rep.count; c++) {
+                    repeated.push(...sliceItems);
+                }
+                marks[rep.startIdx] = repeated;
+                for (let k = rep.startIdx + 1; k < rep.endIdx; k++) {
+                    marks[k] = [];
                 }
             }
-            for (let i = end; i < total; i++) {
-                seq.push({ block: state.nerdBlocks[i], bIdx: i });
-            }
-            return seq;
+            return marks.flat();
         }
 
         function buildNerdSegments() {
             state.nerdSegments = [];
             state.beatClickSegments = [];
 
-            const playbackSequence = getExpandedNerdBlockSequence();
+            const expandedSeq = getExpandedNerdBlockSequence();
 
-            playbackSequence.forEach(({ block, bIdx }) => {
+            expandedSeq.forEach((item, seqStepIdx) => {
+                const block = item.block;
+                const bIdx = item.bIdx;
                 const actualNotesCount = block.subdivCount !== undefined ? block.subdivCount : block.numNotes;
-                // Total duration of this block in beats is (numNotes / tupletRate)
                 const blockTotalBeats = block.numNotes / block.tupletRate;
-                // Each of the 'actualNotesCount' notes takes an equal share of blockTotalBeats
                 const primaryNoteBeats = blockTotalBeats / actualNotesCount;
 
                 for (let n = 0; n < actualNotesCount; n++) {
@@ -1552,6 +1599,7 @@
                         state.nerdSegments.push({
                             blockId: block.id,
                             blockIndex: bIdx,
+                            seqStepIdx: seqStepIdx,
                             noteIndex: n,
                             subIndex: s,
                             stateKey: stateKey,
@@ -1567,68 +1615,105 @@
                 }
             });
 
-            // Build Beat-Click pulse segments across the total block sequence duration
-            // Tuplet rate 4 corresponds to quarter-note pulse (1 beat per click).
-            // General rate R corresponds to (4 / R) quarter-note beats per click.
+            // Compute circular angles for Ultra-nerd segments so Circle View can render them
             const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
-            if (state.beatClickEnabled && totalBeatsEquiv > 0) {
-                const rate = Math.max(1, Math.min(20, parseInt(state.beatClickRate) || 4));
-                const pulseBeats = 4.0 / rate;
-                const eps = 1e-7;
-                const totalPulsesEquiv = totalBeatsEquiv / pulseBeats;
-                const numClickPulses = Math.ceil(totalPulsesEquiv - eps);
-                let remainingBeats = totalBeatsEquiv;
+            const twoPi = 2 * Math.PI;
+            const startOffset = -3 * Math.PI / 4;
+            let runningBeats = 0;
 
-                for (let i = 0; i < numClickPulses; i++) {
+            for (let i = 0; i < state.nerdSegments.length; i++) {
+                const seg = state.nerdSegments[i];
+                const fracOfCircle = totalBeatsEquiv > 0 ? (seg.beatFraction / totalBeatsEquiv) : 0;
+                const spanAngle = fracOfCircle * twoPi;
+                const absStartAngle = startOffset + (totalBeatsEquiv > 0 ? (runningBeats / totalBeatsEquiv) * twoPi : 0);
+                const absEndAngle = absStartAngle + spanAngle;
+                const midAngle = absStartAngle + spanAngle / 2;
+
+                let rOuter = seg.isDownbeat ? 166 : 160;
+                let rInner = 92;
+                if (seg.colorType === 'pink') {
+                    rOuter = 156;
+                    rInner = 108;
+                } else if (seg.colorType === 'green') {
+                    rOuter = 150;
+                    rInner = 118;
+                }
+
+                seg.startAngle = absStartAngle;
+                seg.endAngle = absEndAngle;
+                seg.midAngle = midAngle;
+                seg.spanAngle = spanAngle;
+                seg.rOuter = rOuter;
+                seg.rInner = rInner;
+                seg.textX = 240 + Math.cos(midAngle) * 192;
+                seg.textY = 240 + Math.sin(midAngle) * 192;
+
+                runningBeats += seg.beatFraction;
+            }
+
+            if (state.beatClickEnabled && totalBeatsEquiv > 0) {
+                const eps = 1e-7;
+                const rate = Math.max(1, Math.min(20, state.beatClickRate || 4));
+                const pulseBeats = 4.0 / rate;
+                const numClickBeats = Math.ceil((totalBeatsEquiv / pulseBeats) - eps);
+                let remainingBeats = totalBeatsEquiv;
+                let runningClickBeats = 0;
+
+                for (let i = 0; i < numClickBeats; i++) {
                     const beatKey = `click_${i}`;
                     if (state.beatClickStates[beatKey] === undefined) {
                         state.beatClickStates[beatKey] = true;
                     }
                     const durBeats = remainingBeats >= pulseBeats - eps ? pulseBeats : Math.max(0.001, remainingBeats);
-                    const pulseFraction = durBeats / pulseBeats;
-                    const isPartial = pulseFraction < (1.0 - 1e-4);
+                    const isPartial = durBeats < (pulseBeats - 1e-4);
+
+                    const pStart = startOffset + (runningClickBeats / totalBeatsEquiv) * twoPi;
+                    const pSpan = (durBeats / totalBeatsEquiv) * twoPi;
 
                     state.beatClickSegments.push({
                         index: i,
                         beatKey: beatKey,
                         active: state.beatClickStates[beatKey],
                         durationBeats: durBeats,
-                        pulseFraction: pulseFraction,
+                        pulseBeats: pulseBeats,
                         isPartial: isPartial,
+                        startAngle: pStart,
+                        endAngle: pStart + pSpan,
+                        rOuter: 228,
+                        rInner: 210,
                         scheduledTime: null,
                         scheduledDuration: 0
                     });
 
+                    runningClickBeats += durBeats;
                     remainingBeats -= durBeats;
                 }
             }
 
             updateNerdStats();
             renderNerdBeatClickBar();
-        }
-
-        function getBeatClickRateDescription(rate) {
-            const r = parseInt(rate) || 4;
-            if (r === 4) return 'tuplet rate (quarter)';
-            if (r === 3) return 'tuplet rate (triplet)';
-            if (r === 5) return 'tuplet rate (quintuplet)';
-            if (r === 6) return 'tuplet rate (sextuplet)';
-            if (r === 7) return 'tuplet rate (septuplet)';
-            if (r === 8) return 'tuplet rate (eighth)';
-            return 'tuplet rate';
+            if (state.ultraNerdMode && state.nerdViewMode === 'circle' && !state.isPlaying) {
+                drawStaticSequencer();
+            }
         }
 
         function getTotalNerdBeatsEquivalent() {
-            const playbackSequence = getExpandedNerdBlockSequence();
+            const expandedSeq = getExpandedNerdBlockSequence();
             let totalBeatsEquiv = 0;
-            for (const { block } of playbackSequence) {
-                totalBeatsEquiv += (block.numNotes / block.tupletRate);
+            for (const item of expandedSeq) {
+                totalBeatsEquiv += (item.block.numNotes / item.block.tupletRate);
             }
             return totalBeatsEquiv;
         }
 
         function updateNerdStats() {
-            nerdBlockCount.textContent = state.nerdBlocks.length;
+            const expandedSeq = getExpandedNerdBlockSequence();
+            const baseCount = state.nerdBlocks.length;
+            if (expandedSeq.length !== baseCount) {
+                nerdBlockCount.textContent = `${baseCount} (${expandedSeq.length} w/ repeat)`;
+            } else {
+                nerdBlockCount.textContent = baseCount;
+            }
             const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
             const secondsPerBeat = 60.0 / state.bpm;
             const totalSec = totalBeatsEquiv * secondsPerBeat;
@@ -1638,6 +1723,18 @@
             if (nerdBeatClickBpmLabel) nerdBeatClickBpmLabel.textContent = state.bpm;
         }
 
+        function getTupletRateName(rate) {
+            if (rate === 1) return 'Whole Note (1-tuplet)';
+            if (rate === 2) return 'Half Note (2-tuplet)';
+            if (rate === 3) return 'Triplet (3-tuplet)';
+            if (rate === 4) return 'Quarter Note (4-tuplet)';
+            if (rate === 5) return 'Quintuplet (5-tuplet)';
+            if (rate === 6) return 'Sextuplet (6-tuplet)';
+            if (rate === 7) return 'Septuplet (7-tuplet)';
+            if (rate === 8) return 'Eighth Note (8-tuplet)';
+            return `${rate}-tuplet`;
+        }
+
         function renderNerdBeatClickBar() {
             if (!state.ultraNerdMode || !state.beatClickEnabled) {
                 nerdBeatClickWrapper.classList.add('hidden');
@@ -1645,15 +1742,15 @@
             }
             nerdBeatClickWrapper.classList.remove('hidden');
             nerdBeatClickBpmLabel.textContent = state.bpm;
-            const rate = Math.max(1, Math.min(20, parseInt(state.beatClickRate) || 4));
+            const rate = Math.max(1, Math.min(20, state.beatClickRate || 4));
             if (nerdBeatClickRateLabel) {
-                nerdBeatClickRateLabel.textContent = rate === 4 ? 'Quarter Note / 4-tuplet' : `${rate}-tuplet Rate`;
+                nerdBeatClickRateLabel.textContent = getTupletRateName(rate);
             }
             nerdBeatClickTrack.innerHTML = '';
 
             const totalBeatsEquiv = getTotalNerdBeatsEquivalent();
             if (totalBeatsEquiv <= 0 || state.beatClickSegments.length === 0) {
-                nerdBeatClickSummary.textContent = 'Add blocks to generate beat-click pulse';
+                nerdBeatClickSummary.textContent = 'Add blocks to generate pulse';
                 const emptyHint = document.createElement('div');
                 emptyHint.className = 'w-full text-center text-[10px] text-slate-500 italic';
                 emptyHint.textContent = 'No blocks in sequence yet';
@@ -1663,28 +1760,27 @@
 
             const fullCount = state.beatClickSegments.filter(s => !s.isPartial).length;
             const partialSeg = state.beatClickSegments.find(s => s.isPartial);
-            const unitLabel = rate === 4 ? 'beat' : 'pulse';
             if (partialSeg) {
-                nerdBeatClickSummary.textContent = `${fullCount} full ${unitLabel}${fullCount !== 1 ? 's' : ''} + ${(partialSeg.pulseFraction).toFixed(2)} cut ${unitLabel} (${totalBeatsEquiv.toFixed(2)} beats total)`;
+                const pulseRatio = partialSeg.durationBeats / partialSeg.pulseBeats;
+                nerdBeatClickSummary.textContent = `${fullCount} full pulse${fullCount !== 1 ? 's' : ''} + ${(pulseRatio).toFixed(2)} cut pulse (${totalBeatsEquiv.toFixed(2)} beats total)`;
             } else {
-                nerdBeatClickSummary.textContent = `${fullCount} equal ${rate === 4 ? 'quarter-note beat' : `${rate}-tuplet pulse`}${fullCount !== 1 ? 's' : ''}`;
+                nerdBeatClickSummary.textContent = `${fullCount} equal pulse${fullCount !== 1 ? 's' : ''} (${totalBeatsEquiv.toFixed(2)} beats total)`;
             }
 
             const secPerBeat = 60.0 / state.bpm;
-            const badgePrefix = rate === 4 ? 'Q' : 'P';
 
             state.beatClickSegments.forEach((cSeg, idx) => {
                 const btn = document.createElement('button');
                 btn.id = `nerd_beatclick_${idx}`;
                 btn.type = 'button';
-                // Proportional width via flex-grow matching its beat duration
                 btn.style.flexGrow = cSeg.durationBeats.toFixed(4);
                 btn.style.flexBasis = '0%';
 
                 const secDur = (cSeg.durationBeats * secPerBeat).toFixed(2);
+                const pulseFraction = (cSeg.durationBeats / cSeg.pulseBeats).toFixed(2);
                 btn.title = cSeg.isPartial
-                    ? `Pulse ${idx + 1} (Cut short: ${cSeg.pulseFraction.toFixed(2)} of pulse / ${secDur}s) - Click to toggle`
-                    : `Pulse ${idx + 1} (${cSeg.durationBeats.toFixed(2)} beats / ${secDur}s) - Click to toggle`;
+                    ? `Pulse ${idx + 1} (Cut short: ${pulseFraction} of a pulse / ${cSeg.durationBeats.toFixed(2)}b / ${secDur}s) - Click to toggle`
+                    : `Pulse ${idx + 1} (Full ${rate}-tuplet pulse / ${cSeg.durationBeats.toFixed(2)}b / ${secDur}s) - Click to toggle`;
 
                 btn.className = `h-full rounded-md border text-[10px] font-mono font-bold flex items-center justify-center gap-1 transition-all overflow-hidden px-1 ${
                     cSeg.active
@@ -1694,29 +1790,229 @@
                         : 'bg-[#181822] border-borderSubtle text-slate-500 opacity-50'
                 }`;
 
+                const shortPrefix = rate === 4 ? 'Q' : 'P';
                 btn.innerHTML = `
-                    <span>${badgePrefix}${idx + 1}</span>
-                    ${cSeg.isPartial ? `<span class="text-[9px] opacity-80">(${cSeg.pulseFraction.toFixed(2)})</span>` : ''}
+                    <span>${shortPrefix}${idx + 1}</span>
+                    ${cSeg.isPartial ? `<span class="text-[9px] opacity-80">(${pulseFraction})</span>` : ''}
                 `;
 
                 btn.addEventListener('click', () => {
                     cSeg.active = !cSeg.active;
                     state.beatClickStates[cSeg.beatKey] = cSeg.active;
                     renderNerdBeatClickBar();
+                    if (state.ultraNerdMode && state.nerdViewMode === 'circle' && !state.isPlaying) {
+                        drawStaticSequencer();
+                    }
                 });
 
                 nerdBeatClickTrack.appendChild(btn);
             });
         }
 
-        function openRepeatModal(gapIndex) {
+        function createInsertPlusButton(insertIndex, isAlwaysVisible = false) {
+            const matchingStarts = (state.nerdRepeats || []).filter(r => r.startIdx === insertIndex);
+            const matchingEnds = (state.nerdRepeats || []).filter(r => r.endIdx === insertIndex);
+            const hasBrackets = matchingStarts.length > 0 || matchingEnds.length > 0;
+
+            const canStartHere = insertIndex < state.nerdBlocks.length;
+            const hasActiveRepeatStartToLeft = (state.nerdRepeats || []).some(
+                r => r.startIdx !== null && r.startIdx < insertIndex && (r.endIdx === null || r.endIdx >= insertIndex)
+            );
+            const canEndHere = state.nerdBlocks.length > 0 && insertIndex > 0 && (hasActiveRepeatStartToLeft || matchingEnds.length > 0);
+
+            const forceExpanded = isAlwaysVisible || hasBrackets;
+            const wrapper = document.createElement('div');
+            wrapper.className = `group/plus relative flex flex-col items-center justify-center ${
+                forceExpanded ? 'w-14' : 'w-2 hover:w-16 focus-within:w-16'
+            } transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20`;
+
+            const hitZone = document.createElement('div');
+            hitZone.className = 'absolute inset-y-0 -left-2.5 -right-2.5 z-10';
+            wrapper.appendChild(hitZone);
+
+            // Clean Bracket Visuals Container
+            if (hasBrackets) {
+                const bracketVisualWrap = document.createElement('div');
+                bracketVisualWrap.className = 'absolute inset-y-3 inset-x-1 flex items-center justify-center gap-1 pointer-events-none z-10';
+
+                // Render Repeat End ] first if this gap closes a left repeat before starting a new right repeat
+                matchingEnds.forEach((repObj) => {
+                    const rightBracket = document.createElement('div');
+                    rightBracket.title = 'Click to edit or remove Repeat';
+                    rightBracket.className = 'relative h-full w-3 border-r-[3px] border-t-[3px] border-b-[3px] border-amber-400 rounded-r-md shadow-[0_0_10px_rgba(251,191,36,0.25)] pointer-events-auto cursor-pointer hover:border-amber-200 transition-colors';
+
+                    const countBadge = document.createElement('button');
+                    countBadge.type = 'button';
+                    countBadge.title = 'Click to change repeat count or remove repeat';
+                    countBadge.className = 'absolute -top-2.5 right-0 px-1.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 font-mono font-extrabold text-[10px] leading-none shadow-md pointer-events-auto transition-transform hover:scale-105';
+                    countBadge.textContent = `×${repObj.count}`;
+                    countBadge.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openRepeatModal(insertIndex, repObj);
+                    });
+
+                    rightBracket.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openRepeatModal(insertIndex, repObj);
+                    });
+
+                    rightBracket.appendChild(countBadge);
+                    bracketVisualWrap.appendChild(rightBracket);
+                });
+
+                matchingStarts.forEach((repObj) => {
+                    const leftBracket = document.createElement('div');
+                    leftBracket.title = 'Click to edit or remove Repeat Start [';
+                    leftBracket.className = 'relative h-full w-3 border-l-[3px] border-t-[3px] border-b-[3px] border-amber-400 rounded-l-md shadow-[0_0_10px_rgba(251,191,36,0.25)] pointer-events-auto cursor-pointer hover:border-amber-200 transition-colors';
+
+                    const startBadge = document.createElement('button');
+                    startBadge.type = 'button';
+                    startBadge.title = 'Remove Repeat';
+                    startBadge.className = 'absolute -top-2.5 left-0 px-1 py-0.5 rounded-md bg-[#181822] hover:bg-rose-500 text-amber-300 hover:text-white border border-amber-400/60 font-mono font-bold text-[9px] leading-none shadow-md pointer-events-auto transition-colors';
+                    startBadge.innerHTML = '&times;';
+                    startBadge.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (state.isPlaying) togglePlay();
+                        const idx = state.nerdRepeats.indexOf(repObj);
+                        if (idx !== -1) state.nerdRepeats.splice(idx, 1);
+                        renderNerdLine();
+                    });
+
+                    leftBracket.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (repObj.endIdx !== null) {
+                            openRepeatModal(repObj.endIdx, repObj);
+                        } else {
+                            if (state.isPlaying) togglePlay();
+                            const idx = state.nerdRepeats.indexOf(repObj);
+                            if (idx !== -1) state.nerdRepeats.splice(idx, 1);
+                            renderNerdLine();
+                        }
+                    });
+
+                    leftBracket.appendChild(startBadge);
+                    bracketVisualWrap.appendChild(leftBracket);
+                });
+
+                wrapper.appendChild(bracketVisualWrap);
+            }
+
+            // Plus Button
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.title = 'Insert Block Here';
+            btn.className = `relative z-20 w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out ${
+                isAlwaysVisible
+                    ? 'opacity-100 scale-100 pointer-events-auto'
+                    : 'opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus:opacity-100 focus:scale-100 focus:pointer-events-auto'
+            } hover:!scale-110`;
+            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>`;
+
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openBlockModal('add', insertIndex);
+            });
+
+            wrapper.appendChild(btn);
+
+            // Hover Popover Menu for Repeat Start / Repeat End beneath the + button
+            const repeatBtnsContainer = document.createElement('div');
+            repeatBtnsContainer.className = 'absolute bottom-1 z-30 flex flex-col items-center gap-1 transition-all duration-200 ease-out opacity-0 scale-75 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus-within:opacity-100 focus-within:scale-100 focus-within:pointer-events-auto';
+
+            if (canStartHere) {
+                const hasThisStart = matchingStarts.length > 0;
+                const startBtn = document.createElement('button');
+                startBtn.type = 'button';
+                startBtn.className = hasThisStart
+                    ? 'px-1.5 py-0.5 rounded bg-rose-500/90 hover:bg-rose-400 text-white font-bold text-[9px] uppercase tracking-tight border border-rose-300 shadow-md whitespace-nowrap transition-all active:scale-95'
+                    : 'px-1.5 py-0.5 rounded bg-[#181822]/95 hover:bg-amber-400 text-amber-300 hover:text-slate-950 font-semibold text-[9px] uppercase tracking-tight border border-amber-500/40 hover:border-amber-300 shadow-md whitespace-nowrap transition-all active:scale-95';
+                startBtn.textContent = hasThisStart ? 'Remove [' : 'Repeat Start';
+
+                startBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (state.isPlaying) togglePlay();
+                    if (!state.nerdRepeats) state.nerdRepeats = [];
+                    if (hasThisStart) {
+                        const idx = state.nerdRepeats.findIndex(r => r.startIdx === insertIndex);
+                        if (idx !== -1) state.nerdRepeats.splice(idx, 1);
+                    } else {
+                        state.nerdRepeats.push({
+                            startIdx: insertIndex,
+                            endIdx: null,
+                            count: 2
+                        });
+                    }
+                    renderNerdLine();
+                });
+
+                repeatBtnsContainer.appendChild(startBtn);
+            }
+
+            if (canEndHere) {
+                const hasThisEnd = matchingEnds.length > 0;
+                const endBtn = document.createElement('button');
+                endBtn.type = 'button';
+                endBtn.className = hasThisEnd
+                    ? 'px-1.5 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-[9px] uppercase tracking-tight border border-amber-200 shadow-md whitespace-nowrap transition-all active:scale-95'
+                    : 'px-1.5 py-0.5 rounded bg-[#181822]/95 hover:bg-amber-400 text-amber-300 hover:text-slate-950 font-semibold text-[9px] uppercase tracking-tight border border-amber-500/40 hover:border-amber-300 shadow-md whitespace-nowrap transition-all active:scale-95';
+                endBtn.textContent = hasThisEnd ? 'Edit Repeat ]' : 'Repeat End';
+
+                endBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openRepeatModal(insertIndex, hasThisEnd ? matchingEnds[0] : null);
+                });
+
+                repeatBtnsContainer.appendChild(endBtn);
+            }
+
+            if (repeatBtnsContainer.children.length > 0) {
+                wrapper.appendChild(repeatBtnsContainer);
+            }
+
+            return wrapper;
+        }
+
+        function openRepeatModal(gapIndex, targetRepeatObj = null) {
             pendingRepeatEndGapIndex = gapIndex;
-            const currentCount = (state.nerdRepeat && state.nerdRepeat.count) ? state.nerdRepeat.count : 2;
+            editingRepeatIndex = null;
+
+            if (!state.nerdRepeats) state.nerdRepeats = [];
+
+            if (targetRepeatObj) {
+                const idx = state.nerdRepeats.indexOf(targetRepeatObj);
+                if (idx !== -1) editingRepeatIndex = idx;
+            } else {
+                const existingEndIdx = state.nerdRepeats.findIndex(r => r.endIdx === gapIndex);
+                if (existingEndIdx !== -1) {
+                    editingRepeatIndex = existingEndIdx;
+                } else {
+                    for (let i = state.nerdRepeats.length - 1; i >= 0; i--) {
+                        const r = state.nerdRepeats[i];
+                        if (r.startIdx !== null && r.startIdx < gapIndex && r.endIdx === null) {
+                            editingRepeatIndex = i;
+                            break;
+                        }
+                    }
+                    if (editingRepeatIndex === null) {
+                        for (let i = state.nerdRepeats.length - 1; i >= 0; i--) {
+                            const r = state.nerdRepeats[i];
+                            if (r.startIdx !== null && r.startIdx < gapIndex) {
+                                editingRepeatIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            const rep = editingRepeatIndex !== null ? state.nerdRepeats[editingRepeatIndex] : null;
+            const currentCount = rep ? (rep.count || 2) : 2;
             repeatCountInput.value = currentCount;
             if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = currentCount;
 
+            // Always show the Remove Repeat button when a repeat is selected or being configured
             if (removeRepeatEndBtn) {
-                if (state.nerdRepeat.endIdx === gapIndex) {
+                if (rep) {
                     removeRepeatEndBtn.classList.remove('hidden');
                 } else {
                     removeRepeatEndBtn.classList.add('hidden');
@@ -1731,10 +2027,29 @@
             repeatConfigModal.classList.add('hidden');
             repeatConfigModal.classList.remove('flex');
             pendingRepeatEndGapIndex = null;
+            editingRepeatIndex = null;
         }
 
         if (closeRepeatModalBtn) closeRepeatModalBtn.addEventListener('click', closeRepeatModal);
         if (cancelRepeatModalBtn) cancelRepeatModalBtn.addEventListener('click', closeRepeatModal);
+
+        if (decRepeatCountBtn) {
+            decRepeatCountBtn.addEventListener('click', () => {
+                let v = parseInt(repeatCountInput.value) || 2;
+                v = Math.max(1, v - 1);
+                repeatCountInput.value = v;
+                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
+            });
+        }
+
+        if (incRepeatCountBtn) {
+            incRepeatCountBtn.addEventListener('click', () => {
+                let v = parseInt(repeatCountInput.value) || 2;
+                v = Math.min(10, v + 1);
+                repeatCountInput.value = v;
+                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
+            });
+        }
 
         if (repeatCountInput) {
             repeatCountInput.addEventListener('input', () => {
@@ -1744,31 +2059,25 @@
             });
         }
 
-        if (decRepeatCountBtn) {
-            decRepeatCountBtn.addEventListener('click', () => {
-                let v = parseInt(repeatCountInput.value) || 1;
-                v = Math.max(1, v - 1);
-                repeatCountInput.value = v;
-                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
-            });
-        }
-
-        if (incRepeatCountBtn) {
-            incRepeatCountBtn.addEventListener('click', () => {
-                let v = parseInt(repeatCountInput.value) || 1;
-                v = Math.min(10, v + 1);
-                repeatCountInput.value = v;
-                if (repeatModalPreviewVal) repeatModalPreviewVal.textContent = v;
-            });
-        }
-
         if (saveRepeatModalBtn) {
             saveRepeatModalBtn.addEventListener('click', () => {
                 if (pendingRepeatEndGapIndex !== null) {
                     if (state.isPlaying) togglePlay();
                     const count = Math.max(1, Math.min(10, parseInt(repeatCountInput.value) || 2));
-                    state.nerdRepeat.endIdx = pendingRepeatEndGapIndex;
-                    state.nerdRepeat.count = count;
+
+                    if (!state.nerdRepeats) state.nerdRepeats = [];
+
+                    if (editingRepeatIndex !== null && state.nerdRepeats[editingRepeatIndex]) {
+                        state.nerdRepeats[editingRepeatIndex].endIdx = pendingRepeatEndGapIndex;
+                        state.nerdRepeats[editingRepeatIndex].count = count;
+                    } else {
+                        state.nerdRepeats.push({
+                            startIdx: Math.max(0, pendingRepeatEndGapIndex - 1),
+                            endIdx: pendingRepeatEndGapIndex,
+                            count: count
+                        });
+                    }
+
                     closeRepeatModal();
                     renderNerdLine();
                 }
@@ -1778,136 +2087,22 @@
         if (removeRepeatEndBtn) {
             removeRepeatEndBtn.addEventListener('click', () => {
                 if (state.isPlaying) togglePlay();
-                state.nerdRepeat.endIdx = null;
+                if (editingRepeatIndex !== null && state.nerdRepeats && state.nerdRepeats[editingRepeatIndex]) {
+                    state.nerdRepeats.splice(editingRepeatIndex, 1);
+                } else if (pendingRepeatEndGapIndex !== null && state.nerdRepeats) {
+                    state.nerdRepeats = state.nerdRepeats.filter(
+                        r => r.endIdx !== pendingRepeatEndGapIndex && r.startIdx !== pendingRepeatEndGapIndex
+                    );
+                }
                 closeRepeatModal();
                 renderNerdLine();
             });
-        }
-
-        function createInsertPlusButton(insertIndex, isAlwaysVisible = false) {
-            const hasStartBracket = state.nerdRepeat.startIdx === insertIndex;
-            const hasEndBracket = state.nerdRepeat.endIdx === insertIndex;
-            const hasBracket = hasStartBracket || hasEndBracket;
-            const canStartHere = insertIndex < state.nerdBlocks.length;
-            const canEndHere = state.nerdRepeat.startIdx !== null && insertIndex > state.nerdRepeat.startIdx;
-
-            const forceExpanded = isAlwaysVisible || hasBracket;
-
-            const wrapper = document.createElement('div');
-            wrapper.className = forceExpanded
-                ? 'group/plus relative flex flex-col items-center justify-center w-14 hover:w-20 focus-within:w-20 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20'
-                : 'group/plus relative flex flex-col items-center justify-center w-2 hover:w-20 focus-within:w-20 transition-all duration-200 ease-out self-stretch shrink-0 select-none z-20';
-
-            if (!forceExpanded) {
-                const hitZone = document.createElement('div');
-                hitZone.className = 'absolute inset-y-0 -left-2.5 -right-2.5 z-10';
-                wrapper.appendChild(hitZone);
-            }
-
-            // Left Repeat Bracket '[' Visual
-            if (hasStartBracket) {
-                const startBracketEl = document.createElement('div');
-                startBracketEl.className = 'pointer-events-none absolute inset-y-1 left-1/2 -translate-x-1/2 flex items-center justify-center z-10';
-                startBracketEl.innerHTML = `
-                    <div class="w-4 h-[156px] border-l-[4px] border-t-[4px] border-b-[4px] border-amber-400 rounded-l-md shadow-[0_0_12px_rgba(251,191,36,0.35)]"></div>
-                `;
-                wrapper.appendChild(startBracketEl);
-            }
-
-            // Right Repeat Bracket ']' Visual + Repeat Count Badge
-            if (hasEndBracket) {
-                const endBracketEl = document.createElement('div');
-                endBracketEl.className = 'pointer-events-none absolute inset-y-1 left-1/2 -translate-x-1/2 flex items-center justify-center z-10';
-                endBracketEl.innerHTML = `
-                    <div class="relative w-4 h-[156px] border-r-[4px] border-t-[4px] border-b-[4px] border-amber-400 rounded-r-md shadow-[0_0_12px_rgba(251,191,36,0.35)]">
-                        <span class="absolute -top-3 right-0 px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-mono font-extrabold text-[10px] leading-none shadow-md">×${state.nerdRepeat.count}</span>
-                    </div>
-                `;
-                wrapper.appendChild(endBracketEl);
-            }
-
-            // Controls Stack: Circle '+' button and Repeat Start / Repeat End buttons underneath
-            const controlsStack = document.createElement('div');
-            controlsStack.className = forceExpanded
-                ? 'relative z-20 flex flex-col items-center gap-1.5 transition-all duration-200 ease-out opacity-100 scale-100 pointer-events-auto'
-                : 'relative z-20 flex flex-col items-center gap-1.5 transition-all duration-200 ease-out opacity-0 scale-50 pointer-events-none group-hover/plus:opacity-100 group-hover/plus:scale-100 group-hover/plus:pointer-events-auto focus-within:opacity-100 focus-within:scale-100 focus-within:pointer-events-auto';
-
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.title = 'Insert Block Here';
-            btn.className = 'w-7 h-7 rounded-full bg-[#181822] hover:bg-accent text-slate-300 hover:text-slate-950 border border-slate-600 hover:border-accent shadow-lg flex items-center justify-center transition-all duration-200 ease-out hover:!scale-110';
-            btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>`;
-
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openBlockModal('add', insertIndex);
-            });
-
-            controlsStack.appendChild(btn);
-
-            // Repeat Start & Repeat End buttons underneath the circle '+' button
-            const repeatBtnsContainer = document.createElement('div');
-            repeatBtnsContainer.className = forceExpanded
-                ? 'flex flex-col items-center gap-1 opacity-90 group-hover/plus:opacity-100 transition-opacity'
-                : 'flex flex-col items-center gap-1';
-
-            if (canStartHere) {
-                const startBtn = document.createElement('button');
-                startBtn.type = 'button';
-                startBtn.title = hasStartBracket ? 'Remove Repeat Start [' : 'Place Repeat Start [ here';
-                startBtn.className = hasStartBracket
-                    ? 'px-1.5 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-[9px] uppercase tracking-tight border border-amber-200 shadow-md whitespace-nowrap transition-all active:scale-95'
-                    : 'px-1.5 py-0.5 rounded bg-[#181822]/95 hover:bg-amber-400 text-amber-300 hover:text-slate-950 font-semibold text-[9px] uppercase tracking-tight border border-amber-500/40 hover:border-amber-300 shadow-md whitespace-nowrap transition-all active:scale-95';
-                startBtn.textContent = hasStartBracket ? '[ Start ×' : 'Repeat Start';
-
-                startBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (state.isPlaying) togglePlay();
-                    if (state.nerdRepeat.startIdx === insertIndex) {
-                        state.nerdRepeat.startIdx = null;
-                        state.nerdRepeat.endIdx = null;
-                    } else {
-                        state.nerdRepeat.startIdx = insertIndex;
-                        if (state.nerdRepeat.endIdx !== null && state.nerdRepeat.endIdx <= insertIndex) {
-                            state.nerdRepeat.endIdx = null;
-                        }
-                    }
-                    renderNerdLine();
-                });
-
-                repeatBtnsContainer.appendChild(startBtn);
-            }
-
-            if (canEndHere) {
-                const endBtn = document.createElement('button');
-                endBtn.type = 'button';
-                endBtn.title = hasEndBracket ? 'Edit or Remove Repeat End ]' : 'Place Repeat End ] here';
-                endBtn.className = hasEndBracket
-                    ? 'px-1.5 py-0.5 rounded bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-[9px] uppercase tracking-tight border border-amber-200 shadow-md whitespace-nowrap transition-all active:scale-95'
-                    : 'px-1.5 py-0.5 rounded bg-[#181822]/95 hover:bg-amber-400 text-amber-300 hover:text-slate-950 font-semibold text-[9px] uppercase tracking-tight border border-amber-500/40 hover:border-amber-300 shadow-md whitespace-nowrap transition-all active:scale-95';
-                endBtn.textContent = hasEndBracket ? `End ×${state.nerdRepeat.count} ]` : 'Repeat End';
-
-                endBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    openRepeatModal(insertIndex);
-                });
-
-                repeatBtnsContainer.appendChild(endBtn);
-            }
-
-            if (repeatBtnsContainer.children.length > 0) {
-                controlsStack.appendChild(repeatBtnsContainer);
-            }
-
-            wrapper.appendChild(controlsStack);
-            return wrapper;
         }
 
         function renderNerdLine() {
             buildNerdSegments();
             nerdTrackContent.innerHTML = '';
 
-            // If no blocks exist yet, show the centered rectangular "Add Block" button on the line
             if (state.nerdBlocks.length === 0) {
                 const emptyContainer = document.createElement('div');
                 emptyContainer.className = 'w-full flex items-center justify-center py-8';
@@ -1926,21 +2121,24 @@
                 return;
             }
 
-            // Leading circle '+' button at start of line
             nerdTrackContent.appendChild(createInsertPlusButton(0));
 
             const secondsPerBeat = 60.0 / state.bpm;
+            const validRepeats = (state.nerdRepeats || []).filter(
+                r => r.startIdx !== null && r.endIdx !== null && r.endIdx > r.startIdx && r.endIdx <= state.nerdBlocks.length
+            );
 
-            // Render each Block
             state.nerdBlocks.forEach((block, bIdx) => {
                 const actualNotesCount = block.subdivCount !== undefined ? block.subdivCount : block.numNotes;
                 const blockSec = ((block.numNotes / block.tupletRate) * secondsPerBeat).toFixed(2);
+                const isInsideRepeat = validRepeats.some(r => bIdx >= r.startIdx && bIdx < r.endIdx);
 
                 const blockCard = document.createElement('div');
                 blockCard.id = `nerd_block_card_${block.id}`;
-                blockCard.className = 'group/block relative flex flex-col bg-[#14141d]/90 hover:bg-[#181824] border border-borderSubtle hover:border-slate-700 rounded-2xl px-3.5 pt-8 pb-6 transition-all shadow-lg shrink-0';
+                blockCard.className = `group/block relative flex flex-col bg-[#14141d]/90 hover:bg-[#181824] border ${
+                    isInsideRepeat ? 'border-amber-500/40 bg-amber-500/[0.03]' : 'border-borderSubtle hover:border-slate-700'
+                } rounded-2xl px-3.5 pt-8 pb-6 transition-all shadow-lg shrink-0`;
 
-                // Top Header Bar inside block: Ratio label + Edit/Delete controls (visible on hover)
                 const blockHeader = document.createElement('div');
                 blockHeader.className = 'absolute top-2 left-3 right-3 flex items-center justify-between gap-3 text-[11px]';
 
@@ -1984,14 +2182,11 @@
                 blockHeader.appendChild(actionsDiv);
                 blockCard.appendChild(blockHeader);
 
-                // Notes Row aligned along the horizontal line
                 const notesRow = document.createElement('div');
                 notesRow.className = 'flex items-center gap-2.5 my-auto pt-2 pb-1';
 
                 for (let n = 0; n < actualNotesCount; n++) {
                     const l2Count = block.subDivs[n] || 1;
-
-                    // Note group container (holds primary note + any green L2 subdivisions)
                     const noteGroup = document.createElement('div');
                     noteGroup.className = 'relative flex items-center gap-1 px-1.5 py-1 rounded-xl bg-[#0c0c12]/60 border border-transparent hover:border-slate-800 transition-all';
 
@@ -2001,10 +2196,6 @@
                         const isFirstNoteDownbeat = (n === 0 && s === 0);
                         const isPinkNote = (n > 0 && s === 0);
 
-                        // Heights & Colors per specification:
-                        // First note of block (blue, tall) -> h-28 (112px)
-                        // Subsequent notes of block (pink, slightly shorter) -> h-20 (80px)
-                        // Second layer subdivisions (green, slightly shorter than pink) -> h-14 (56px)
                         let heightClass = 'h-14';
                         let widthClass = l2Count > 4 ? 'w-3.5' : 'w-5';
                         let activeColorClasses = '';
@@ -2048,7 +2239,6 @@
                         noteGroup.appendChild(barBtn);
                     }
 
-                    // If in Subdivision Mode (or if L2Count > 1), show a compact L2 badge below the note group
                     if (state.interactionMode === 'subdivision' || l2Count > 1) {
                         const l2Badge = document.createElement('button');
                         l2Badge.type = 'button';
@@ -2071,14 +2261,13 @@
                 blockCard.appendChild(notesRow);
                 nerdTrackContent.appendChild(blockCard);
 
-                // Circle '+' button after every block (between adjacent blocks and at the right end)
-                nerdTrackContent.appendChild(createInsertPlusButton(bIdx + 1, bIdx + 1 === state.nerdBlocks.length));
+                const isLastGap = (bIdx === state.nerdBlocks.length - 1);
+                nerdTrackContent.appendChild(createInsertPlusButton(bIdx + 1, isLastGap));
             });
 
-            // Add a trailing spacer to prevent the last plus button from being cut off
-            const trailingSpacer = document.createElement('div');
-            trailingSpacer.className = 'w-8 shrink-0 pointer-events-none';
-            nerdTrackContent.appendChild(trailingSpacer);
+            const rightEndSpacer = document.createElement('div');
+            rightEndSpacer.className = 'w-8 shrink-0 pointer-events-none';
+            nerdTrackContent.appendChild(rightEndSpacer);
         }
 
         function openNerdSubdivPopup(block, noteIndex, e) {
@@ -2224,6 +2413,17 @@
                     blk.subdivCount = subdivCount;
                 }
             } else {
+                const insIdx = blockModalContext.insertIndex;
+                if (state.nerdRepeats) {
+                    state.nerdRepeats.forEach(rep => {
+                        if (rep.startIdx !== null && insIdx <= rep.startIdx) {
+                            rep.startIdx++;
+                        }
+                        if (rep.endIdx !== null && insIdx < rep.endIdx) {
+                            rep.endIdx++;
+                        }
+                    });
+                }
                 const newBlock = {
                     id: state.nextBlockId++,
                     numNotes: numNotes,
@@ -2232,15 +2432,7 @@
                     subDivs: {},
                     activeStates: {}
                 };
-                const idx = blockModalContext.insertIndex;
-                state.nerdBlocks.splice(idx, 0, newBlock);
-
-                if (state.nerdRepeat.startIdx !== null && idx <= state.nerdRepeat.startIdx) {
-                    state.nerdRepeat.startIdx++;
-                }
-                if (state.nerdRepeat.endIdx !== null && idx < state.nerdRepeat.endIdx) {
-                    state.nerdRepeat.endIdx++;
-                }
+                state.nerdBlocks.splice(insIdx, 0, newBlock);
             }
 
             closeBlockModal();
@@ -2254,22 +2446,22 @@
 
             state.nerdBlocks.splice(delIdx, 1);
 
-            if (state.nerdRepeat.startIdx !== null) {
-                if (delIdx < state.nerdRepeat.startIdx) {
-                    state.nerdRepeat.startIdx--;
-                }
-                if (state.nerdRepeat.startIdx >= state.nerdBlocks.length) {
-                    state.nerdRepeat.startIdx = null;
-                    state.nerdRepeat.endIdx = null;
-                }
-            }
-            if (state.nerdRepeat.endIdx !== null) {
-                if (delIdx < state.nerdRepeat.endIdx) {
-                    state.nerdRepeat.endIdx--;
-                }
-                if (state.nerdRepeat.startIdx === null || state.nerdRepeat.endIdx <= state.nerdRepeat.startIdx) {
-                    state.nerdRepeat.endIdx = null;
-                }
+            if (state.nerdRepeats) {
+                state.nerdRepeats = state.nerdRepeats.filter(rep => {
+                    if (rep.startIdx !== null && delIdx < rep.startIdx) {
+                        rep.startIdx--;
+                    }
+                    if (rep.endIdx !== null && delIdx < rep.endIdx) {
+                        rep.endIdx--;
+                    }
+                    if (rep.startIdx !== null && rep.startIdx >= state.nerdBlocks.length) {
+                        return false;
+                    }
+                    if (rep.endIdx !== null && rep.startIdx !== null && rep.endIdx <= rep.startIdx) {
+                        return false;
+                    }
+                    return true;
+                });
             }
 
             if (state.isPlaying && state.nerdBlocks.length === 0) {
@@ -2279,13 +2471,13 @@
             renderNerdLine();
         }
 
-        // Beat-Click Checkbox & Tuplet Rate Controls in Ultra-nerd Mode
         function updateBeatClickControlUI() {
-            if (!beatClickCheckbox) return;
-            beatClickCheckbox.checked = state.beatClickEnabled;
-            if (beatClickRateSlider) beatClickRateSlider.value = state.beatClickRate;
-            if (beatClickRateText) beatClickRateText.textContent = state.beatClickRate;
-            if (beatClickRateUnit) beatClickRateUnit.textContent = getBeatClickRateDescription(state.beatClickRate);
+            const rate = Math.max(1, Math.min(20, state.beatClickRate || 4));
+            if (beatClickRateSlider) beatClickRateSlider.value = rate;
+            if (beatClickRateText) beatClickRateText.textContent = rate;
+            if (beatClickRateUnit) {
+                beatClickRateUnit.textContent = rate === 4 ? 'tuplet rate (quarter)' : `tuplet rate (${getTupletRateName(rate).toLowerCase()})`;
+            }
 
             if (state.beatClickEnabled) {
                 beatClickStatusBadge.textContent = 'On';
@@ -2333,9 +2525,7 @@
         if (decBeatClickRateBtn) {
             decBeatClickRateBtn.addEventListener('click', () => {
                 if (state.beatClickRate > 1) {
-                    if (state.isPlaying) {
-                        togglePlay();
-                    }
+                    if (state.isPlaying) togglePlay();
                     state.beatClickRate--;
                     updateBeatClickControlUI();
                     renderNerdLine();
@@ -2346,9 +2536,7 @@
         if (incBeatClickRateBtn) {
             incBeatClickRateBtn.addEventListener('click', () => {
                 if (state.beatClickRate < 20) {
-                    if (state.isPlaying) {
-                        togglePlay();
-                    }
+                    if (state.isPlaying) togglePlay();
                     state.beatClickRate++;
                     updateBeatClickControlUI();
                     renderNerdLine();
@@ -2356,43 +2544,31 @@
             });
         }
 
-        // Toggle between Standard Circular Mode and Ultra-nerd Mode
-        ultraNerdModeBtn.addEventListener('click', () => {
-            if (state.isPlaying) {
-                togglePlay();
-            }
-            beatEditorPopup.classList.add('hidden');
-            state.ultraNerdMode = !state.ultraNerdMode;
-
+        function applyModeLayoutUI() {
             if (state.ultraNerdMode) {
-                // Transform page into Ultra-nerd Mode
                 mainContainer.classList.remove('max-w-xl');
                 mainContainer.classList.add('max-w-3xl');
-                canvasContainer.classList.add('hidden');
-                nerdLineWrapper.classList.remove('hidden');
-                nerdLineWrapper.classList.add('flex');
                 nerdModeBadge.classList.remove('hidden');
 
-                // Hide circular-only controls ("Beats", "Uniform Subdivision", "Custom Recursive Subdivision", and "Polyrhythm")
                 beatsControlSection.classList.add('hidden');
                 uniformSubdivSection.classList.add('hidden');
                 customSubdivSection.classList.add('hidden');
                 polyrhythmSection.classList.add('hidden');
 
-                // Show Beat-Click section for Ultra-nerd Mode
                 nerdBeatClickSection.classList.remove('hidden');
                 nerdBeatClickSection.classList.add('flex');
 
-                // Always show Interaction Mode switcher (Toggle Mode vs Subdivision Mode)
                 interactionModeWrapper.classList.remove('hidden');
+                if (nerdViewModeWrapper) {
+                    nerdViewModeWrapper.classList.remove('hidden');
+                    nerdViewModeWrapper.classList.add('flex');
+                }
 
                 ultraNerdBtnText.textContent = 'Exit Ultra-nerd Mode';
                 resetBtnText.textContent = 'Clear Blocks';
-                updateInstructionHint();
                 ensurePerBeatSettings();
-                renderNerdLine();
+                setNerdViewMode(state.nerdViewMode || 'line');
             } else {
-                // Transform back to Standard Circular Mode
                 mainContainer.classList.remove('max-w-3xl');
                 mainContainer.classList.add('max-w-xl');
                 nerdLineWrapper.classList.add('hidden');
@@ -2408,11 +2584,18 @@
                 nerdBeatClickSection.classList.add('hidden');
                 nerdBeatClickSection.classList.remove('flex');
 
+                if (nerdViewModeWrapper) {
+                    nerdViewModeWrapper.classList.add('hidden');
+                    nerdViewModeWrapper.classList.remove('flex');
+                }
+
                 if (!state.customSubdivEnabled) {
                     interactionModeWrapper.classList.add('hidden');
                     state.interactionMode = 'toggle';
                     modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                     modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                } else {
+                    interactionModeWrapper.classList.remove('hidden');
                 }
 
                 ultraNerdBtnText.textContent = 'Activate Ultra-nerd Mode';
@@ -2422,6 +2605,18 @@
                 initSegments();
                 drawStaticSequencer();
             }
+        }
+
+        ultraNerdModeBtn.addEventListener('click', () => {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+            state.ultraNerdMode = !state.ultraNerdMode;
+            if (state.ultraNerdMode) {
+                state.nerdViewMode = 'line';
+            }
+            applyModeLayoutUI();
         });
 
         /* ==========================================
@@ -2441,7 +2636,8 @@
                 if (counts.length > 0) maxSubdivs = Math.max(...counts);
             }
 
-            const hiddenClass = state.ultraNerdMode ? " hidden" : "";
+            const isCanvasHidden = state.ultraNerdMode && state.nerdViewMode === 'line';
+            const hiddenClass = isCanvasHidden ? " hidden" : "";
             if (maxSubdivs >= 10) {
                 canvasContainer.className = "relative w-[352px] h-[352px] md:w-[400px] md:h-[400px] flex items-center justify-center overflow-visible transition-transform duration-300 hover:scale-[1.12]" + hiddenClass;
             } else if (maxSubdivs >= 5) {
@@ -2543,7 +2739,6 @@
                 while (state.nextNoteTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
                     const segIdx = state.currentSegmentIndex % state.nerdSegments.length;
 
-                    // Synchronize Beat-Click cycle start with the start of the block sequence loop
                     if (segIdx === 0) {
                         state.nextBeatClickTime = state.nextNoteTime;
                         state.currentBeatClickIndex = 0;
@@ -2563,7 +2758,6 @@
                     state.currentSegmentIndex = (segIdx + 1) % state.nerdSegments.length;
                 }
 
-                // Schedule Beat-Click quarter notes (with the final beat cut short if total duration is non-integer beats)
                 if (state.beatClickEnabled && state.beatClickSegments.length > 0) {
                     while (state.nextBeatClickTime < state.audioCtx.currentTime + state.scheduleAheadTime) {
                         const cIdx = state.currentBeatClickIndex % state.beatClickSegments.length;
@@ -2584,7 +2778,6 @@
                 return;
             }
 
-            // Standard Circular Mode scheduling
             if (state.segments.length === 0) return;
             const twoPi = 2 * Math.PI;
 
@@ -2634,27 +2827,25 @@
             if (!state.isPlaying) return;
             const currentTime = state.audioCtx ? state.audioCtx.currentTime : 0;
 
-            if (state.ultraNerdMode) {
+            if (state.ultraNerdMode && state.nerdViewMode === 'line') {
                 let activeIdx = -1;
-                const activeDomIds = new Set();
+                const litDomIds = new Set();
+
                 for (let i = 0, len = state.nerdSegments.length; i < len; i++) {
                     const seg = state.nerdSegments[i];
                     const highlightWindow = Math.min(0.12, Math.max(0.05, (seg.scheduledDuration || 0.1) * 0.85));
                     const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + highlightWindow);
                     if (isCurrent) {
                         activeIdx = i;
-                        activeDomIds.add(seg.domId);
+                        litDomIds.add(seg.domId);
                     }
                 }
 
-                const visitedDomIds = new Set();
                 for (let i = 0, len = state.nerdSegments.length; i < len; i++) {
-                    const domId = state.nerdSegments[i].domId;
-                    if (visitedDomIds.has(domId)) continue;
-                    visitedDomIds.add(domId);
-                    const el = document.getElementById(domId);
+                    const seg = state.nerdSegments[i];
+                    const el = document.getElementById(seg.domId);
                     if (el) {
-                        if (activeDomIds.has(domId)) {
+                        if (litDomIds.has(seg.domId)) {
                             el.classList.add('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
                         } else {
                             el.classList.remove('ring-2', 'ring-amber-300', 'scale-110', 'brightness-125', 'z-30');
@@ -2662,24 +2853,26 @@
                     }
                 }
 
-                // Auto-scroll the horizontal line smoothly to follow the active block/segment
                 if (activeIdx !== -1 && activeIdx !== lastScrolledSegIdx) {
                     lastScrolledSegIdx = activeIdx;
                     const activeSeg = state.nerdSegments[activeIdx];
                     const activeEl = document.getElementById(activeSeg.domId);
                     if (activeEl && nerdScrollContainer) {
-                        const containerRect = nerdScrollContainer.getBoundingClientRect();
-                        const elRect = activeEl.getBoundingClientRect();
-                        const offsetInsideContainer = (elRect.left - containerRect.left) + nerdScrollContainer.scrollLeft;
-                        const targetScroll = offsetInsideContainer - (containerRect.width / 2) + (elRect.width / 2);
-                        nerdScrollContainer.scrollTo({
-                            left: Math.max(0, targetScroll),
-                            behavior: 'auto'
-                        });
+                        if (activeIdx === 0) {
+                            nerdScrollContainer.scrollTo({ left: 0, behavior: 'auto' });
+                        } else {
+                            const containerRect = nerdScrollContainer.getBoundingClientRect();
+                            const elRect = activeEl.getBoundingClientRect();
+                            const offsetInsideContainer = (elRect.left - containerRect.left) + nerdScrollContainer.scrollLeft;
+                            const targetScroll = offsetInsideContainer - (containerRect.width / 2) + (elRect.width / 2);
+                            nerdScrollContainer.scrollTo({
+                                left: Math.max(0, targetScroll),
+                                behavior: 'auto'
+                            });
+                        }
                     }
                 }
 
-                // Highlight active Beat-Click segment on the Pulse Metronome Bar
                 if (state.beatClickEnabled && state.beatClickSegments.length > 0) {
                     for (let c = 0, clen = state.beatClickSegments.length; c < clen; c++) {
                         const cSeg = state.beatClickSegments[c];
@@ -2700,16 +2893,21 @@
                 return;
             }
 
-            // Standard Circular Mode Canvas rendering
+            // Circular Canvas Rendering (Standard Mode OR Ultra-Nerd Circle View)
             ctx.fillStyle = '#0f0f14';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
 
-            for (let i = 0, len = state.segments.length; i < len; i++) {
-                const seg = state.segments[i];
-                const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + 0.08);
+            const activeSegList = state.ultraNerdMode ? state.nerdSegments : state.segments;
+
+            for (let i = 0, len = activeSegList.length; i < len; i++) {
+                const seg = activeSegList[i];
+                const highlightWin = state.ultraNerdMode
+                    ? Math.min(0.12, Math.max(0.05, (seg.scheduledDuration || 0.08) * 0.85))
+                    : 0.08;
+                const isCurrent = seg.scheduledTime && (currentTime >= seg.scheduledTime && currentTime < seg.scheduledTime + highlightWin);
 
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, seg.rOuter, seg.startAngle, seg.endAngle, false);
@@ -2725,7 +2923,7 @@
 
                 if (isCurrent) {
                     fillColor = seg.active ? '#93c5fd' : '#262633';
-                } else if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
+                } else if (!state.ultraNerdMode && i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
                     fillColor = seg.active ? '#e0f2fe' : '#222233';
                 }
 
@@ -2741,13 +2939,18 @@
                     ctx.font = '600 13px Inter, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                    const labelNum = state.ultraNerdMode ? (seg.blockIndex + 1) : (seg.beatIndex + 1);
+                    ctx.fillText(labelNum.toString(), seg.textX, seg.textY);
                 }
             }
 
-            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
-                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
-                    const pSeg = state.polySegments[p];
+            const outerRingList = state.ultraNerdMode
+                ? (state.beatClickEnabled ? state.beatClickSegments : [])
+                : (state.polyrhythmEnabled ? state.polySegments : []);
+
+            if (outerRingList.length > 0) {
+                for (let p = 0, plen = outerRingList.length; p < plen; p++) {
+                    const pSeg = outerRingList[p];
                     const isCurrentPoly = pSeg.scheduledTime && (currentTime >= pSeg.scheduledTime && currentTime < pSeg.scheduledTime + 0.08);
 
                     ctx.beginPath();
@@ -2758,7 +2961,7 @@
                     let pFill = pSeg.active ? '#f59e0b' : '#14141c';
                     if (isCurrentPoly) {
                         pFill = pSeg.active ? '#fde68a' : '#262633';
-                    } else if (p === hoveredPolyIndex && state.interactionMode === 'toggle') {
+                    } else if (!state.ultraNerdMode && p === hoveredPolyIndex && state.interactionMode === 'toggle') {
                         pFill = pSeg.active ? '#fde68a' : '#222233';
                     }
 
@@ -2920,9 +3123,22 @@
             lastScrolledSegIdx = -1;
         }
 
+        function startPlaybackLoop() {
+            const startTime = state.audioCtx.currentTime + 0.05;
+            state.nextNoteTime = startTime;
+            state.currentSegmentIndex = 0;
+            state.nextPolyNoteTime = startTime;
+            state.currentPolyIndex = 0;
+            state.nextBeatClickTime = startTime;
+            state.currentBeatClickIndex = 0;
+            lastScrolledSegIdx = -1;
+            scheduler();
+            requestAnimationFrame(animationLoop);
+        }
+
         function togglePlay() {
             if (state.ultraNerdMode && state.nerdSegments.length === 0 && !state.isPlaying) {
-                // If user clicks Play with no blocks on the Ultra-nerd line, prompt Add Block modal
+                if (state.nerdViewMode === 'circle') setNerdViewMode('line');
                 openBlockModal('add', 0);
                 return;
             }
@@ -2935,24 +3151,13 @@
                 playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
                 playBtn.classList.remove('bg-slate-100', 'text-slate-900', 'hover:bg-white');
                 playBtn.classList.add('bg-amber-500', 'text-slate-950', 'hover:bg-amber-400');
-                
-                const startPlaybackLoop = () => {
-                    if (!state.isPlaying || !state.audioCtx) return;
-                    const startTime = state.audioCtx.currentTime + 0.05;
-                    state.nextNoteTime = startTime;
-                    state.currentSegmentIndex = 0;
-                    state.nextPolyNoteTime = startTime;
-                    state.currentPolyIndex = 0;
-                    state.nextBeatClickTime = startTime;
-                    state.currentBeatClickIndex = 0;
-                    lastScrolledSegIdx = -1;
-                    scheduler();
-                    requestAnimationFrame(animationLoop);
-                };
 
-                // 3. Ensure AudioContext is running before reading currentTime to prevent dropped notes on iOS
-                if (state.audioCtx.state !== 'running') {
-                    state.audioCtx.resume().then(startPlaybackLoop).catch(startPlaybackLoop);
+                if (state.audioCtx && (state.audioCtx.state === 'suspended' || state.audioCtx.state === 'interrupted')) {
+                    state.audioCtx.resume().then(() => {
+                        if (state.isPlaying) startPlaybackLoop();
+                    }).catch(() => {
+                        if (state.isPlaying) startPlaybackLoop();
+                    });
                 } else {
                     startPlaybackLoop();
                 }
@@ -2965,6 +3170,7 @@
                 clearTimeout(state.timerID);
                 if (state.ultraNerdMode) {
                     clearNerdVisualHighlights();
+                    if (state.nerdViewMode === 'circle') drawStaticSequencer();
                 } else {
                     for (let i = 0, len = state.segments.length; i < len; i++) {
                         state.segments[i].scheduledTime = null;
@@ -2977,9 +3183,6 @@
             }
         }
 
-        // Pre-unlock audio synchronously on touchstart/pointerdown on the Play button for iOS Safari
-        playBtn.addEventListener('touchstart', () => { initAudioContext(); }, { passive: true });
-        playBtn.addEventListener('pointerdown', () => { initAudioContext(); }, { passive: true });
         playBtn.addEventListener('click', togglePlay);
 
         window.addEventListener('keydown', (e) => {
@@ -2992,7 +3195,7 @@
                     closeBlockModal();
                     return;
                 }
-                if (!repeatConfigModal.classList.contains('hidden')) {
+                if (repeatConfigModal && !repeatConfigModal.classList.contains('hidden')) {
                     closeRepeatModal();
                     return;
                 }
@@ -3009,15 +3212,27 @@
         });
 
         function drawStaticSequencer() {
-            if (state.ultraNerdMode) return;
+            if (state.ultraNerdMode && state.nerdViewMode === 'line') return;
+
             ctx.fillStyle = '#0f0f14';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
 
-            for (let i = 0, len = state.segments.length; i < len; i++) {
-                const seg = state.segments[i];
+            const segList = state.ultraNerdMode ? state.nerdSegments : state.segments;
+
+            if (state.ultraNerdMode && segList.length === 0) {
+                ctx.fillStyle = '#64748b';
+                ctx.font = '500 12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Click circle to add blocks in Line View', centerX, centerY + 55);
+                return;
+            }
+
+            for (let i = 0, len = segList.length; i < len; i++) {
+                const seg = segList[i];
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, seg.rOuter, seg.startAngle, seg.endAngle, false);
                 ctx.arc(centerX, centerY, seg.rInner, seg.endAngle, seg.startAngle, true);
@@ -3029,7 +3244,7 @@
                     else if (seg.colorType === 'pink') fillColor = '#f472b6';
                     else fillColor = '#34d399';
                 }
-                if (i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
+                if (!state.ultraNerdMode && i === hoveredSegmentIndex && state.interactionMode === 'toggle') {
                     fillColor = seg.active ? '#e0f2fe' : '#222233';
                 }
 
@@ -3045,20 +3260,25 @@
                     ctx.font = '600 13px Inter, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText((seg.beatIndex + 1).toString(), seg.textX, seg.textY);
+                    const labelNum = state.ultraNerdMode ? (seg.blockIndex + 1) : (seg.beatIndex + 1);
+                    ctx.fillText(labelNum.toString(), seg.textX, seg.textY);
                 }
             }
 
-            if (state.polyrhythmEnabled && state.polySegments.length > 0) {
-                for (let p = 0, plen = state.polySegments.length; p < plen; p++) {
-                    const pSeg = state.polySegments[p];
+            const outerRingList = state.ultraNerdMode
+                ? (state.beatClickEnabled ? state.beatClickSegments : [])
+                : (state.polyrhythmEnabled ? state.polySegments : []);
+
+            if (outerRingList.length > 0) {
+                for (let p = 0, plen = outerRingList.length; p < plen; p++) {
+                    const pSeg = outerRingList[p];
                     ctx.beginPath();
                     ctx.arc(centerX, centerY, pSeg.rOuter, pSeg.startAngle, pSeg.endAngle, false);
                     ctx.arc(centerX, centerY, pSeg.rInner, pSeg.endAngle, pSeg.startAngle, true);
                     ctx.closePath();
 
                     let pFill = pSeg.active ? '#f59e0b' : '#14141c';
-                    if (p === hoveredPolyIndex && state.interactionMode === 'toggle') {
+                    if (!state.ultraNerdMode && p === hoveredPolyIndex && state.interactionMode === 'toggle') {
                         pFill = pSeg.active ? '#fde68a' : '#222233';
                     }
 
@@ -3319,13 +3539,12 @@
 
             if (state.ultraNerdMode) {
                 state.nerdBlocks = [];
+                state.nerdRepeats = [];
                 state.nerdSegments = [];
-                state.nerdRepeat = { startIdx: null, endIdx: null, count: 2 };
-                state.beatClickRate = 4;
                 state.beatClickSegments = [];
                 state.beatClickStates = {};
-                updateBeatClickControlUI();
                 ensurePerBeatSettings();
+                setNerdViewMode('line');
                 renderNerdLine();
                 return;
             }
@@ -3475,7 +3694,8 @@
 
         polyType.addEventListener('change', (e) => { state.polyrhythm.type = e.target.value; });
         polyPitch.addEventListener('input', (e) => {
-            state.polyrhythm.pitch = parseInt(e.target.value);
+            state.polyPitch = parseInt(e.target.value);
+            state.polyrhythm.pitch = state.polyPitch;
             polyPitchVal.textContent = state.polyrhythm.pitch;
         });
         polyVolume.addEventListener('input', (e) => {
@@ -3483,232 +3703,138 @@
             polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
         });
 
-        const copyEmailBtn = document.getElementById('copyEmailBtn');
-        const copyEmailText = document.getElementById('copyEmailText');
-        const obfuscatedEmailDisplay = document.getElementById('obfuscatedEmailDisplay');
-        const articleCopyEmailBtn = document.getElementById('articleCopyEmailBtn');
-        const articleCopyEmailText = document.getElementById('articleCopyEmailText');
-        const articleObfuscatedEmailDisplay = document.getElementById('articleObfuscatedEmailDisplay');
-
-        function handleCopyAuthorEmail(btnEl, textEl, displayEl) {
-            const fullEmail = "josiahghudock" + "@" + "gmail.com";
-            if (displayEl) displayEl.textContent = fullEmail;
-
+        function copyTextToClipboard(text) {
             const textarea = document.createElement('textarea');
-            textarea.value = fullEmail;
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
             document.body.appendChild(textarea);
             textarea.select();
+            let success = false;
             try {
-                document.execCommand('copy');
-                if (textEl) textEl.textContent = "Copied!";
-                if (btnEl) btnEl.classList.add('text-emerald-400', 'border-emerald-500/50');
-                setTimeout(() => {
-                    if (textEl) textEl.textContent = "Copy Email";
-                    if (btnEl) btnEl.classList.remove('text-emerald-400', 'border-emerald-500/50');
-                }, 2000);
+                success = document.execCommand('copy');
             } catch (err) {
                 console.debug('Copy failed', err);
             }
             document.body.removeChild(textarea);
-        }
-
-        if (copyEmailBtn) {
-            copyEmailBtn.addEventListener('click', () => {
-                handleCopyAuthorEmail(copyEmailBtn, copyEmailText, obfuscatedEmailDisplay);
-            });
-        }
-
-        if (articleCopyEmailBtn) {
-            articleCopyEmailBtn.addEventListener('click', () => {
-                handleCopyAuthorEmail(articleCopyEmailBtn, articleCopyEmailText, articleObfuscatedEmailDisplay);
-            });
+            return success;
         }
 
         /* ==========================================
-         * LEARN MORE ARTICLE VIEW NAVIGATION
+         * SAVE & LOAD SETUP HASH SYSTEM (N2 + NOME1)
          * ========================================== */
-        const learnMoreBtn = document.getElementById('learnMoreBtn');
-        const articleView = document.getElementById('articleView');
-        const backToNomeTopBtn = document.getElementById('backToNomeTopBtn');
-        const backToNomeBottomBtn = document.getElementById('backToNomeBottomBtn');
-        const headerActionButtons = resetStandardBtn ? resetStandardBtn.parentElement : null;
-
-        function openArticleView() {
-            if (state.isPlaying) {
-                togglePlay();
-            }
-            beatEditorPopup.classList.add('hidden');
-            closeBlockModal();
-            closeRepeatModal();
-            mainContainer.classList.add('hidden');
-            if (headerActionButtons) headerActionButtons.classList.add('hidden');
-            articleView.classList.remove('hidden');
-            articleView.classList.add('flex');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function closeArticleView() {
-            articleView.classList.add('hidden');
-            articleView.classList.remove('flex');
-            mainContainer.classList.remove('hidden');
-            if (headerActionButtons) headerActionButtons.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        if (learnMoreBtn) {
-            learnMoreBtn.addEventListener('click', openArticleView);
-        }
-        if (backToNomeTopBtn) {
-            backToNomeTopBtn.addEventListener('click', closeArticleView);
-        }
-        if (backToNomeBottomBtn) {
-            backToNomeBottomBtn.addEventListener('click', closeArticleView);
-        }
-
-        document.querySelectorAll('.preset-hash-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const hash = btn.getAttribute('data-preset-hash');
-                closeArticleView();
-                if (hash) {
-                    if (setupHashInput) setupHashInput.value = hash;
-                    loadSetupFromHash(hash);
-                }
-            });
-        });
-
-        /* ==========================================
-         * HASH SAVE & LOAD SYSTEM (Compact N2- + Legacy NOME1- + URL Sharing)
-         * ========================================== */
-        const saveSetupBtn = document.getElementById('saveSetupBtn');
-        const saveSetupBtnText = document.getElementById('saveSetupBtnText');
-        const shareLinkBtn = document.getElementById('shareLinkBtn');
-        const shareLinkBtnText = document.getElementById('shareLinkBtnText');
-        const setupHashInput = document.getElementById('setupHashInput');
-        const loadSetupBtn = document.getElementById('loadSetupBtn');
-        const hashFeedbackMsg = document.getElementById('hashFeedbackMsg');
-        let hashFeedbackTimeout = null;
-
-        const WAVE_TO_INT = { sine: 0, triangle: 1, square: 2, sawtooth: 3 };
-        const INT_TO_WAVE = ['sine', 'triangle', 'square', 'sawtooth'];
+        let hashFeedbackTimer = null;
+        const WAVE_LIST = ['sine', 'triangle', 'square', 'sawtooth'];
 
         function showHashFeedback(message, isError = false) {
             if (!hashFeedbackMsg) return;
             hashFeedbackMsg.textContent = message;
             hashFeedbackMsg.className = `text-[11px] font-medium ${isError ? 'text-rose-400' : 'text-emerald-400'}`;
             hashFeedbackMsg.classList.remove('hidden');
-            clearTimeout(hashFeedbackTimeout);
-            hashFeedbackTimeout = setTimeout(() => {
+            clearTimeout(hashFeedbackTimer);
+            hashFeedbackTimer = setTimeout(() => {
                 hashFeedbackMsg.classList.add('hidden');
-            }, 3500);
+            }, 3200);
         }
 
-        // Generates ultra-compact N2- hash by omitting default values and storing only muted (off) note keys
         function generateSetupHash() {
             const p = {};
-
             if (state.bpm !== 100) p.b = state.bpm;
 
             if (state.ultraNerdMode) {
                 p.u = 1;
                 if (state.nerdBlocks.length > 0) {
                     p.nb = state.nerdBlocks.map(blk => {
-                        const n = blk.numNotes;
-                        const r = blk.tupletRate;
-                        const x = blk.subdivCount !== undefined ? blk.subdivCount : n;
-
+                        const x = blk.subdivCount !== undefined ? blk.subdivCount : blk.numNotes;
                         const sd = {};
-                        let hasSd = false;
-                        if (blk.subDivs) {
-                            for (const [k, v] of Object.entries(blk.subDivs)) {
-                                if (v > 1) {
-                                    sd[k] = v;
-                                    hasSd = true;
-                                }
-                            }
-                        }
-
+                        Object.keys(blk.subDivs || {}).forEach(k => {
+                            if (blk.subDivs[k] > 1) sd[k] = blk.subDivs[k];
+                        });
                         const off = [];
-                        for (let ni = 0; ni < x; ni++) {
-                            const l2 = (blk.subDivs && blk.subDivs[ni]) ? blk.subDivs[ni] : 1;
-                            for (let si = 0; si < l2; si++) {
-                                const key = `${ni}_${si}`;
+                        for (let n = 0; n < x; n++) {
+                            const l2 = sd[n] || 1;
+                            for (let s = 0; s < l2; s++) {
+                                const key = `${n}_${s}`;
                                 if (blk.activeStates && blk.activeStates[key] === false) {
-                                    off.push(si === 0 ? `${ni}` : key);
+                                    off.push(s === 0 ? `${n}` : key);
                                 }
                             }
                         }
-
-                        const arr = [n, r];
-                        if (x !== n || hasSd || off.length > 0) arr.push(x);
-                        if (hasSd || off.length > 0) arr.push(hasSd ? sd : 0);
+                        const arr = [blk.numNotes, blk.tupletRate];
+                        if (x !== blk.numNotes || Object.keys(sd).length > 0 || off.length > 0) arr.push(x);
+                        if (Object.keys(sd).length > 0 || off.length > 0) arr.push(Object.keys(sd).length > 0 ? sd : 0);
                         if (off.length > 0) arr.push(off);
                         return arr;
                     });
                 }
-
-                if (state.nerdRepeat && state.nerdRepeat.startIdx !== null) {
-                    p.nr = [
-                        state.nerdRepeat.startIdx,
-                        state.nerdRepeat.endIdx,
-                        state.nerdRepeat.count || 2
-                    ];
+                const validRepeats = (state.nerdRepeats || []).filter(
+                    r => r.startIdx !== null && r.endIdx !== null && r.endIdx > r.startIdx
+                );
+                if (validRepeats.length > 0) {
+                    p.nrs = validRepeats.map(r => [r.startIdx, r.endIdx, r.count || 2]);
                 }
-
                 if (state.beatClickEnabled) {
                     p.bce = 1;
-                    if (state.beatClickRate !== 4) {
+                    if (state.beatClickRate && state.beatClickRate !== 4) {
                         p.bcr = state.beatClickRate;
                     }
                     const bcOff = [];
-                    for (const [k, v] of Object.entries(state.beatClickStates)) {
-                        if (v === false) {
-                            bcOff.push(k.replace('click_', ''));
+                    Object.keys(state.beatClickStates).forEach(k => {
+                        if (state.beatClickStates[k] === false) {
+                            bcOff.push(parseInt(k.replace('click_', ''), 10));
                         }
-                    }
+                    });
                     if (bcOff.length > 0) p.bco = bcOff;
                 }
             } else {
                 if (state.totalBeats !== 4) p.tb = state.totalBeats;
-                if (state.subdivEnabled && state.subdivCount > 1) {
-                    p.se = state.subdivCount;
+                if (state.subdivEnabled) {
+                    p.se = 1;
+                    if (state.subdivCount !== 1) p.sc = state.subdivCount;
                 }
                 if (state.customSubdivEnabled) {
                     p.ce = 1;
                     const bsc = {};
-                    for (const [k, v] of Object.entries(state.beatSubdivCounts)) {
-                        if (parseInt(k) < state.totalBeats && v > 1) bsc[k] = v;
-                    }
+                    Object.keys(state.beatSubdivCounts).forEach(b => {
+                        if (parseInt(b) < state.totalBeats && state.beatSubdivCounts[b] > 1) {
+                            bsc[b] = state.beatSubdivCounts[b];
+                        }
+                    });
                     if (Object.keys(bsc).length > 0) p.bsc = bsc;
 
                     const ssc = {};
-                    for (const [k, v] of Object.entries(state.subSubdivCounts)) {
-                        const parts = k.split('_');
-                        const bIdx = parseInt(parts[0]);
-                        const sIdx = parseInt(parts[1]);
-                        const l1 = state.beatSubdivCounts[bIdx] || 1;
-                        if (bIdx < state.totalBeats && sIdx < l1 && v > 1) ssc[k] = v;
-                    }
+                    Object.keys(state.subSubdivCounts).forEach(k => {
+                        const bIdx = parseInt(k.split('_')[0]);
+                        if (bIdx < state.totalBeats && state.subSubdivCounts[k] > 1) {
+                            ssc[k] = state.subSubdivCounts[k];
+                        }
+                    });
                     if (Object.keys(ssc).length > 0) p.ssc = ssc;
                 }
 
-                // Store only muted (false) segment keys for active segments in the current circle
-                const bsOff = [];
-                for (const seg of state.segments) {
-                    if (!seg.active) {
-                        bsOff.push(seg.segKey);
-                    }
-                }
-                if (bsOff.length > 0) p.bo = bsOff;
-
-                if (state.polyrhythmEnabled) {
-                    p.pe = state.polyBeats;
-                    const psOff = [];
-                    for (let i = 0; i < state.polyBeats; i++) {
-                        if (state.polyStates[`poly_${i}`] === false) {
-                            psOff.push(i);
+                const offSegs = [];
+                for (let b = 0; b < state.totalBeats; b++) {
+                    const l1Count = state.customSubdivEnabled ? (state.beatSubdivCounts[b] || 1) : (state.subdivEnabled ? state.subdivCount : 1);
+                    for (let s = 0; s < l1Count; s++) {
+                        const l2Count = state.customSubdivEnabled ? (state.subSubdivCounts[`${b}_${s}`] || 1) : 1;
+                        for (let ss = 0; ss < l2Count; ss++) {
+                            const key = `${b}_${s}_${ss}`;
+                            if (state.beatStates[key] === false) {
+                                offSegs.push(ss === 0 ? (s === 0 ? `${b}` : `${b}_${s}`) : key);
+                            }
                         }
                     }
-                    if (psOff.length > 0) p.po = psOff;
+                }
+                if (offSegs.length > 0) p.bo = offSegs;
+
+                if (state.polyrhythmEnabled) {
+                    p.pe = 1;
+                    if (state.polyBeats !== 3) p.pb = state.polyBeats;
+                    const pOff = [];
+                    for (let i = 0; i < state.polyBeats; i++) {
+                        if (state.polyStates[`poly_${i}`] === false) pOff.push(i);
+                    }
+                    if (pOff.length > 0) p.po = pOff;
                 }
             }
 
@@ -3726,225 +3852,65 @@
             }
 
             if (state.downbeat.type !== 'triangle' || state.downbeat.pitch !== 440 || state.downbeat.volume !== 0.45) {
-                p.db = [WAVE_TO_INT[state.downbeat.type] ?? 1, state.downbeat.pitch, state.downbeat.volume];
+                p.db = [WAVE_LIST.indexOf(state.downbeat.type), state.downbeat.pitch, state.downbeat.volume];
             }
             if (state.subdivision.type !== 'triangle' || state.subdivision.pitch !== 330 || state.subdivision.volume !== 0.35) {
-                p.sb = [WAVE_TO_INT[state.subdivision.type] ?? 1, state.subdivision.pitch, state.subdivision.volume];
+                p.sb = [WAVE_LIST.indexOf(state.subdivision.type), state.subdivision.pitch, state.subdivision.volume];
             }
-            if (state.polyrhythm.type !== 'sine' || state.polyrhythm.pitch !== 587 || state.polyrhythm.volume !== 0.4) {
-                p.pl = [WAVE_TO_INT[state.polyrhythm.type] ?? 0, state.polyrhythm.pitch, state.polyrhythm.volume];
+            if (state.polyrhythm.type !== 'sine' || state.polyrhythm.pitch !== 587 || state.polyrhythm.volume !== 0.40) {
+                p.pl = [WAVE_LIST.indexOf(state.polyrhythm.type), state.polyrhythm.pitch, state.polyrhythm.volume];
             }
 
             const jsonStr = JSON.stringify(p);
-            const b64 = btoa(unescape(encodeURIComponent(jsonStr)))
+            const base64 = btoa(unescape(encodeURIComponent(jsonStr)))
                 .replace(/\+/g, '-')
                 .replace(/\//g, '_')
                 .replace(/=+$/, '');
-            return `N2-${b64}`;
+            return `N2-${base64}`;
         }
 
-        function generateShareableUrl(hashCode) {
-            const code = hashCode || generateSetupHash();
+        function extractHashFromInput(rawInput) {
+            let trimmed = (rawInput || '').trim();
+            if (!trimmed) return '';
             try {
-                const url = new URL(window.location.href);
-                url.searchParams.set('s', code);
-                return url.toString();
-            } catch (e) {
-                const base = window.location.href.split('?')[0].split('#')[0];
-                return `${base}?s=${encodeURIComponent(code)}`;
-            }
-        }
-
-        // Extracts N2-... or NOME1-... token from either a raw code or a full URL
-        function extractHashToken(rawInput) {
-            if (!rawInput || typeof rawInput !== 'string') return '';
-            const trimmed = rawInput.trim();
-            if (trimmed.startsWith('N2-') || trimmed.startsWith('NOME1-')) {
-                return trimmed;
-            }
-            try {
-                if (trimmed.includes('?s=') || trimmed.includes('&s=') || trimmed.includes('?setup=') || trimmed.startsWith('http')) {
-                    const url = new URL(trimmed, window.location.origin);
-                    const sParam = url.searchParams.get('s') || url.searchParams.get('setup');
-                    if (sParam && (sParam.startsWith('N2-') || sParam.startsWith('NOME1-'))) {
-                        return sParam.trim();
-                    }
-                    if (url.hash) {
-                        const h = url.hash.slice(1).trim();
-                        if (h.startsWith('N2-') || h.startsWith('NOME1-')) return h;
-                    }
+                if (trimmed.includes('?s=') || trimmed.includes('&s=')) {
+                    const m = trimmed.match(/[?&]s=([^&#\s]+)/);
+                    if (m && m[1]) return decodeURIComponent(m[1]);
                 }
-            } catch (e) {
-                // Fallback regex extraction if URL constructor fails
-            }
-            const match = trimmed.match(/(N2-[A-Za-z0-9_-]+|NOME1-[A-Za-z0-9_-]+)/);
-            return match ? match[1] : trimmed;
-        }
-
-        function applyModeUI() {
-            if (state.ultraNerdMode) {
-                mainContainer.classList.remove('max-w-xl');
-                mainContainer.classList.add('max-w-3xl');
-                canvasContainer.classList.add('hidden');
-                nerdLineWrapper.classList.remove('hidden');
-                nerdLineWrapper.classList.add('flex');
-                nerdModeBadge.classList.remove('hidden');
-
-                beatsControlSection.classList.add('hidden');
-                uniformSubdivSection.classList.add('hidden');
-                customSubdivSection.classList.add('hidden');
-                polyrhythmSection.classList.add('hidden');
-
-                nerdBeatClickSection.classList.remove('hidden');
-                nerdBeatClickSection.classList.add('flex');
-
-                interactionModeWrapper.classList.remove('hidden');
-
-                ultraNerdBtnText.textContent = 'Exit Ultra-nerd Mode';
-                resetBtnText.textContent = 'Clear Blocks';
-                updateInstructionHint();
-                ensurePerBeatSettings();
-                renderNerdLine();
-            } else {
-                mainContainer.classList.remove('max-w-3xl');
-                mainContainer.classList.add('max-w-xl');
-                nerdLineWrapper.classList.add('hidden');
-                nerdLineWrapper.classList.remove('flex');
-                canvasContainer.classList.remove('hidden');
-                nerdModeBadge.classList.add('hidden');
-
-                beatsControlSection.classList.remove('hidden');
-                uniformSubdivSection.classList.remove('hidden');
-                customSubdivSection.classList.remove('hidden');
-                polyrhythmSection.classList.remove('hidden');
-
-                nerdBeatClickSection.classList.add('hidden');
-                nerdBeatClickSection.classList.remove('flex');
-
-                if (state.customSubdivEnabled) {
-                    interactionModeWrapper.classList.remove('hidden');
-                } else {
-                    interactionModeWrapper.classList.add('hidden');
-                    state.interactionMode = 'toggle';
-                    modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
-                    modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+                if (trimmed.includes('#')) {
+                    const hashPart = trimmed.split('#').pop();
+                    if (hashPart.startsWith('N2-') || hashPart.startsWith('NOME1-')) return hashPart;
                 }
-
-                ultraNerdBtnText.textContent = 'Activate Ultra-nerd Mode';
-                resetBtnText.textContent = 'Reset 4/4';
-                updateInstructionHint();
-                ensurePerBeatSettings();
-                initSegments();
-                drawStaticSequencer();
-            }
+            } catch (e) {}
+            return trimmed;
         }
 
-        function syncAllControlsFromState() {
-            bpmSlider.value = state.bpm;
-            bpmText.textContent = state.bpm;
-            centerBpmDisplay.textContent = state.bpm;
-
-            beatsSlider.value = state.totalBeats;
-            beatsText.textContent = state.totalBeats;
-
-            subdivCheckbox.checked = state.subdivEnabled;
-            subdivSlider.value = state.subdivCount;
-            subdivText.textContent = state.subdivCount;
-            if (state.subdivEnabled) {
-                subdivText.classList.remove('opacity-40');
-                subdivControlContainer.classList.remove('opacity-40', 'pointer-events-none');
-                decSubdivBtn.removeAttribute('disabled');
-                incSubdivBtn.removeAttribute('disabled');
-                subdivSlider.removeAttribute('disabled');
-            } else {
-                subdivText.classList.add('opacity-40');
-                subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
-                decSubdivBtn.setAttribute('disabled', 'true');
-                incSubdivBtn.setAttribute('disabled', 'true');
-                subdivSlider.setAttribute('disabled', 'true');
-            }
-
-            customSubdivCheckbox.checked = state.customSubdivEnabled;
-            if (state.customSubdivEnabled) {
-                customSubdivHint.classList.remove('hidden');
-            } else {
-                customSubdivHint.classList.add('hidden');
-            }
-
-            polyrhythmCheckbox.checked = state.polyrhythmEnabled;
-            polySlider.value = state.polyBeats;
-            polyBeatsText.textContent = state.polyBeats;
-            if (state.polyrhythmEnabled) {
-                polyBeatsText.classList.remove('opacity-40');
-                polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
-                decPolyBtn.removeAttribute('disabled');
-                incPolyBtn.removeAttribute('disabled');
-                polySlider.removeAttribute('disabled');
-            } else {
-                polyBeatsText.classList.add('opacity-40');
-                polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
-                decPolyBtn.setAttribute('disabled', 'true');
-                incPolyBtn.setAttribute('disabled', 'true');
-                polySlider.setAttribute('disabled', 'true');
-            }
-
-            if (beatClickCheckbox) {
-                updateBeatClickControlUI();
-            }
-
-            downbeatType.value = state.downbeat.type;
-            downbeatPitch.value = state.downbeat.pitch;
-            downbeatPitchVal.textContent = state.downbeat.pitch;
-            downbeatVolume.value = state.downbeat.volume;
-            downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
-
-            subdivType.value = state.subdivision.type;
-            subdivPitch.value = state.subdivision.pitch;
-            subdivPitchVal.textContent = state.subdivision.pitch;
-            subdivVolume.value = state.subdivision.volume;
-            subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
-
-            polyType.value = state.polyrhythm.type;
-            polyPitch.value = state.polyrhythm.pitch;
-            polyPitchVal.textContent = state.polyrhythm.pitch;
-            polyVolume.value = state.polyrhythm.volume;
-            polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
-
-            advancedDownbeatCheckbox.checked = state.advancedDownbeatEnabled;
-            if (state.advancedDownbeatEnabled) {
-                advancedDownbeatPanel.classList.remove('hidden');
-            } else {
-                advancedDownbeatPanel.classList.add('hidden');
-            }
-
-            applyModeUI();
-        }
-
-        function loadSetupFromHash(rawCode) {
-            const token = extractHashToken(rawCode);
-            if (!token) {
-                showHashFeedback('Please paste a setup code or link first.', true);
-                return;
-            }
-
-            const isV2 = token.startsWith('N2-');
-            const isV1 = token.startsWith('NOME1-');
-            if (!isV2 && !isV1) {
-                showHashFeedback('Invalid code format (expected N2- or NOME1-).', true);
-                return;
+        function loadSetupFromHash(rawHash) {
+            const cleaned = extractHashFromInput(rawHash);
+            if (!cleaned) {
+                showHashFeedback('Please paste a setup code first.', true);
+                return false;
             }
 
             try {
-                const prefixLen = isV2 ? 3 : 6;
-                let b64 = token.slice(prefixLen).replace(/-/g, '+').replace(/_/g, '/');
+                let isV2 = false;
+                let b64 = cleaned;
+                if (b64.startsWith('N2-')) {
+                    isV2 = true;
+                    b64 = b64.slice(3);
+                } else if (b64.startsWith('NOME1-')) {
+                    b64 = b64.slice(6);
+                }
+                b64 = b64.replace(/-/g, '+').replace(/_/g, '/');
                 while (b64.length % 4 !== 0) {
                     b64 += '=';
                 }
+
                 const jsonStr = decodeURIComponent(escape(atob(b64)));
                 const data = JSON.parse(jsonStr);
 
                 if (!data || typeof data !== 'object') {
-                    throw new Error('Malformed setup data');
+                    throw new Error('Invalid payload');
                 }
 
                 if (state.isPlaying) {
@@ -3955,65 +3921,82 @@
                 closeRepeatModal();
 
                 if (isV2) {
-                    // Decode compact N2- format (with clean defaults for omitted properties)
                     state.ultraNerdMode = Boolean(data.u);
+                    // Open Ultra-Nerd hashes in Circle Mode by default
+                    state.nerdViewMode = state.ultraNerdMode ? 'circle' : 'line';
                     state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
                     state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
                     state.subdivEnabled = Boolean(data.se);
-                    state.subdivCount = state.subdivEnabled ? Math.max(1, Math.min(20, parseInt(data.se) || 1)) : 1;
+                    state.subdivCount = Math.max(1, Math.min(20, parseInt(data.sc) || 1));
                     state.customSubdivEnabled = Boolean(data.ce);
                     state.polyrhythmEnabled = Boolean(data.pe);
-                    state.polyBeats = state.polyrhythmEnabled ? Math.max(1, Math.min(25, parseInt(data.pe) || 3)) : 3;
-
-                    state.beatSubdivCounts = (data.bsc && typeof data.bsc === 'object') ? data.bsc : {};
-                    state.subSubdivCounts = (data.ssc && typeof data.ssc === 'object') ? data.ssc : {};
-
-                    state.beatStates = {};
-                    if (Array.isArray(data.bo)) {
-                        data.bo.forEach(k => { state.beatStates[k] = false; });
-                    }
+                    state.polyBeats = Math.max(1, Math.min(25, parseInt(data.pb) || 3));
 
                     state.polyStates = {};
                     if (Array.isArray(data.po)) {
                         data.po.forEach(idx => { state.polyStates[`poly_${idx}`] = false; });
                     }
 
-                    if (Array.isArray(data.nb)) {
-                        state.nerdBlocks = data.nb.map((arr, idx) => {
-                            const nNotes = Math.max(1, Math.min(20, parseInt(arr[0]) || 4));
-                            const tRate = Math.max(1, Math.min(20, parseInt(arr[1]) || 4));
-                            const sCount = Math.max(1, Math.min(20, parseInt(arr[2] !== undefined ? arr[2] : nNotes) || nNotes));
-                            const sdObj = (arr[3] && typeof arr[3] === 'object') ? arr[3] : {};
-                            const activeStates = {};
-                            if (Array.isArray(arr[4])) {
-                                arr[4].forEach(offKey => {
-                                    const fullKey = String(offKey).includes('_') ? String(offKey) : `${offKey}_0`;
-                                    activeStates[fullKey] = false;
-                                });
-                            }
-                            return {
-                                id: idx + 1,
-                                numNotes: nNotes,
-                                tupletRate: tRate,
-                                subdivCount: sCount,
-                                subDivs: sdObj,
-                                activeStates: activeStates
-                            };
+                    state.beatSubdivCounts = data.bsc && typeof data.bsc === 'object' ? { ...data.bsc } : {};
+                    state.subSubdivCounts = data.ssc && typeof data.ssc === 'object' ? { ...data.ssc } : {};
+
+                    state.beatStates = {};
+                    if (Array.isArray(data.bo)) {
+                        data.bo.forEach(code => {
+                            const parts = String(code).split('_');
+                            if (parts.length === 1) state.beatStates[`${parts[0]}_0_0`] = false;
+                            else if (parts.length === 2) state.beatStates[`${parts[0]}_${parts[1]}_0`] = false;
+                            else state.beatStates[code] = false;
                         });
-                        state.nextBlockId = state.nerdBlocks.length + 1;
-                    } else {
-                        state.nerdBlocks = [];
-                        state.nextBlockId = 1;
                     }
 
-                    if (Array.isArray(data.nr)) {
-                        state.nerdRepeat = {
-                            startIdx: data.nr[0] !== null && data.nr[0] !== undefined ? parseInt(data.nr[0]) : null,
-                            endIdx: data.nr[1] !== null && data.nr[1] !== undefined ? parseInt(data.nr[1]) : null,
-                            count: Math.max(1, Math.min(10, parseInt(data.nr[2]) || 2))
-                        };
-                    } else {
-                        state.nerdRepeat = { startIdx: null, endIdx: null, count: 2 };
+                    state.nerdBlocks = [];
+                    state.nextBlockId = 1;
+                    if (Array.isArray(data.nb)) {
+                        data.nb.forEach(arr => {
+                            if (Array.isArray(arr)) {
+                                const n = Math.max(1, Math.min(20, parseInt(arr[0]) || 4));
+                                const r = Math.max(1, Math.min(20, parseInt(arr[1]) || 4));
+                                const x = arr[2] !== undefined ? Math.max(1, Math.min(20, parseInt(arr[2]) || n)) : n;
+                                const sd = (arr[3] && typeof arr[3] === 'object') ? { ...arr[3] } : {};
+                                const as = {};
+                                if (Array.isArray(arr[4])) {
+                                    arr[4].forEach(c => {
+                                        const sp = String(c).split('_');
+                                        as[sp.length === 1 ? `${sp[0]}_0` : c] = false;
+                                    });
+                                }
+                                state.nerdBlocks.push({
+                                    id: state.nextBlockId++,
+                                    numNotes: n,
+                                    tupletRate: r,
+                                    subdivCount: x,
+                                    subDivs: sd,
+                                    activeStates: as
+                                });
+                            }
+                        });
+                    }
+
+                    state.nerdRepeats = [];
+                    if (Array.isArray(data.nrs)) {
+                        data.nrs.forEach(repArr => {
+                            if (Array.isArray(repArr) && repArr.length >= 2) {
+                                const sIdx = repArr[0] !== null && repArr[0] !== undefined ? parseInt(repArr[0], 10) : null;
+                                const eIdx = repArr[1] !== null && repArr[1] !== undefined ? parseInt(repArr[1], 10) : null;
+                                const cnt = Math.max(1, Math.min(10, parseInt(repArr[2], 10) || 2));
+                                if (sIdx !== null && eIdx !== null && eIdx > sIdx) {
+                                    state.nerdRepeats.push({ startIdx: sIdx, endIdx: eIdx, count: cnt });
+                                }
+                            }
+                        });
+                    } else if (Array.isArray(data.nr)) {
+                        const sIdx = data.nr[0] !== null && data.nr[0] !== undefined ? parseInt(data.nr[0], 10) : null;
+                        const eIdx = data.nr[1] !== null && data.nr[1] !== undefined ? parseInt(data.nr[1], 10) : null;
+                        const cnt = Math.max(1, Math.min(10, parseInt(data.nr[2], 10) || 2));
+                        if (sIdx !== null && eIdx !== null && eIdx > sIdx) {
+                            state.nerdRepeats.push({ startIdx: sIdx, endIdx: eIdx, count: cnt });
+                        }
                     }
 
                     state.beatClickEnabled = Boolean(data.bce);
@@ -4023,51 +4006,30 @@
                         data.bco.forEach(idx => { state.beatClickStates[`click_${idx}`] = false; });
                     }
 
+                    state.downbeat = Array.isArray(data.db)
+                        ? { type: WAVE_LIST[data.db[0]] || 'triangle', pitch: Number(data.db[1]) || 440, volume: Number(data.db[2]) ?? 0.45 }
+                        : { type: 'triangle', pitch: 440, volume: 0.45 };
+                    state.subdivision = Array.isArray(data.sb)
+                        ? { type: WAVE_LIST[data.sb[0]] || 'triangle', pitch: Number(data.sb[1]) || 330, volume: Number(data.sb[2]) ?? 0.35 }
+                        : { type: 'triangle', pitch: 330, volume: 0.35 };
+                    state.polyrhythm = Array.isArray(data.pl)
+                        ? { type: WAVE_LIST[data.pl[0]] || 'sine', pitch: Number(data.pl[1]) || 587, volume: Number(data.pl[2]) ?? 0.40 }
+                        : { type: 'sine', pitch: 587, volume: 0.40 };
+
                     state.advancedDownbeatEnabled = Boolean(data.ade);
                     state.perBeatSettings = {};
                     if (data.pbs && typeof data.pbs === 'object') {
-                        for (const [k, arr] of Object.entries(data.pbs)) {
-                            if (Array.isArray(arr)) {
-                                state.perBeatSettings[k] = {
-                                    pitch: Math.max(100, Math.min(1200, parseInt(arr[0]) || 440)),
-                                    volume: Math.max(0, Math.min(1, parseFloat(arr[1]) ?? 0.45))
-                                };
+                        Object.keys(data.pbs).forEach(k => {
+                            const entry = data.pbs[k];
+                            if (Array.isArray(entry)) {
+                                state.perBeatSettings[k] = { pitch: Number(entry[0]) || 440, volume: Number(entry[1]) ?? 0.45 };
                             }
-                        }
-                    }
-
-                    if (Array.isArray(data.db)) {
-                        state.downbeat = {
-                            type: INT_TO_WAVE[data.db[0]] || 'triangle',
-                            pitch: Math.max(100, Math.min(1200, parseInt(data.db[1]) || 440)),
-                            volume: Math.max(0, Math.min(1, parseFloat(data.db[2]) ?? 0.45))
-                        };
-                    } else {
-                        state.downbeat = { type: 'triangle', pitch: 440, volume: 0.45 };
-                    }
-
-                    if (Array.isArray(data.sb)) {
-                        state.subdivision = {
-                            type: INT_TO_WAVE[data.sb[0]] || 'triangle',
-                            pitch: Math.max(150, Math.min(1000, parseInt(data.sb[1]) || 330)),
-                            volume: Math.max(0, Math.min(1, parseFloat(data.sb[2]) ?? 0.35))
-                        };
-                    } else {
-                        state.subdivision = { type: 'triangle', pitch: 330, volume: 0.35 };
-                    }
-
-                    if (Array.isArray(data.pl)) {
-                        state.polyrhythm = {
-                            type: INT_TO_WAVE[data.pl[0]] || 'sine',
-                            pitch: Math.max(150, Math.min(1200, parseInt(data.pl[1]) || 587)),
-                            volume: Math.max(0, Math.min(1, parseFloat(data.pl[2]) ?? 0.40))
-                        };
-                    } else {
-                        state.polyrhythm = { type: 'sine', pitch: 587, volume: 0.40 };
+                        });
                     }
                 } else {
-                    // Decode Legacy NOME1- format
                     state.ultraNerdMode = Boolean(data.u);
+                    // Open Ultra-Nerd hashes in Circle Mode by default
+                    state.nerdViewMode = state.ultraNerdMode ? 'circle' : 'line';
                     state.bpm = Math.max(30, Math.min(300, parseInt(data.b) || 100));
                     state.totalBeats = Math.max(1, Math.min(25, parseInt(data.tb) || 4));
                     state.subdivEnabled = Boolean(data.se);
@@ -4075,82 +4037,143 @@
                     state.customSubdivEnabled = Boolean(data.ce);
                     state.polyrhythmEnabled = Boolean(data.pe);
                     state.polyBeats = Math.max(1, Math.min(25, parseInt(data.pb) || 3));
-                    state.polyStates = (data.ps && typeof data.ps === 'object') ? data.ps : {};
-                    state.beatSubdivCounts = (data.bsc && typeof data.bsc === 'object') ? data.bsc : {};
-                    state.subSubdivCounts = (data.ssc && typeof data.ssc === 'object') ? data.ssc : {};
-                    state.beatStates = (data.bs && typeof data.bs === 'object') ? data.bs : {};
+                    state.polyStates = data.ps && typeof data.ps === 'object' ? { ...data.ps } : {};
+                    state.beatSubdivCounts = data.bsc && typeof data.bsc === 'object' ? { ...data.bsc } : {};
+                    state.subSubdivCounts = data.ssc && typeof data.ssc === 'object' ? { ...data.ssc } : {};
+                    state.beatStates = data.bs && typeof data.bs === 'object' ? { ...data.bs } : {};
                     state.advancedDownbeatEnabled = Boolean(data.ade);
-                    state.perBeatSettings = (data.pbs && typeof data.pbs === 'object') ? data.pbs : {};
+                    state.perBeatSettings = data.pbs && typeof data.pbs === 'object' ? JSON.parse(JSON.stringify(data.pbs)) : {};
 
+                    state.nerdBlocks = [];
+                    state.nerdRepeats = [];
+                    state.nextBlockId = 1;
                     if (Array.isArray(data.nb)) {
-                        state.nerdBlocks = data.nb.map((blk, idx) => {
-                            const nNotes = Math.max(1, Math.min(20, parseInt(blk.n) || 4));
-                            const tRate = Math.max(1, Math.min(20, parseInt(blk.r) || 4));
-                            const sCount = Math.max(1, Math.min(20, parseInt(blk.x !== undefined ? blk.x : nNotes) || nNotes));
-                            return {
-                                id: idx + 1,
-                                numNotes: nNotes,
-                                tupletRate: tRate,
-                                subdivCount: sCount,
-                                subDivs: (blk.sd && typeof blk.sd === 'object') ? blk.sd : {},
-                                activeStates: (blk.as && typeof blk.as === 'object') ? blk.as : {}
-                            };
+                        data.nb.forEach(blk => {
+                            const n = Math.max(1, Math.min(20, parseInt(blk.n) || 4));
+                            const r = Math.max(1, Math.min(20, parseInt(blk.r) || 4));
+                            const x = blk.x !== undefined ? Math.max(1, Math.min(20, parseInt(blk.x) || n)) : n;
+                            state.nerdBlocks.push({
+                                id: state.nextBlockId++,
+                                numNotes: n,
+                                tupletRate: r,
+                                subdivCount: x,
+                                subDivs: blk.sd && typeof blk.sd === 'object' ? { ...blk.sd } : {},
+                                activeStates: blk.as && typeof blk.as === 'object' ? { ...blk.as } : {}
+                            });
                         });
-                        state.nextBlockId = state.nerdBlocks.length + 1;
-                    } else {
-                        state.nerdBlocks = [];
-                        state.nextBlockId = 1;
                     }
 
-                    state.nerdRepeat = { startIdx: null, endIdx: null, count: 2 };
                     state.beatClickEnabled = Boolean(data.bce);
                     state.beatClickRate = Math.max(1, Math.min(20, parseInt(data.bcr) || 4));
-                    state.beatClickStates = (data.bcs && typeof data.bcs === 'object') ? data.bcs : {};
+                    state.beatClickStates = data.bcs && typeof data.bcs === 'object' ? { ...data.bcs } : {};
 
                     if (data.db && typeof data.db === 'object') {
-                        state.downbeat = {
-                            type: data.db.type || 'triangle',
-                            pitch: Math.max(100, Math.min(1200, parseInt(data.db.pitch) || 440)),
-                            volume: Math.max(0, Math.min(1, parseFloat(data.db.volume) ?? 0.45))
-                        };
+                        state.downbeat.type = data.db.type || 'triangle';
+                        state.downbeat.pitch = Math.max(100, Math.min(1200, parseInt(data.db.pitch) || 440));
+                        state.downbeat.volume = Math.max(0, Math.min(1, parseFloat(data.db.volume ?? 0.45)));
                     }
                     if (data.sb && typeof data.sb === 'object') {
-                        state.subdivision = {
-                            type: data.sb.type || 'triangle',
-                            pitch: Math.max(150, Math.min(1000, parseInt(data.sb.pitch) || 330)),
-                            volume: Math.max(0, Math.min(1, parseFloat(data.sb.volume) ?? 0.35))
-                        };
+                        state.subdivision.type = data.sb.type || 'triangle';
+                        state.subdivision.pitch = Math.max(150, Math.min(1000, parseInt(data.sb.pitch) || 330));
+                        state.subdivision.volume = Math.max(0, Math.min(1, parseFloat(data.sb.volume ?? 0.35)));
                     }
                     if (data.pl && typeof data.pl === 'object') {
-                        state.polyrhythm = {
-                            type: data.pl.type || 'sine',
-                            pitch: Math.max(150, Math.min(1200, parseInt(data.pl.pitch) || 587)),
-                            volume: Math.max(0, Math.min(1, parseFloat(data.pl.volume) ?? 0.40))
-                        };
+                        state.polyrhythm.type = data.pl.type || 'sine';
+                        state.polyrhythm.pitch = Math.max(150, Math.min(1200, parseInt(data.pl.pitch) || 587));
+                        state.polyrhythm.volume = Math.max(0, Math.min(1, parseFloat(data.pl.volume ?? 0.40)));
                     }
                 }
 
-                syncAllControlsFromState();
-                showHashFeedback('Setup loaded!', false);
-            } catch (err) {
-                console.debug('Failed to decode setup hash:', err);
-                showHashFeedback('Invalid or corrupted setup code.', true);
-            }
-        }
+                bpmSlider.value = state.bpm;
+                bpmText.textContent = state.bpm;
+                centerBpmDisplay.textContent = state.bpm;
 
-        function copyTextToClipboard(text, onSuccess, onFallback) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                if (onSuccess) onSuccess();
+                beatsSlider.value = state.totalBeats;
+                beatsText.textContent = state.totalBeats;
+
+                subdivCheckbox.checked = state.subdivEnabled;
+                subdivSlider.value = state.subdivCount;
+                subdivText.textContent = state.subdivCount;
+                if (state.subdivEnabled) {
+                    subdivText.classList.remove('opacity-40');
+                    subdivControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                    decSubdivBtn.removeAttribute('disabled');
+                    incSubdivBtn.removeAttribute('disabled');
+                    subdivSlider.removeAttribute('disabled');
+                } else {
+                    subdivText.classList.add('opacity-40');
+                    subdivControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                    decSubdivBtn.setAttribute('disabled', 'true');
+                    incSubdivBtn.setAttribute('disabled', 'true');
+                    subdivSlider.setAttribute('disabled', 'true');
+                }
+
+                customSubdivCheckbox.checked = state.customSubdivEnabled;
+                if (state.customSubdivEnabled) {
+                    customSubdivHint.classList.remove('hidden');
+                } else {
+                    customSubdivHint.classList.add('hidden');
+                }
+
+                polyrhythmCheckbox.checked = state.polyrhythmEnabled;
+                polySlider.value = state.polyBeats;
+                polyBeatsText.textContent = state.polyBeats;
+                if (state.polyrhythmEnabled) {
+                    polyBeatsText.classList.remove('opacity-40');
+                    polyControlContainer.classList.remove('opacity-40', 'pointer-events-none');
+                    decPolyBtn.removeAttribute('disabled');
+                    incPolyBtn.removeAttribute('disabled');
+                    polySlider.removeAttribute('disabled');
+                } else {
+                    polyBeatsText.classList.add('opacity-40');
+                    polyControlContainer.classList.add('opacity-40', 'pointer-events-none');
+                    decPolyBtn.setAttribute('disabled', 'true');
+                    incPolyBtn.setAttribute('disabled', 'true');
+                    polySlider.setAttribute('disabled', 'true');
+                }
+
+                if (beatClickCheckbox) {
+                    beatClickCheckbox.checked = state.beatClickEnabled;
+                    updateBeatClickControlUI();
+                }
+
+                downbeatType.value = state.downbeat.type;
+                downbeatPitch.value = state.downbeat.pitch;
+                downbeatPitchVal.textContent = state.downbeat.pitch;
+                downbeatVolume.value = state.downbeat.volume;
+                downbeatVolVal.textContent = `${Math.round(state.downbeat.volume * 100)}%`;
+
+                subdivType.value = state.subdivision.type;
+                subdivPitch.value = state.subdivision.pitch;
+                subdivPitchVal.textContent = state.subdivision.pitch;
+                subdivVolume.value = state.subdivision.volume;
+                subdivVolVal.textContent = `${Math.round(state.subdivision.volume * 100)}%`;
+
+                polyType.value = state.polyrhythm.type;
+                polyPitch.value = state.polyrhythm.pitch;
+                polyPitchVal.textContent = state.polyrhythm.pitch;
+                polyVolume.value = state.polyrhythm.volume;
+                polyVolVal.textContent = `${Math.round(state.polyrhythm.volume * 100)}%`;
+
+                advancedDownbeatCheckbox.checked = state.advancedDownbeatEnabled;
+                if (state.advancedDownbeatEnabled) {
+                    advancedDownbeatPanel.classList.remove('hidden');
+                } else {
+                    advancedDownbeatPanel.classList.add('hidden');
+                }
+
+                state.interactionMode = 'toggle';
+                modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
+                modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
+
+                applyModeLayoutUI();
+                showHashFeedback('Setup loaded successfully!');
+                return true;
             } catch (err) {
-                console.debug('Copy failed', err);
-                if (onFallback) onFallback();
+                console.debug('Failed to parse setup hash:', err);
+                showHashFeedback('Invalid or corrupted setup code.', true);
+                return false;
             }
-            document.body.removeChild(textarea);
         }
 
         if (saveSetupBtn) {
@@ -4159,47 +4182,36 @@
                 if (setupHashInput) {
                     setupHashInput.value = hash;
                 }
-                copyTextToClipboard(
-                    hash,
-                    () => {
-                        if (saveSetupBtnText) saveSetupBtnText.textContent = 'Short Code Copied!';
-                        saveSetupBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
-                        showHashFeedback(`Short code (${hash.length} chars) copied!`, false);
-                        setTimeout(() => {
-                            if (saveSetupBtnText) saveSetupBtnText.textContent = 'Copy Short Code';
-                            saveSetupBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
-                        }, 2000);
-                    },
-                    () => showHashFeedback('Code generated in box below!', false)
-                );
+                copyTextToClipboard(hash);
+                if (saveSetupBtnText) saveSetupBtnText.textContent = 'Copied Code!';
+                saveSetupBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                showHashFeedback('Short setup code copied to clipboard!');
+                setTimeout(() => {
+                    if (saveSetupBtnText) saveSetupBtnText.textContent = 'Copy Code';
+                    saveSetupBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                }, 2000);
             });
         }
 
         if (shareLinkBtn) {
             shareLinkBtn.addEventListener('click', () => {
                 const hash = generateSetupHash();
-                const shareUrl = generateShareableUrl(hash);
+                const baseUrl = window.location.href.split('?')[0].split('#')[0];
+                const shareUrl = `${baseUrl}?s=${hash}`;
                 if (setupHashInput) {
                     setupHashInput.value = shareUrl;
                 }
+                copyTextToClipboard(shareUrl);
                 try {
-                    window.history.replaceState(null, '', `?s=${encodeURIComponent(hash)}`);
-                } catch (err) {
-                    // Ignore history.replaceState restrictions in sandboxed iframes
-                }
-                copyTextToClipboard(
-                    shareUrl,
-                    () => {
-                        if (shareLinkBtnText) shareLinkBtnText.textContent = 'Share Link Copied!';
-                        shareLinkBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
-                        showHashFeedback('Shareable link copied to clipboard!', false);
-                        setTimeout(() => {
-                            if (shareLinkBtnText) shareLinkBtnText.textContent = 'Copy Shareable Link';
-                            shareLinkBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
-                        }, 2000);
-                    },
-                    () => showHashFeedback('Shareable link generated in box below!', false)
-                );
+                    window.history.replaceState(null, '', `?s=${hash}`);
+                } catch (e) {}
+                if (shareLinkBtnText) shareLinkBtnText.textContent = 'Link Copied!';
+                shareLinkBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                showHashFeedback('Shareable link copied to clipboard!');
+                setTimeout(() => {
+                    if (shareLinkBtnText) shareLinkBtnText.textContent = 'Copy Shareable Link';
+                    shareLinkBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                }, 2000);
             });
         }
 
@@ -4217,6 +4229,125 @@
                 }
             });
         }
+
+        /* ==========================================
+         * ARTICLE VIEW & URL ROUTING
+         * ========================================== */
+        function showArticleView(updateUrl = true) {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+            mainContainer.classList.add('hidden');
+            articleView.classList.remove('hidden');
+            articleView.classList.add('flex');
+            if (updateUrl) {
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('view', 'learn-more');
+                    window.history.pushState({ view: 'learn-more' }, '', url.toString());
+                } catch (e) {
+                    try { window.location.hash = 'learn-more'; } catch (err) {}
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showMainSequencerView(updateUrl = true) {
+            articleView.classList.add('hidden');
+            articleView.classList.remove('flex');
+            mainContainer.classList.remove('hidden');
+            if (updateUrl) {
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.delete('view');
+                    if (url.hash === '#learn-more' || url.hash === '#learn') {
+                        url.hash = '';
+                    }
+                    window.history.pushState({ view: 'main' }, '', url.toString());
+                } catch (e) {
+                    try {
+                        if (window.location.hash === '#learn-more' || window.location.hash === '#learn') {
+                            window.location.hash = '';
+                        }
+                    } catch (err) {}
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function isUrlRequestingLearnMore() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const viewParam = (params.get('view') || params.get('page') || '').toLowerCase();
+                if (viewParam === 'learn-more' || viewParam === 'learnmore' || viewParam === 'learn' || viewParam === 'guide' || params.has('learn-more') || params.has('learn')) {
+                    return true;
+                }
+                const hashVal = (window.location.hash || '').replace(/^#\/?/, '').toLowerCase();
+                if (hashVal === 'learn-more' || hashVal === 'learnmore' || hashVal === 'learn' || hashVal === 'guide') {
+                    return true;
+                }
+            } catch (e) {}
+            return false;
+        }
+
+        window.addEventListener('popstate', () => {
+            if (isUrlRequestingLearnMore()) {
+                showArticleView(false);
+            } else {
+                showMainSequencerView(false);
+            }
+        });
+
+        window.addEventListener('hashchange', () => {
+            if (isUrlRequestingLearnMore()) {
+                showArticleView(false);
+            } else if (!articleView.classList.contains('hidden')) {
+                showMainSequencerView(false);
+            }
+        });
+
+        if (learnMoreBtn) {
+            learnMoreBtn.addEventListener('click', () => showArticleView(true));
+        }
+        if (backToNomeTopBtn) {
+            backToNomeTopBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
+        if (backToNomeBottomBtn) {
+            backToNomeBottomBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
+
+        document.querySelectorAll('.preset-hash-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const presetHash = btn.getAttribute('data-preset-hash');
+                if (presetHash) {
+                    showMainSequencerView(true);
+                    if (setupHashInput) setupHashInput.value = presetHash;
+                    loadSetupFromHash(presetHash);
+                }
+            });
+        });
+
+        function setupEmailCopyButton(btnId, textId, displayId) {
+            const btn = document.getElementById(btnId);
+            const txt = document.getElementById(textId);
+            const disp = document.getElementById(displayId);
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                const fullEmail = "josiahghudock" + "@" + "gmail.com";
+                if (disp) disp.textContent = fullEmail;
+                copyTextToClipboard(fullEmail);
+                if (txt) txt.textContent = "Copied!";
+                btn.classList.add('text-emerald-400', 'border-emerald-500/50');
+                setTimeout(() => {
+                    if (txt) txt.textContent = "Copy Email";
+                    btn.classList.remove('text-emerald-400', 'border-emerald-500/50');
+                }, 2000);
+            });
+        }
+
+        setupEmailCopyButton('copyEmailBtn', 'copyEmailText', 'obfuscatedEmailDisplay');
+        setupEmailCopyButton('articleCopyEmailBtn', 'articleCopyEmailText', 'articleObfuscatedEmailDisplay');
 
         function getSegmentFromEvent(e) {
             const rect = canvas.getBoundingClientRect();
@@ -4279,6 +4410,11 @@
         }
 
         canvas.addEventListener('click', (e) => {
+            if (state.ultraNerdMode && state.nerdViewMode === 'circle') {
+                // Clicking to edit in Ultra-Nerd Circle View returns to Line View
+                setNerdViewMode('line');
+                return;
+            }
             if (state.interactionMode === 'subdivision') {
                 return; 
             }
@@ -4295,6 +4431,7 @@
         });
 
         canvas.addEventListener('mousemove', (e) => {
+            if (state.ultraNerdMode) return;
             const seg = getSegmentFromEvent(e);
             const newHoverKey = (seg && !seg.isPoly) ? seg.segKey : null;
             const newPolyIdx = (seg && seg.isPoly) ? seg.polyIndex : null;
@@ -4312,16 +4449,18 @@
             initSegments();
             drawStaticSequencer();
 
-            // Automatically check if the page was opened with a rhythm link (?s=... or #N2-... / #NOME1-...)
             try {
                 const params = new URLSearchParams(window.location.search);
-                const urlSetup = params.get('s') || params.get('setup') || (window.location.hash ? window.location.hash.slice(1) : '');
-                if (urlSetup && (urlSetup.startsWith('N2-') || urlSetup.startsWith('NOME1-'))) {
-                    if (setupHashInput) setupHashInput.value = urlSetup;
-                    loadSetupFromHash(urlSetup);
+                const sharedSetup = params.get('s') || (window.location.hash.length > 3 ? window.location.hash.slice(1) : '');
+                if (sharedSetup && (sharedSetup.startsWith('N2-') || sharedSetup.startsWith('NOME1-'))) {
+                    if (setupHashInput) setupHashInput.value = sharedSetup;
+                    loadSetupFromHash(sharedSetup);
+                }
+                if (isUrlRequestingLearnMore()) {
+                    showArticleView(false);
                 }
             } catch (e) {
-                console.debug('Auto-load URL check skipped:', e);
+                console.debug('Auto-load URL check error:', e);
             }
         };
     </script>
