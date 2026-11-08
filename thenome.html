@@ -113,7 +113,9 @@
             <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
             <span id="nerdModeBadge" class="hidden px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded-full">Ultra-Nerd</span>
         </div>
-        <p id="headerSubtitle" class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
+        <div class="flex items-center justify-center gap-2 flex-wrap">
+            <p id="headerSubtitle" class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
+        </div>
         <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
             <button id="resetStandardBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -135,13 +137,17 @@
     <main id="mainContainer" class="w-full max-w-xl flex flex-col items-center justify-center my-auto py-6 transition-all duration-300">
         
         <!-- Mode & View Switcher -->
-        <div id="interactionModeWrapper" class="w-full flex flex-wrap justify-between items-center gap-2 px-2 mb-3 text-xs hidden">
-            <div class="flex items-center gap-2">
+        <div id="interactionModeWrapper" class="w-full flex flex-wrap justify-between items-center gap-3 px-2 mb-3 text-xs hidden">
+            <div id="modeToggleGroup" class="flex items-center gap-2 hidden">
                 <span class="text-slate-400 font-medium">Mode:</span>
                 <div class="inline-flex p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md">
                     <button id="modeToggleBtn" class="px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm">Toggle Mode</button>
                     <button id="modeSubdivBtn" class="px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all">Subdivision Mode</button>
                 </div>
+            </div>
+
+            <div id="loadedSetupNameBadge" class="hidden text-sky-400 text-sm md:text-base font-bold tracking-wider mx-auto text-center w-full md:w-auto mt-2 md:mt-0 order-last md:order-none">
+                <span id="loadedSetupNameText"></span>
             </div>
 
             <!-- Ultra-Nerd Line vs Circle View Switcher -->
@@ -457,12 +463,15 @@
                     <span class="font-semibold uppercase tracking-wider text-slate-400">Save & Share Setup</span>
                     <span id="hashFeedbackMsg" class="text-[11px] font-medium text-emerald-400 hidden"></span>
                 </div>
+                <div class="flex items-center gap-2">
+                    <input id="setupNameInput" type="text" maxlength="60" placeholder="Optional setup name (e.g. My 7/8 Groove)..." class="w-full bg-[#16161c] border border-borderSubtle rounded-xl px-3 py-2 text-slate-200 placeholder-slate-500 text-[11px] focus:outline-none focus:border-accent">
+                </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button id="saveSetupBtn" type="button" class="flex-1 sm:flex-initial px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                         </svg>
-                        <span id="saveSetupBtnText">Copy Code</span>
+                        <span id="saveSetupBtnText">Save & Copy Code</span>
                     </button>
                     <button id="shareLinkBtn" type="button" class="flex-1 sm:flex-initial px-3.5 py-2 bg-[#1a1a22] hover:bg-[#22222c] border border-purple-500/40 text-purple-300 hover:text-white font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -483,14 +492,22 @@
 
         <!-- About Section -->
         <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-4 text-xs">
-            <div class="flex items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
                 <h2 class="text-sm font-bold tracking-wider text-slate-200 uppercase">About The 'Nome</h2>
-                <button id="learnMoreBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    <span>Learn More</span>
-                </button>
+                <div class="flex items-center gap-2">
+                    <button id="examplesTabBtn" type="button" class="px-3.5 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 hover:text-white font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                        </svg>
+                        <span>Examples</span>
+                    </button>
+                    <button id="learnMoreBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <span>Learn More</span>
+                    </button>
+                </div>
             </div>
             <p class="text-slate-400 leading-relaxed">
                 The 'Nome is a free user-friendly online metronome with advanced capabilities. It is built specifically for practicing odd-time, polyrhythmic, odd-tuplet, or nested tuplet rhythms. Ultra-Nerd mode allows for "irrational" time signatures and extremely precise sequencing. If you found this tool useful, have questions, or suggestions please let me know!
@@ -508,17 +525,22 @@
     <!-- Learn More Article View -->
     <article id="articleView" class="hidden w-full max-w-3xl my-auto py-6 flex-col gap-6 text-slate-300">
         <!-- Sticky / Top Navigation Bar -->
-        <div class="flex items-center justify-between bg-cardBg border border-borderSubtle rounded-2xl px-5 py-4 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-cardBg border border-borderSubtle rounded-2xl px-5 py-4 shadow-xl">
             <div class="flex items-center gap-2.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_8px_rgba(56,189,248,0.6)]"></span>
-                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome — Guide & Examples</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome: user guide</span>
             </div>
-            <button id="backToNomeTopBtn" type="button" class="px-3.5 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                <span>Back to The 'Nome</span>
-            </button>
+            <div class="flex items-center gap-2">
+                <button id="articleToExamplesBtn" type="button" class="px-3.5 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 hover:text-white text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                    <span>View Examples Library</span>
+                </button>
+                <button id="backToNomeTopBtn" type="button" class="px-3.5 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to The 'Nome</span>
+                </button>
+            </div>
         </div>
 
         <!-- Main Article Body -->
@@ -576,7 +598,7 @@
                         By allowing uniform subdivision, you can further split each beat into your desired number of subdivisions. For instance, we can create 6/8 time signatures like this:
                     </p>
                     <div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjoyLCJzZSI6MSwic2MiOjMsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjp0cnVlLCIxXzFfMCI6dHJ1ZSwiMF8yXzAiOnRydWUsIjFfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8zXzAiOnRydWV9LCJhZGUiOjEsInBicyI6eyIwIjp7InBpdGNoIjo1NzUsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W10sImJjZSI6MCwiYmNzIjp7fSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjI1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/40 text-sky-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <button type="button" data-preset-name="6/8 Time Signature" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjoyLCJzZSI6MSwic2MiOjMsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjp0cnVlLCIxXzFfMCI6dHJ1ZSwiMF8yXzAiOnRydWUsIjFfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8zXzAiOnRydWV9LCJhZGUiOjEsInBicyI6eyIwIjp7InBpdGNoIjo1NzUsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W10sImJjZSI6MCwiYmNzIjp7fSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjI1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/40 text-sky-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open in The 'Nome: 6/8 Time Signature</span>
                         </button>
@@ -590,14 +612,14 @@
                         Instead of playing strictly "on-the-grid", many musicians intentionally "swing" their rhythms by playing slightly before or after where a note should lie mathematically. The 'Nome is built for musicians who want to use a more precise swing through use of various tuplets. There are several degrees of swing that musicians can use in their performance. For example, consider the difference between this triplet swing
                     </p>
                     <div class="flex flex-wrap items-center gap-2.5 my-1">
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjo0LCJzZSI6MSwic2MiOjMsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIyXzFfMCI6ZmFsc2UsIjNfMV8wIjpmYWxzZSwiMF8yXzAiOmZhbHNlLCIxXzJfMCI6dHJ1ZSwiMl8yXzAiOmZhbHNlLCIzXzJfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo1OTcsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fX0sIm5iIjpbXSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDIwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6Mzk2LCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/40 text-pink-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <button type="button" data-preset-name="Triplet Swing" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjo0LCJzZSI6MSwic2MiOjMsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIyXzFfMCI6ZmFsc2UsIjNfMV8wIjpmYWxzZSwiMF8yXzAiOmZhbHNlLCIxXzJfMCI6dHJ1ZSwiMl8yXzAiOmZhbHNlLCIzXzJfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo1OTcsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fX0sIm5iIjpbXSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDIwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6Mzk2LCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/40 text-pink-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open in The 'Nome: Triplet Swing</span>
                         </button>
                     </div>
                     <p class="text-slate-300">and this septuplet swing:</p>
                     <div class="flex flex-wrap items-center gap-2.5 my-1">
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjo0LCJzZSI6MSwic2MiOjcsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIyXzFfMCI6ZmFsc2UsIjNfMV8wIjpmYWxzZSwiMF8yXzAiOmZhbHNlLCIxXzJfMCI6ZmFsc2UsIjJfMl8wIjpmYWxzZSwiM18yXzAiOmZhbHNlLCIwXzNfMCI6ZmFsc2UsIjFfM18wIjpmYWxzZSwiMl8zXzAiOmZhbHNlLCIzXzNfMCI6ZmFsc2UsIjBfNF8wIjpmYWxzZSwiMV80XzAiOnRydWUsIjJfNF8wIjpmYWxzZSwiM180XzAiOnRydWUsIjBfNV8wIjpmYWxzZSwiMV81XzAiOmZhbHNlLCIyXzVfMCI6ZmFsc2UsIjNfNV8wIjpmYWxzZSwiMF82XzAiOmZhbHNlLCIxXzZfMCI6ZmFsc2UsIjJfNl8wIjpmYWxzZSwiM182XzAiOmZhbHNlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo1OTcsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0MjAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozOTYsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/40 text-pink-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <button type="button" data-preset-name="Septuplet Swing" data-preset-hash="NOME1-eyJ1IjowLCJiIjoxMDAsInRiIjo0LCJzZSI6MSwic2MiOjcsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWUsIjBfMV8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIyXzFfMCI6ZmFsc2UsIjNfMV8wIjpmYWxzZSwiMF8yXzAiOmZhbHNlLCIxXzJfMCI6ZmFsc2UsIjJfMl8wIjpmYWxzZSwiM18yXzAiOmZhbHNlLCIwXzNfMCI6ZmFsc2UsIjFfM18wIjpmYWxzZSwiMl8zXzAiOmZhbHNlLCIzXzNfMCI6ZmFsc2UsIjBfNF8wIjpmYWxzZSwiMV80XzAiOnRydWUsIjJfNF8wIjpmYWxzZSwiM180XzAiOnRydWUsIjBfNV8wIjpmYWxzZSwiMV81XzAiOmZhbHNlLCIyXzVfMCI6ZmFsc2UsIjNfNV8wIjpmYWxzZSwiMF82XzAiOmZhbHNlLCIxXzZfMCI6ZmFsc2UsIjJfNl8wIjpmYWxzZSwiM182XzAiOmZhbHNlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo1OTcsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjU5Nywidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NTk3LCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0MjAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozOTYsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/40 text-pink-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open in The 'Nome: Septuplet Swing</span>
                         </button>
@@ -611,7 +633,7 @@
                         The 'Nome is a great tool for practicing transitioning between different note rates. With Custom Subdivision, you can set a different subdivision for each beat. For example, you could practice "speeding up" in a metric way by playing cycling through the tuplets:
                     </p>
                     <div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo1NywidGIiOjgsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMSI6MiwiMiI6MywiMyI6NCwiNCI6NSwiNSI6NiwiNiI6NywiNyI6OH0sInNzYyI6e30sImJzIjp7IjBfMF8wIjp0cnVlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjp0cnVlLCI0XzBfMCI6dHJ1ZSwiNV8wXzAiOnRydWUsIjZfMF8wIjp0cnVlLCI3XzBfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjJfMV8wIjp0cnVlLCIyXzJfMCI6dHJ1ZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzNfMCI6dHJ1ZSwiNF8xXzAiOnRydWUsIjRfMl8wIjp0cnVlLCI0XzNfMCI6dHJ1ZSwiNF80XzAiOnRydWUsIjVfMV8wIjp0cnVlLCI1XzJfMCI6dHJ1ZSwiNV8zXzAiOnRydWUsIjVfNF8wIjp0cnVlLCI1XzVfMCI6dHJ1ZSwiNl8xXzAiOnRydWUsIjZfMl8wIjp0cnVlLCI2XzNfMCI6dHJ1ZSwiNl80XzAiOnRydWUsIjZfNV8wIjp0cnVlLCI2XzZfMCI6dHJ1ZSwiN18xXzAiOnRydWUsIjdfMl8wIjp0cnVlLCI3XzNfMCI6dHJ1ZSwiN180XzAiOnRydWUsIjdfNV8wIjp0cnVlLCI3XzZfMCI6dHJ1ZSwiN183XzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbXSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <button type="button" data-preset-name="Cycling Through Tuplets (1 to 8)" data-preset-hash="NOME1-eyJ1IjowLCJiIjo1NywidGIiOjgsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMSI6MiwiMiI6MywiMyI6NCwiNCI6NSwiNSI6NiwiNiI6NywiNyI6OH0sInNzYyI6e30sImJzIjp7IjBfMF8wIjp0cnVlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjp0cnVlLCI0XzBfMCI6dHJ1ZSwiNV8wXzAiOnRydWUsIjZfMF8wIjp0cnVlLCI3XzBfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjJfMV8wIjp0cnVlLCIyXzJfMCI6dHJ1ZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzNfMCI6dHJ1ZSwiNF8xXzAiOnRydWUsIjRfMl8wIjp0cnVlLCI0XzNfMCI6dHJ1ZSwiNF80XzAiOnRydWUsIjVfMV8wIjp0cnVlLCI1XzJfMCI6dHJ1ZSwiNV8zXzAiOnRydWUsIjVfNF8wIjp0cnVlLCI1XzVfMCI6dHJ1ZSwiNl8xXzAiOnRydWUsIjZfMl8wIjp0cnVlLCI2XzNfMCI6dHJ1ZSwiNl80XzAiOnRydWUsIjZfNV8wIjp0cnVlLCI2XzZfMCI6dHJ1ZSwiN18xXzAiOnRydWUsIjdfMl8wIjp0cnVlLCI3XzNfMCI6dHJ1ZSwiN180XzAiOnRydWUsIjdfNV8wIjp0cnVlLCI3XzZfMCI6dHJ1ZSwiN183XzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbXSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open in The 'Nome: Cycling Through Tuplets (1 to 8)</span>
                         </button>
@@ -620,7 +642,7 @@
                         A nested tuplet is just "a tuplet within a tuplet". Technically speaking, most musicians are very comfortable with at least one type of nested tuplet. Indeed, sixteenth notes can be thought of as "4-lets" or equivalently as "2-lets" nested inside "2-lets". Likewise, sextuplets can be thought of as "3-lets" nested within "2-lets". Check it out here!:
                     </p>
                     <div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6NCwiMSI6MiwiMiI6NiwiMyI6Mn0sInNzYyI6eyIxXzAiOjIsIjFfMSI6PiwiM18wIjozLCIzXzEiOjN9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjFfMF8xIjp0cnVlLCIxXzFfMSI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6dHJ1ZSwiMl80XzAiOnRydWUsIjJfNV8wIjp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <button type="button" data-preset-name="Nested Tuplets Comparison" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6NCwiMSI6MiwiMiI6NiwiMyI6Mn0sInNzYyI6eyIxXzAiOjIsIjFfMSI6MiwiM18wIjozLCIzXzEiOjN9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjFfMF8xIjp0cnVlLCIxXzFfMSI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6dHJ1ZSwiMl80XzAiOnRydWUsIjJfNV8wIjp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open in The 'Nome: Nested Tuplets Comparison</span>
                         </button>
@@ -640,7 +662,7 @@
                                 </a>
                                 <span> from <strong>Zappa's Black Page</strong>:</span>
                             </div>
-                            <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo2MCwidGIiOjE2LCJzZSI6MCwic2MiOjEsImNlIjoxLCJwZSI6MSwicGIiOjgsInBzIjp7InBvbHlfMCI6dHJ1ZSwicG9seV8xIjp0cnVlLCJwb2x5XzIiOnRydWUsInBvbHlfMyI6dHJ1ZSwicG9seV80Ijp0cnVlLCJwb2x5XzUiOnRydWUsInBvbHlfNiI6dHJ1ZSwicG9seV83Ijp0cnVlLCJwb2x5XzgiOnRydWUsIm5lcnRSZXBlYXQiOnsic3RhcnRJZHgiOm51bGwsImVuZElkeCI6bnVsbCwiY291bnQiOjJ9fSwiYnNjIjp7IjEiOjIsIjIiOjIsIjMiOjUsIjQiOjUsIjUiOjUsIjYiOjEsIjgiOjIsIjkiOjIsIjEwIjoxMCwiMTEiOjExLCIxMiI6MywiMTMiOjN9LCJzc2MiOnsiMV8wIjo0LCIxXzEiOjQsIjJfMCI6MywiMl8xIjo1LCI4XzEiOjUsIjlfMCI6NSwiOV8xIjo0fSwiYnMiOnsiMF8wXzAiOmZhbHNlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjpmYWxzZSwiNF8wXzAiOnRydWUsIjVfMF8wIjp0cnVlLCI2XzBfMCI6ZmFsc2UsIjdfMF8wIjpmYWxzZSwiMV8xXzAiOmZhbHNlLCIxXzJfMCI6dHJ1ZSwiMV8zXzAiOnRydWUsIjFfNF8wIjp0cnVlLCIxXzVfMCI6dHJ1ZSwiMV82XzAiOnRydWUsIjFfN18wIjp0cnVlLCIxXzBfMSI6ZmFsc2UsIjFfMF8yIjpmYWxzZSwiMV8wXzMiOmZhbHNlLCIxXzFfMSI6dHJ1ZSwiMV8xXzIiOnRydWUsIjFfMV8zIjp0cnVlLCIyXzFfMCI6dHJ1ZSwiMl8wXzEiOnRydWUsIjJfMF8yIjp0cnVlLCIyXzFfMSI6dHJ1ZSwiMl8xXzIiOnRydWUsIjJfMV8zIjp0cnVlLCIyXzFfNCI6dHJ1ZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzNfMCI6dHJ1ZSwiM180XzAiOnRydWUsIjRfMV8wIjp0cnVlLCI0XzJfMCI6dHJ1ZSwiNF8zXzAiOnRydWUsIjRfNF8wIjp0cnVlLCI0XzVfMCI6dHJ1ZSwiNV8xXzAiOnRydWUsIjVfMl8wIjp0cnVlLCI1XzNfMCI6dHJ1ZSwiNV80XzAiOnRydWUsIjZfMV8wIjp0cnVlLCI2XzJfMCI6dHJ1ZSwiNl8zXzAiOnRydWUsIjZfNF8wIjp0cnVlLCI2XzVfMCI6dHJ1ZSwiOF8wXzAiOmZhbHNlLCI5XzBfMCI6dHJ1ZSwiMTBfMF8wIjp0cnVlLCIxMV8wXzAiOnRydWUsIjEyXzBfMCI6dHJ1ZSwiMTNfMF8wIjpmYWxzZSwiMTRfMF8wIjp0cnVlLCIxNV8wXzAiOmZhbHNlLCI4XzFfMCI6ZmFsc2UsIjhfMV8xIjp0cnVlLCI4XzFfMiI6dHJ1ZSwiOF8xXzMiOnRydWUsIjhfMV80Ijp0cnVlLCI5XzFfMCI6dHJ1ZSwiOV8yXzAiOnRydWUsIjlfM18wIjp0cnVlLCI5XzBfMSI6dHJ1ZSwiOV8wXzIiOnRydWUsIjlfMF8zIjp0cnVlLCI5XzBfNCI6dHJ1ZSwiOV8xXzEiOnRydWUsIjlfMV8yIjp0cnVlLCI5XzFfMyI6dHJ1ZSwiMTBfMV8wIjp0cnVlLCIxMF8yXzAiOnRydWUsIjEwXzNfMCI6dHJ1ZSwiMTBfNF8wIjp0cnVlLCIxMF81XzAiOnRydWUsIjEwXzZfMCI6dHJ1ZSwiMTBfN18wIjp0cnVlLCIxMF84XzAiOnRydWUsIjEwXzlfMCI6dHJ1ZSwiMTFfMV8wIjp0cnVlLCIxMV8yXzAiOnRydWUsIjExXzNfMCI6dHJ1ZSwiMTFfNF8wIjp0cnVlLCIxMV81XzAiOnRydWUsIjExXzZfMCI6dHJ1ZSwiMTEsN18wIjp0cnVlLCIxMV84XzAiOnRydWUsIjExXzlfMCI6dHJ1ZSwiMTEsMTBfMCI6dHJ1ZSwiMTJfMV8wIjpmYWxzZSwiMTJfMl8wIjp0cnVlLCIxM18xXzAiOnRydWUsIjEzXzJfMCI6ZmFsc2UsIjEzXzNfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0siOSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <button type="button" data-preset-name="The Black Page" data-preset-hash="NOME1-eyJ1IjowLCJiIjo2MCwidGIiOjE2LCJzZSI6MCwic2MiOjEsImNlIjoxLCJwZSI6MSwicGIiOjgsInBzIjp7InBvbHlfMCI6dHJ1ZSwicG9seV8xIjp0cnVlLCJwb2x5XzIiOnRydWUsInBvbHlfMyI6dHJ1ZSwicG9seV80Ijp0cnVlLCJwb2x5XzUiOnRydWUsInBvbHlfNiI6dHJ1ZSwicG9seV83Ijp0cnVlLCJwb2x5XzgiOnRydWV9LCJic2MiOnsiMSI6MiwiMiI6MiwiMyI6NSwiNCI6NSwiNSI6NSwiNiI6MSwiOCI6MiwiOSI6MiwiMTAiOjEwLCIxMSI6MTEsIjEyIjozLCIxMyI6M30sInNzYyI6eyIxXzAiOjQsIjFfMSI6NCwiMl8wIjozLCIyXzEiOjUsIjhfMSI6NSwiOV8wIjo1LCI5XzEiOjR9LCJicyI6eyIwXzBfMCI6ZmFsc2UsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOmZhbHNlLCI0XzBfMCI6dHJ1ZSwiNV8wXzAiOnRydWUsIjZfMF8wIjpmYWxzZSwiN18wXzAiOmZhbHNlLCIxXzFfMCI6ZmFsc2UsIjFfMl8wIjp0cnVlLCIxXzNfMCI6dHJ1ZSwiMV80XzAiOnRydWUsIjFfNV8wIjp0cnVlLCIxXzZfMCI6dHJ1ZSwiMV83XzAiOnRydWUsIjFfMF8xIjpmYWxzZSwiMV8wXzIiOmZhbHNlLCIxXzBfMyI6ZmFsc2UsIjFfMV8xIjp0cnVlLCIxXzFfMiI6dHJ1ZSwiMV8xXzMiOnRydWUsIjJfMV8wIjp0cnVlLCIyXzBfMSI6dHJ1ZSwiMl8wXzIiOnRydWUsIjJfMV8xIjp0cnVlLCIyXzFfMiI6dHJ1ZSwiMl8xXzMiOnRydWUsIjJfMV80Ijp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfM18wIjp0cnVlLCIzXzRfMCI6dHJ1ZSwiNF8xXzAiOnRydWUsIjRfMl8wIjp0cnVlLCI0XzNfMCI6dHJ1ZSwiNF80XzAiOnRydWUsIjRfNV8wIjp0cnVlLCI1XzFfMCI6dHJ1ZSwiNV8yXzAiOnRydWUsIjVfM18wIjp0cnVlLCI1XzRfMCI6dHJ1ZSwiNl8xXzAiOnRydWUsIjZfMl8wIjp0cnVlLCI2XzNfMCI6dHJ1ZSwiNl80XzAiOnRydWUsIjZfNV8wIjp0cnVlLCI4XzBfMCI6ZmFsc2UsIjlfMF8wIjp0cnVlLCIxMF8wXzAiOnRydWUsIjExXzBfMCI6dHJ1ZSwiMTJfMF8wIjp0cnVlLCIxM18wXzAiOmZhbHNlLCIxNF8wXzAiOnRydWUsIjE1XzBfMCI6ZmFsc2UsIjhfMV8wIjpmYWxzZSwiOF8xXzEiOnRydWUsIjhfMV8yIjp0cnVlLCI4XzFfMyI6dHJ1ZSwiOF8xXzQiOnRydWUsIjlfMV8wIjp0cnVlLCI5XzJfMCI6dHJ1ZSwiOV8zXzAiOnRydWUsIjlfMF8xIjp0cnVlLCI5XzBfMiI6dHJ1ZSwiOV8wXzMiOnRydWUsIjlfMF80Ijp0cnVlLCI5XzFfMSI6dHJ1ZSwiOV8xXzIiOnRydWUsIjlfMV8zIjp0cnVlLCIxMF8xXzAiOnRydWUsIjEwXzJfMCI6dHJ1ZSwiMTBfM18wIjp0cnVlLCIxMF80XzAiOnRydWUsIjEwXzVfMCI6dHJ1ZSwiMTBfNl8wIjp0cnVlLCIxMF83XzAiOnRydWUsIjEwXzhfMCI6dHJ1ZSwiMTBfOV8wIjp0cnVlLCIxMV8xXzAiOnRydWUsIjExXzJfMCI6dHJ1ZSwiMTFfM18wIjp0cnVlLCIxMV80XzAiOnRydWUsIjExXzVfMCI6dHJ1ZSwiMTFfNl8wIjp0cnVlLCIxMV83XzAiOnRydWUsIjExXzhfMCI6dHJ1ZSwiMTFfOV8wIjp0cnVlLCIxMV8xMF8wIjp0cnVlLCIxMl8xXzAiOmZhbHNlLCIxMl8yXzAiOnRydWUsIjEzXzFfMCI6dHJ1ZSwiMTNfMl8wIjpmYWxzZSwiMTNfM18wIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjUiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI3Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjgiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 <span>Load Preset</span>
                             </button>
@@ -654,7 +676,7 @@
                                 </a>
                                 <span> by <strong>Car Bomb</strong>:</span>
                             </div>
-                            <button type="button" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MSwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJucmV0UmVwZWF0Ijp7InN0YXJ0SWR4IjpudWxsLCJlbmRJZHgiOm51bGwsImNvdW50IjoyfSwiYnNjIjp7IjAiOjMsIjEiOjUsIjIiOjUsIjMiOjJ9LCJzc2MiOnsiMF8wIjo0LCIwXzEiOjQsIjFfMCI6MiwiMV8xIjoyLCIxXzIiOjIsIjFfMyI6MiwiMV80IjoyLCIyXzAiOjIsIjJfMSI6MiwiMl8yIjoyLCIyXzMiOjIsIjJfNCI6MiwiM18wIjo0LCIzXzEiOjR9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjpmYWxzZSwiMF8wXzEiOnRydWUsIjBfMF8yIjp0cnVlLCIwXzBfMyI6ZmFsc2UsIjBfMV8xIjp0cnVlLCIwXzFfMiI6dHJ1ZSwiMF8xXzMiOmZhbHNlLCIxXzFfMCI6dHJ1ZSwiMV8yXzAiOnRydWUsIjFfM18wIjp0cnVlLCIxXzRfMCI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6ZmFsc2UsIjJfNF8wIjpmYWxzZSwiMV8wXzEiOnRydWUsIjFfMF8yIjp0cnVlLCIxXzBfMyI6ZmFsc2UsIjFfMV8xIjpmYWxzZSwiMV8yXzEiOnRydWUsIjFfM18xIjpmYWxzZSwiMV80XzEiOnRydWUsIjJfMF8xIjpmYWxzZSwiMl8xXzEiOmZhbHNlLCIyXzJfMSI6ZmFsc2UsIjJfM18xIjpmYWxzZSwiMl80XzEiOmZhbHNlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18wXzMiOmZhbHNlLCIzXzBfNCI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlLCIzXzFfMyI6ZmFsc2V9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W10sImJjZSI6MCwiYmNzIjp7fSwiZGIiOnsidHlwZSI6InNxdWFyZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC4zNX0sInNiIjp5OnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <button type="button" data-preset-name="Naked Fuse" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MSwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6MywiMSI6NSwiMiI6NSwiMyI6Mn0sInNzYyI6eyIwXzAiOjQsIjBfMSI6NCwiMV8wIjoyLCIxXzEiOjIsIjFfMiI6MiwiMV8zIjoyLCIxXzQiOjIsIjJfMCI6MiwiMl8xIjoyLCIyXzIiOjIsIjJfMyI6MiwiMl80IjoyLCIzXzAiOjQsIjNfMSI6NH0sImJzIjp7IjBfMF8wIjp0cnVlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjp0cnVlLCIwXzFfMCI6dHJ1ZSwiMF8yXzAiOmZhbHNlLCIwXzBfMSI6dHJ1ZSwiMF8wXzIiOnRydWUsIjBfMF8zIjpmYWxzZSwiMF8xXzEiOnRydWUsIjBfMV8yIjp0cnVlLCIwXzFfMyI6ZmFsc2UsIjFfMV8wIjp0cnVlLCIxXzJfMCI6dHJ1ZSwiMV8zXzAiOnRydWUsIjFfNF8wIjp0cnVlLCIyXzFfMCI6dHJ1ZSwiMl8yXzAiOnRydWUsIjJfM18wIjpmYWxzZSwiMl80XzAiOmZhbHNlLCIxXzBfMSI6dHJ1ZSwiMV8wXzIiOnRydWUsIjFfMF8zIjpmYWxzZSwiMV8xXzEiOmZhbHNlLCIxXzJfMSI6dHJ1ZSwiMV8zXzEiOmZhbHNlLCIxXzRfMSI6dHJ1ZSwiMl8wXzEiOmZhbHNlLCIyXzFfMSI6dHJ1ZSwiMl8yXzEiOmZhbHNlLCIyXzNfMSI6ZmFsc2UsIjJfNF8xIjpmYWxzZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzBfMSI6dHJ1ZSwiM18wXzIiOnRydWUsIjNfMF8zIjpmYWxzZSwiM18wXzQiOnRydWUsIjNfMV8xIjp0cnVlLCIzXzFfMiI6dHJ1ZSwiM18xXzMiOmZhbHNlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJzcXVhcmUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuMzV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 <span>Load Preset</span>
                             </button>
@@ -704,13 +726,28 @@
                             </a>
                             <span> in <strong>Monomyth</strong> by Animals as Leaders:</span>
                         </div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNTAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI5Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjExIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjE0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W3siaWQiOjEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7InBvaW50ZXJzIjp7fSwiaWQiOjMsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjQsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjUsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWlffSx7ImlkIjo2LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo3LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo4LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6OSwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6MTAsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWlffSx7ImlkIjoxMSwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6MTIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWlffSx7ImlkIjoxMywibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6MTQsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjE1LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX1dLCJiY2UiOjEsImJjcyI6eyJjbGlja18wIjp0cnVlLCJjbGlja18xIjp0cnVlLCJjbGlja18yIjp0cnVlLCJjbGlja18zIjp0cnVlLCJjbGlja180Ijp0cnVlLCJjbGlja181Ijp0cnVlLCJjbGlja182Ijp0cnVlLCJjbGlja183Ijp0cnVlLCJjbGlja184Ijp0cnVlLCJjbGlja185Ijp0cnVlLCJjbGlja18xMCI6dHJ1ZSwiY2xpY2tfMTEiOnRydWV9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-name="Monomyth" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxNTAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI5Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjExIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjE0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W3siaWQiOjEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjozLCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo1LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6NiwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6NywibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6OCwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjksIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEwLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEyLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTMsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjE0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjoxNSwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZSwiY2xpY2tfNyI6dHJ1ZSwiY2xpY2tfOCI6dHJ1ZSwiY2xpY2tfOSI6dHJ1ZSwiY2xpY2tfMTAiOnRydWUsImNsaWNrXzExIjp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Monomyth Run</span>
                         </button>
                     </div>
 
-                    <!-- Example 2: Cool 7 -->
+                    <!-- Example 2: Dracul Gras -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
+                        <div class="text-xs text-slate-200">
+                            <a href="https://youtu.be/FUk72MwuWrs?si=J4bUd-D6oc_5iQZi" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
+                                <span>This song</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <span> in <strong>Dracul Gras</strong> by Periphery:</span>
+                        </div>
+                        <button type="button" data-preset-name="Dracul Gras" data-preset-hash="N2-eyJiIjoxMDQsInUiOjEsIm5iIjpbWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDUsNCwwLFsiMSJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs1LDUsNSwwLFsiMSIsIjQiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNCw1LDQsMCxbIjEiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDVdLFs1LDUsNSwwLFsiMSIsIjQiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDUsNCwwLFsiMSJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs1LDVdLFs0LDVdLFs1LDUsNSwwLFsiMSIsIjQiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDVdLFs2LDVdLFs0LDUsMV0sWzQsNSwxXSxbNCw1LDFdLFs0LDUsMV1dLCJucnMiOltbMyw3LDJdXSwiYmNlIjoxLCJiY3IiOjV9" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open Dracul Gras</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Example 3: Alon Tamir -->
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
                         <div class="text-xs text-slate-200">
                             <a href="https://youtu.be/Hmu8X0FmcHo?si=jlyM6N_SQaDwwBCh&t=166" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
@@ -719,7 +756,7 @@
                             </a>
                             <span> in <strong>Cool 7</strong> by Sungazer:</span>
                         </div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxMzgsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiciciOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjIsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjMsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjQsIm4iOjYsInIiOjQsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjEsInIiOjEsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZX0sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-name="Cool 7" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxMzgsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6MiwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6MywibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6NCwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6NSwibiI6MSwiciI6MSwieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX1dLCJiY2UiOjEsImJjcyI6eyJjbGlja18wIjp0cnVlLCJjbGlja18xIjp0cnVlLCJjbGlja18yIjp0cnVlLCJjbGlja18zIjp0cnVlLCJjbGlja180Ijp0cnVlLCJjbGlja181Ijp0cnVlLCJjbGlja182Ijp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Cool 7 Groove</span>
                         </button>
@@ -734,7 +771,7 @@
                             </a>
                             <span> in <strong>Lights Out</strong> by Car Bomb:</span>
                         </div>
-                        <button type="button" data-preset-hash="NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NiwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-name="Lights Out" data-preset-hash="NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Lights Out Groove</span>
                         </button>
@@ -749,7 +786,7 @@
                             </a>
                             <span> in <strong>The Unapologetic Yogi</strong> by Alon Tamir:</span>
                         </div>
-                        <button type="button" data-preset-hash="N2-eyJiIjo4NywidSI6MSwibmIiOltbNSw1XSxbNSw1XSxbNSw1XSxbNSw1XSxbMiw1XSxbMyw1XSxbNCw1LDNdLFs0LDUsM10sWzUsNSwzXSxbNSw1LDNdLFs0LDUsM10sWzQsNSwzXSxbMyw1XSxbMyw1XSxbMyw1XSxbNSw1XSxbNSw1XSxbNSw1XSxbNSw1XV0sInNiIjpbMSwzMzAsMC4yXX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
+                        <button type="button" data-preset-name="The Unapologetic Yogi" data-preset-hash="N2-eyJiIjoxMTYsInUiOjEsIm5iIjpbWzUsNV0sWzUsNV0sWzUsNV0sWzUsNV0sWzIsNV0sWzMsNV0sWzQsNSwzXSxbNCw1LDNdLFs1LDUsM10sWzUsNSwzXSxbNCw1LDNdLFs0LDUsM10sWzMsNV0sWzMsNV0sWzMsNV0sWzUsNV0sWzUsNV0sWzUsNV0sWzUsNV1dLCJzYiI6WzEsMzMwLDAuMl19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                             <span>Open Yogi Break</span>
                         </button>
@@ -762,6 +799,14 @@
                 <p class="text-slate-300">
                     <strong>Saving Your Work:</strong> If you want to save your settings for future reference, use the button to generate a hash and store it on your computer. You can paste it in and regenerate your settings in a future visit.
                 </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 my-2">
+                    <span class="text-purple-200 font-semibold tracking-wide">Explore various features through these examples!</span>
+                    <button id="articleInlineExamplesBtn" type="button" class="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 text-purple-300 hover:text-white font-bold rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+                        <span>Examples Library</span>
+                    </button>
+                </div>
 
                 <h2 class="text-lg md:text-xl font-bold text-slate-100 tracking-wide mt-2">In Closing</h2>
                 
@@ -789,6 +834,49 @@
             </div>
         </div>
     </article>
+
+    <!-- Examples Library View -->
+    <section id="examplesView" class="hidden w-full max-w-3xl my-auto py-6 flex-col gap-6 text-slate-300">
+        <!-- Top Navigation Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-cardBg border border-borderSubtle rounded-2xl px-5 py-4 shadow-xl">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.6)]"></span>
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome — Examples Library</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="examplesToLearnMoreBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95">
+                    <span>Learn More Guide</span>
+                </button>
+                <button id="backFromExamplesTopBtn" type="button" class="px-3.5 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to The 'Nome</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-cardBg border border-borderSubtle rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col gap-6">
+            <!-- Tag Filter Bar -->
+            <div id="examplesTagFilterBar" class="flex flex-wrap items-center gap-2">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Examples List Container -->
+            <div id="examplesListContainer" class="flex flex-col gap-3.5">
+                <!-- Populated dynamically -->
+            </div>
+
+            <div class="flex justify-center pt-4 border-t border-borderSubtle/60">
+                <button id="backFromExamplesBottomBtn" type="button" class="px-5 py-2.5 bg-[#1a1a22] hover:bg-accent border border-borderSubtle hover:border-sky-300 text-slate-300 hover:text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to The 'Nome</span>
+                </button>
+            </div>
+        </div>
+    </section>
 
     <!-- Subdivision Popup Modal (Used in both Circular & Ultra-nerd Mode) -->
     <div id="beatEditorPopup" class="fixed hidden bg-[#16161c] border border-borderSubtle rounded-xl p-3 shadow-2xl flex flex-col gap-2 z-50 text-xs w-52 backdrop-blur-md">
@@ -926,9 +1014,22 @@
 
         const mainContainer = document.getElementById('mainContainer');
         const articleView = document.getElementById('articleView');
+        const examplesView = document.getElementById('examplesView');
         const learnMoreBtn = document.getElementById('learnMoreBtn');
+        const examplesTabBtn = document.getElementById('examplesTabBtn');
+        const articleToExamplesBtn = document.getElementById('articleToExamplesBtn');
+        const examplesToLearnMoreBtn = document.getElementById('examplesToLearnMoreBtn');
         const backToNomeTopBtn = document.getElementById('backToNomeTopBtn');
         const backToNomeBottomBtn = document.getElementById('backToNomeBottomBtn');
+        const backFromExamplesTopBtn = document.getElementById('backFromExamplesTopBtn');
+        const backFromExamplesBottomBtn = document.getElementById('backFromExamplesBottomBtn');
+        const articleInlineExamplesBtn = document.getElementById('articleInlineExamplesBtn');
+        const examplesTagFilterBar = document.getElementById('examplesTagFilterBar');
+        const examplesListContainer = document.getElementById('examplesListContainer');
+
+        const loadedSetupNameBadge = document.getElementById('loadedSetupNameBadge');
+        const loadedSetupNameText = document.getElementById('loadedSetupNameText');
+        const setupNameInput = document.getElementById('setupNameInput');
 
         const nerdLineWrapper = document.getElementById('nerdLineWrapper');
         const nerdScrollContainer = document.getElementById('nerdScrollContainer');
@@ -1067,6 +1168,7 @@
         // Application State
         const state = {
             isPlaying: false,
+            setupName: '',
             ultraNerdMode: false,
             nerdViewMode: 'line', // 'line' or 'circle'
             bpm: 100,
@@ -2545,6 +2647,7 @@
         }
 
         function applyModeLayoutUI() {
+            const modeToggleGroup = document.getElementById('modeToggleGroup');
             if (state.ultraNerdMode) {
                 mainContainer.classList.remove('max-w-xl');
                 mainContainer.classList.add('max-w-3xl');
@@ -2559,6 +2662,7 @@
                 nerdBeatClickSection.classList.add('flex');
 
                 interactionModeWrapper.classList.remove('hidden');
+                if (modeToggleGroup) modeToggleGroup.classList.remove('hidden');
                 if (nerdViewModeWrapper) {
                     nerdViewModeWrapper.classList.remove('hidden');
                     nerdViewModeWrapper.classList.add('flex');
@@ -2590,12 +2694,18 @@
                 }
 
                 if (!state.customSubdivEnabled) {
-                    interactionModeWrapper.classList.add('hidden');
+                    if (modeToggleGroup) modeToggleGroup.classList.add('hidden');
                     state.interactionMode = 'toggle';
                     modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                     modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
                 } else {
+                    if (modeToggleGroup) modeToggleGroup.classList.remove('hidden');
+                }
+
+                if (state.customSubdivEnabled || state.setupName) {
                     interactionModeWrapper.classList.remove('hidden');
+                } else {
+                    interactionModeWrapper.classList.add('hidden');
                 }
 
                 ultraNerdBtnText.textContent = 'Activate Ultra-nerd Mode';
@@ -2939,7 +3049,7 @@
                     ctx.font = '600 13px Inter, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    const labelNum = state.ultraNerdMode ? (seg.blockIndex + 1) : (seg.beatIndex + 1);
+                    const labelNum = state.ultraNerdMode ? ((seg.seqStepIdx !== undefined ? seg.seqStepIdx : seg.blockIndex) + 1) : (seg.beatIndex + 1);
                     ctx.fillText(labelNum.toString(), seg.textX, seg.textY);
                 }
             }
@@ -3260,7 +3370,7 @@
                     ctx.font = '600 13px Inter, sans-serif';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    const labelNum = state.ultraNerdMode ? (seg.blockIndex + 1) : (seg.beatIndex + 1);
+                    const labelNum = state.ultraNerdMode ? ((seg.seqStepIdx !== undefined ? seg.seqStepIdx : seg.blockIndex) + 1) : (seg.beatIndex + 1);
                     ctx.fillText(labelNum.toString(), seg.textX, seg.textY);
                 }
             }
@@ -3377,12 +3487,16 @@
 
         subdivCheckbox.addEventListener('change', (e) => {
             state.subdivEnabled = e.target.checked;
+            const modeToggleGroup = document.getElementById('modeToggleGroup');
             if (state.subdivEnabled) {
                 if (state.customSubdivEnabled) {
                     state.customSubdivEnabled = false;
                     customSubdivCheckbox.checked = false;
                     customSubdivHint.classList.add('hidden');
-                    interactionModeWrapper.classList.add('hidden');
+                    if (!state.setupName) {
+                        interactionModeWrapper.classList.add('hidden');
+                    }
+                    if (modeToggleGroup) modeToggleGroup.classList.add('hidden');
                     state.interactionMode = 'toggle';
                     modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                     modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
@@ -3434,6 +3548,7 @@
 
         customSubdivCheckbox.addEventListener('change', (e) => {
             state.customSubdivEnabled = e.target.checked;
+            const modeToggleGroup = document.getElementById('modeToggleGroup');
             if (state.customSubdivEnabled) {
                 if (state.subdivEnabled) {
                     state.subdivEnabled = false;
@@ -3443,10 +3558,14 @@
                 }
                 customSubdivHint.classList.remove('hidden');
                 interactionModeWrapper.classList.remove('hidden');
+                if (modeToggleGroup) modeToggleGroup.classList.remove('hidden');
             } else {
                 customSubdivHint.classList.add('hidden');
                 beatEditorPopup.classList.add('hidden');
-                interactionModeWrapper.classList.add('hidden');
+                if (!state.setupName) {
+                    interactionModeWrapper.classList.add('hidden');
+                }
+                if (modeToggleGroup) modeToggleGroup.classList.add('hidden');
                 state.interactionMode = 'toggle';
                 modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                 modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
@@ -3543,12 +3662,14 @@
                 state.nerdSegments = [];
                 state.beatClickSegments = [];
                 state.beatClickStates = {};
+                updateSetupNameDisplay('');
                 ensurePerBeatSettings();
                 setNerdViewMode('line');
                 renderNerdLine();
                 return;
             }
 
+            updateSetupNameDisplay('');
             state.totalBeats = 4;
             beatsSlider.value = 4;
             beatsText.textContent = '4';
@@ -3582,7 +3703,9 @@
             advancedDownbeatPanel.classList.add('hidden');
             state.perBeatSettings = {};
 
+            const modeToggleGroup = document.getElementById('modeToggleGroup');
             interactionModeWrapper.classList.add('hidden');
+            if (modeToggleGroup) modeToggleGroup.classList.add('hidden');
             state.interactionMode = 'toggle';
             modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
             modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
@@ -3726,6 +3849,111 @@
         let hashFeedbackTimer = null;
         const WAVE_LIST = ['sine', 'triangle', 'square', 'sawtooth'];
 
+        const EXAMPLES_CATALOG = [
+            {
+                song: 'Cool 7',
+                artist: 'Sungazer',
+                youtubeUrl: 'https://youtu.be/Hmu8X0FmcHo?si=jlyM6N_SQaDwwBCh&t=166',
+                tags: ['polyrhythmic subdivs'],
+                hash: 'NOME1-eyJ1IjoxLCJiIjoxMzgsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6MiwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6MywibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6NCwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6NSwibiI6MSwiciI6MSwieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX1dLCJiY2UiOjEsImJjcyI6eyJjbGlja18wIjp0cnVlLCJjbGlja18xIjp0cnVlLCJjbGlja18yIjp0cnVlLCJjbGlja18zIjp0cnVlLCJjbGlja180Ijp0cnVlLCJjbGlja181Ijp0cnVlLCJjbGlja182Ijp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19'
+            },
+            {
+                song: 'The Unapologetic Yogi',
+                artist: 'Alon Tamir',
+                youtubeUrl: 'https://youtu.be/xTNVDKy98r0?si=5vFcM3bTazOZw0PN&t=165',
+                tags: ['tuplets', 'polyrhythmic subdivs'],
+                hash: 'N2-eyJiIjoxMTYsInUiOjEsIm5iIjpbWzUsNV0sWzUsNV0sWzUsNV0sWzUsNV0sWzIsNV0sWzMsNV0sWzQsNSwzXSxbNCw1LDNdLFs1LDUsM10sWzUsNSwzXSxbNCw1LDNdLFs0LDUsM10sWzMsNV0sWzMsNV0sWzMsNV0sWzUsNV0sWzUsNV0sWzUsNV0sWzUsNV1dLCJzYiI6WzEsMzMwLDAuMl19'
+            },
+            {
+                song: 'Monomyth',
+                artist: 'Animals as Leaders',
+                youtubeUrl: 'https://youtu.be/-xUqa6pYqnY?si=KmOeJbd2oRfGGOqA&t=85',
+                tags: ['polyrhythmic subdivs'],
+                hash: 'NOME1-eyJ1IjoxLCJiIjoxNTAsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI2Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjciOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI5Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjExIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjE0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX19LCJuYiI6W3siaWQiOjEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjIsIm4iOjMsInIiOjMsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjozLCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjo1LCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6NiwibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6NywibiI6MiwiciI6MywieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX0seyJpZCI6OCwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19LHsiaWQiOjksIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEwLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTEsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjEyLCJuIjozLCJyIjozLCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWUsIjNfMCI6dHJ1ZSwiNF8wIjp0cnVlfX0seyJpZCI6MTMsIm4iOjIsInIiOjMsIngiOjMsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZX19LHsiaWQiOjE0LCJuIjoyLCJyIjozLCJ4IjozLCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjp0cnVlLCIyXzAiOnRydWV9fSx7ImlkIjoxNSwibiI6MywiciI6MywieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjoxLCJiY3MiOnsiY2xpY2tfMCI6dHJ1ZSwiY2xpY2tfMSI6dHJ1ZSwiY2xpY2tfMiI6dHJ1ZSwiY2xpY2tfMyI6dHJ1ZSwiY2xpY2tfNCI6dHJ1ZSwiY2xpY2tfNSI6dHJ1ZSwiY2xpY2tfNiI6dHJ1ZSwiY2xpY2tfNyI6dHJ1ZSwiY2xpY2tfOCI6dHJ1ZSwiY2xpY2tfOSI6dHJ1ZSwiY2xpY2tfMTAiOnRydWUsImNsaWNrXzExIjp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19'
+            },
+            {
+                song: 'Lights Out',
+                artist: 'Car Bomb',
+                youtubeUrl: 'https://youtu.be/DqiVp0Nx5I4?si=Yh714d4mFgyzA0Jc&t=79',
+                tags: ['tuplets', 'non-dyadic time sigs'],
+                hash: 'NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0'
+            },
+            {
+                song: 'Naked Fuse',
+                artist: 'Car Bomb',
+                youtubeUrl: 'https://youtu.be/WCF2sDLJMsQ?si=pqhB1TPMaA_r4ywD&t=90',
+                tags: ['nested tuplets'],
+                hash: 'NOME1-eyJ1IjowLCJiIjo3MSwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6MywiMSI6NSwiMiI6NSwiMyI6Mn0sInNzYyI6eyIwXzAiOjQsIjBfMSI6NCwiMV8wIjoyLCIxXzEiOjIsIjFfMiI6MiwiMV8zIjoyLCIxXzQiOjIsIjJfMCI6MiwiMl8xIjoyLCIyXzIiOjIsIjJfMyI6MiwiMl80IjoyLCIzXzAiOjQsIjNfMSI6NH0sImJzIjp7IjBfMF8wIjp0cnVlLCIxXzBfMCI6dHJ1ZSwiMl8wXzAiOnRydWUsIjNfMF8wIjp0cnVlLCIwXzFfMCI6dHJ1ZSwiMF8yXzAiOmZhbHNlLCIwXzBfMSI6dHJ1ZSwiMF8wXzIiOnRydWUsIjBfMF8zIjpmYWxzZSwiMF8xXzEiOnRydWUsIjBfMV8yIjp0cnVlLCIwXzFfMyI6ZmFsc2UsIjFfMV8wIjp0cnVlLCIxXzJfMCI6dHJ1ZSwiMV8zXzAiOnRydWUsIjFfNF8wIjp0cnVlLCIyXzFfMCI6dHJ1ZSwiMl8yXzAiOnRydWUsIjJfM18wIjpmYWxzZSwiMl80XzAiOmZhbHNlLCIxXzBfMSI6dHJ1ZSwiMV8wXzIiOnRydWUsIjFfMF8zIjpmYWxzZSwiMV8xXzEiOmZhbHNlLCIxXzJfMSI6dHJ1ZSwiMV8zXzEiOmZhbHNlLCIxXzRfMSI6dHJ1ZSwiMl8wXzEiOmZhbHNlLCIyXzFfMSI6dHJ1ZSwiMl8yXzEiOmZhbHNlLCIyXzNfMSI6ZmFsc2UsIjJfNF8xIjpmYWxzZSwiM18xXzAiOnRydWUsIjNfMl8wIjp0cnVlLCIzXzBfMSI6dHJ1ZSwiM18wXzIiOnRydWUsIjNfMF8zIjpmYWxzZSwiM18wXzQiOnRydWUsIjNfMV8xIjp0cnVlLCIzXzFfMiI6dHJ1ZSwiM18xXzMiOmZhbHNlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJzcXVhcmUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuMzV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0'
+            },
+            {
+                song: 'The Black Page',
+                artist: 'Frank Zappa',
+                youtubeUrl: 'https://youtu.be/CyH8A_XPXeM?si=CQ9Zr83Cl4ruRJ-z&t=95',
+                tags: ['nested tuplets'],
+                hash: 'NOME1-eyJ1IjowLCJiIjo2MCwidGIiOjE2LCJzZSI6MCwic2MiOjEsImNlIjoxLCJwZSI6MSwicGIiOjgsInBzIjp7InBvbHlfMCI6dHJ1ZSwicG9seV8xIjp0cnVlLCJwb2x5XzIiOnRydWUsInBvbHlfMyI6dHJ1ZSwicG9seV80Ijp0cnVlLCJwb2x5XzUiOnRydWUsInBvbHlfNiI6dHJ1ZSwicG9seV83Ijp0cnVlLCJwb2x5XzgiOnRydWV9LCJic2MiOnsiMSI6MiwiMiI6MiwiMyI6NSwiNCI6NSwiNSI6NSwiNiI6MSwiOCI6MiwiOSI6MiwiMTAiOjEwLCIxMSI6MTEsIjEyIjozLCIxMyI6M30sInNzYyI6eyIxXzAiOjQsIjFfMSI6NCwiMl8wIjozLCIyXzEiOjUsIjhfMSI6NSwiOV8wIjo1LCI5XzEiOjR9LCJicyI6eyIwXzBfMCI6ZmFsc2UsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOmZhbHNlLCI0XzBfMCI6dHJ1ZSwiNV8wXzAiOnRydWUsIjZfMF8wIjpmYWxzZSwiN18wXzAiOmZhbHNlLCIxXzFfMCI6ZmFsc2UsIjFfMl8wIjp0cnVlLCIxXzNfMCI6dHJ1ZSwiMV80XzAiOnRydWUsIjFfNV8wIjp0cnVlLCIxXzZfMCI6dHJ1ZSwiMV83XzAiOnRydWUsIjFfMF8xIjpmYWxzZSwiMV8wXzIiOmZhbHNlLCIxXzBfMyI6ZmFsc2UsIjFfMV8xIjp0cnVlLCIxXzFfMiI6dHJ1ZSwiMV8xXzMiOnRydWUsIjJfMV8wIjp0cnVlLCIyXzBfMSI6dHJ1ZSwiMl8wXzIiOnRydWUsIjJfMV8xIjp0cnVlLCIyXzFfMiI6dHJ1ZSwiMl8xXzMiOnRydWUsIjJfMV80Ijp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfM18wIjp0cnVlLCIzXzRfMCI6dHJ1ZSwiNF8xXzAiOnRydWUsIjRfMl8wIjp0cnVlLCI0XzNfMCI6dHJ1ZSwiNF80XzAiOnRydWUsIjRfNV8wIjp0cnVlLCI1XzFfMCI6dHJ1ZSwiNV8yXzAiOnRydWUsIjVfM18wIjp0cnVlLCI1XzRfMCI6dHJ1ZSwiNl8xXzAiOnRydWUsIjZfMl8wIjp0cnVlLCI2XzNfMCI6dHJ1ZSwiNl80XzAiOnRydWUsIjZfNV8wIjp0cnVlLCI4XzBfMCI6ZmFsc2UsIjlfMF8wIjp0cnVlLCIxMF8wXzAiOnRydWUsIjExXzBfMCI6dHJ1ZSwiMTJfMF8wIjp0cnVlLCIxM18wXzAiOmZhbHNlLCIxNF8wXzAiOnRydWUsIjE1XzBfMCI6ZmFsc2UsIjhfMV8wIjpmYWxzZSwiOF8xXzEiOnRydWUsIjhfMV8yIjp0cnVlLCI4XzFfMyI6dHJ1ZSwiOF8xXzQiOnRydWUsIjlfMV8wIjp0cnVlLCI5XzJfMCI6dHJ1ZSwiOV8zXzAiOnRydWUsIjlfMF8xIjp0cnVlLCI5XzBfMiI6dHJ1ZSwiOV8wXzMiOnRydWUsIjlfMF80Ijp0cnVlLCI5XzFfMSI6dHJ1ZSwiOV8xXzIiOnRydWUsIjlfMV8zIjp0cnVlLCIxMF8xXzAiOnRydWUsIjEwXzJfMCI6dHJ1ZSwiMTBfM18wIjp0cnVlLCIxMF80XzAiOnRydWUsIjEwXzVfMCI6dHJ1ZSwiMTBfNl8wIjp0cnVlLCIxMF83XzAiOnRydWUsIjEwXzhfMCI6dHJ1ZSwiMTBfOV8wIjp0cnVlLCIxMV8xXzAiOnRydWUsIjExXzJfMCI6dHJ1ZSwiMTFfM18wIjp0cnVlLCIxMV80XzAiOnRydWUsIjExXzVfMCI6dHJ1ZSwiMTFfNl8wIjp0cnVlLCIxMV83XzAiOnRydWUsIjExXzhfMCI6dHJ1ZSwiMTFfOV8wIjp0cnVlLCIxMV8xMF8wIjp0cnVlLCIxMl8xXzAiOmZhbHNlLCIxMl8yXzAiOnRydWUsIjEzXzFfMCI6dHJ1ZSwiMTNfMl8wIjpmYWxzZSwiMTNfM18wIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI0Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjUiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI3Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjgiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiOSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxNSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ'
+            },
+            {
+                song: 'Threshold',
+                artist: 'Sungazer',
+                youtubeUrl: 'https://youtu.be/tFOttUKWT50?si=Q1Ojv2wS_u0Kc65Z&t=108',
+                tags: ['tuplets'],
+                hash: 'N2-eyJiIjozMywic2UiOjEsInNjIjoxOSwiYm8iOlsiMF8xIiwiMF80IiwiMF81IiwiMF83IiwiMF8xMCIsIjBfMTEiLCIwXzEzIiwiMF8xNSIsIjFfMSIsIjFfNCIsIjFfNSIsIjFfNyIsIjFfMTAiLCIxXzExIiwiMV8xMyIsIjFfMTUiLCIyXzEiLCIyXzQiLCIyXzUiLCIyXzciLCIyXzEwIiwiMl8xMSIsIjJfMTMiLCIyXzE1IiwiMl8xNyIsIjNfMSIsIjNfNCIsIjNfNSIsIjNfNyIsIjNfMTAiLCIzXzEyIiwiM18xNSJdfQ'
+            },
+            {
+                song: 'Academia',
+                artist: 'Miguel Zenon',
+                youtubeUrl: 'https://youtu.be/ZHrcMCnjVKk?si=367PKOxC3nirw1iS&t=47',
+                tags: ['polyrhythmic subdivs', 'tuplets'],
+                hash: 'N2-eyJiIjoxMzksInUiOjEsIm5iIjpbWzExLDQsMTEsMCxbIjEiLCIyIiwiMyIsIjUiLCI2IiwiOCIsIjkiLCIxMCJdXSxbNCw0LDNdLFszLDQsMiwwLFsiMSJdXSxbNCw0LDNdLFs0LDQsM10sWzMsNCwyLDAsWyIxIl1dLFs0LDQsM10sWzQsNCwzXSxbNCw0LDNdLFsxMSw0LDExLDAsWyIzIiwiNiIsIjEwIl1dLFs4LDQsOCwwLFsiMyIsIjciXV1dLCJucnMiOltbMCwxLDRdLFsxLDksMl0sWzksMTAsMl1dfQ'
+            },
+            {
+                song: 'Dracul Gras',
+                artist: 'Periphery',
+                youtubeUrl: 'https://youtu.be/FUk72MwuWrs?si=J4bUd-D6oc_5iQZi',
+                tags: ['non-dyadic time sigs'],
+                hash: 'N2-eyJiIjoxMDQsInUiOjEsIm5iIjpbWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDUsNCwwLFsiMSJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs1LDUsNSwwLFsiMSIsIjQiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNCw1LDQsMCxbIjEiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDVdLFs1LDUsNSwwLFsiMSIsIjQiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDUsNCwwLFsiMSJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs1LDVdLFs0LDVdLFs1LDUsNSwwLFsiMSIsIjQiXV0sWzUsNSw1LDAsWyIxIiwiNCJdXSxbNSw1LDUsMCxbIjEiLCI0Il1dLFs0LDVdLFs2LDVdLFs0LDUsMV0sWzQsNSwxXSxbNCw1LDFdLFs0LDUsMV1dLCJucnMiOltbMyw3LDJdXSwiYmNlIjoxLCJiY3IiOjV9'
+            }
+        ];
+
+        // Map known preset hashes to their song/example names without modifying the hash string itself
+        const KNOWN_PRESET_NAMES = {};
+        EXAMPLES_CATALOG.forEach(ex => {
+            KNOWN_PRESET_NAMES[ex.hash] = ex.song;
+        });
+        document.querySelectorAll('.preset-hash-btn').forEach(btn => {
+            const h = btn.getAttribute('data-preset-hash');
+            const n = btn.getAttribute('data-preset-name');
+            if (h && n && !KNOWN_PRESET_NAMES[h]) {
+                KNOWN_PRESET_NAMES[h] = n;
+            }
+        });
+
+        function updateSetupNameDisplay(name) {
+            const cleanName = (name || '').trim();
+            state.setupName = cleanName;
+            if (setupNameInput && document.activeElement !== setupNameInput) {
+                setupNameInput.value = cleanName;
+            }
+            if (loadedSetupNameBadge && loadedSetupNameText) {
+                if (cleanName) {
+                    loadedSetupNameText.textContent = cleanName;
+                    loadedSetupNameBadge.classList.remove('hidden');
+                    loadedSetupNameBadge.classList.add('block');
+                } else {
+                    loadedSetupNameText.textContent = '';
+                    loadedSetupNameBadge.classList.add('hidden');
+                    loadedSetupNameBadge.classList.remove('block');
+                }
+            }
+            if (!state.ultraNerdMode) {
+                if (state.customSubdivEnabled || cleanName !== '') {
+                    interactionModeWrapper.classList.remove('hidden');
+                } else {
+                    interactionModeWrapper.classList.add('hidden');
+                }
+            }
+        }
+
         function showHashFeedback(message, isError = false) {
             if (!hashFeedbackMsg) return;
             hashFeedbackMsg.textContent = message;
@@ -3739,6 +3967,11 @@
 
         function generateSetupHash() {
             const p = {};
+            const customName = setupNameInput ? setupNameInput.value.trim() : state.setupName;
+            if (customName) {
+                p.nm = customName;
+                updateSetupNameDisplay(customName);
+            }
             if (state.bpm !== 100) p.b = state.bpm;
 
             if (state.ultraNerdMode) {
@@ -3885,7 +4118,7 @@
             return trimmed;
         }
 
-        function loadSetupFromHash(rawHash) {
+        function loadSetupFromHash(rawHash, explicitPresetName = null) {
             const cleaned = extractHashFromInput(rawHash);
             if (!cleaned) {
                 showHashFeedback('Please paste a setup code first.', true);
@@ -4166,8 +4399,11 @@
                 modeToggleBtn.className = 'px-3 py-1.5 rounded-lg font-semibold bg-accent text-slate-950 transition-all shadow-sm';
                 modeSubdivBtn.className = 'px-3 py-1.5 rounded-lg font-semibold text-slate-400 hover:text-slate-200 transition-all';
 
+                const resolvedName = explicitPresetName || (typeof data.nm === 'string' ? data.nm : '') || KNOWN_PRESET_NAMES[cleaned] || '';
+                updateSetupNameDisplay(resolvedName);
+
                 applyModeLayoutUI();
-                showHashFeedback('Setup loaded successfully!');
+                showHashFeedback(resolvedName ? `Loaded "${resolvedName}"!` : 'Setup loaded successfully!');
                 return true;
             } catch (err) {
                 console.debug('Failed to parse setup hash:', err);
@@ -4187,7 +4423,7 @@
                 saveSetupBtn.classList.add('text-emerald-400', 'border-emerald-500/50');
                 showHashFeedback('Short setup code copied to clipboard!');
                 setTimeout(() => {
-                    if (saveSetupBtnText) saveSetupBtnText.textContent = 'Copy Code';
+                    if (saveSetupBtnText) saveSetupBtnText.textContent = 'Save & Copy Code';
                     saveSetupBtn.classList.remove('text-emerald-400', 'border-emerald-500/50');
                 }, 2000);
             });
@@ -4231,14 +4467,151 @@
         }
 
         /* ==========================================
-         * ARTICLE VIEW & URL ROUTING
+         * ARTICLE VIEW, EXAMPLES VIEW & URL ROUTING
          * ========================================== */
+        let activeExampleTagFilter = 'all';
+
+        function getTagBadgeClasses(tag) {
+            const t = tag.toLowerCase();
+            if (t.includes('nested')) return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+            if (t.includes('non-dyadic')) return 'bg-rose-500/15 text-rose-300 border-rose-500/30';
+            if (t.includes('polyrhythmic subdivs')) return 'bg-purple-500/15 text-purple-300 border-purple-500/30';
+            if (t.includes('polyrhythm')) return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+            if (t.includes('tuplets')) return 'bg-sky-500/15 text-sky-300 border-sky-500/30';
+            return 'bg-slate-500/15 text-slate-300 border-slate-500/30';
+        }
+
+        function renderExamplesLibrary() {
+            if (!examplesListContainer || !examplesTagFilterBar) return;
+
+            const allTags = ['all', 'tuplets', 'nested tuplets', 'non-dyadic time sigs', 'polyrhythm', 'polyrhythmic subdivs'];
+            examplesTagFilterBar.innerHTML = '';
+
+            allTags.forEach(tag => {
+                const isSelected = activeExampleTagFilter === tag;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = isSelected
+                    ? 'px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-accent text-slate-950 border border-sky-300 shadow-sm transition-all'
+                    : 'px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-[#16161e] hover:bg-[#1f1f2a] text-slate-400 hover:text-slate-200 border border-borderSubtle transition-all';
+                btn.textContent = tag === 'all' ? 'All Examples' : `(${tag})`;
+                btn.addEventListener('click', () => {
+                    activeExampleTagFilter = tag;
+                    renderExamplesLibrary();
+                });
+                examplesTagFilterBar.appendChild(btn);
+            });
+
+            examplesListContainer.innerHTML = '';
+            const filtered = activeExampleTagFilter === 'all'
+                ? EXAMPLES_CATALOG
+                : EXAMPLES_CATALOG.filter(ex => ex.tags.some(t => t.toLowerCase() === activeExampleTagFilter));
+
+            if (filtered.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'p-6 text-center text-xs text-slate-500 italic bg-[#121218] rounded-xl border border-borderSubtle';
+                empty.textContent = `No examples currently tagged with (${activeExampleTagFilter}).`;
+                examplesListContainer.appendChild(empty);
+                return;
+            }
+
+            filtered.forEach(ex => {
+                const card = document.createElement('div');
+                card.className = 'flex flex-col gap-3 p-4 rounded-2xl bg-[#14141c] hover:bg-[#171722] border border-borderSubtle transition-all shadow-md';
+
+                const topRow = document.createElement('div');
+                topRow.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+
+                const titleInfo = document.createElement('div');
+                titleInfo.className = 'flex flex-col gap-1';
+
+                const songArtistRow = document.createElement('div');
+                songArtistRow.className = 'flex flex-wrap items-center gap-2';
+                songArtistRow.innerHTML = `
+                    <span class="text-sm md:text-base font-bold text-slate-100">${ex.song}</span>
+                    <span class="text-xs text-slate-500">by</span>
+                    <span class="text-xs md:text-sm font-semibold text-sky-400">${ex.artist}</span>
+                `;
+
+                const tagsWrap = document.createElement('div');
+                tagsWrap.className = 'flex flex-wrap items-center gap-1.5 mt-0.5';
+                ex.tags.forEach(t => {
+                    const pill = document.createElement('span');
+                    pill.className = `px-2 py-0.5 rounded-full text-[10px] font-semibold border ${getTagBadgeClasses(t)}`;
+                    pill.textContent = `(${t})`;
+                    tagsWrap.appendChild(pill);
+                });
+
+                titleInfo.appendChild(songArtistRow);
+                titleInfo.appendChild(tagsWrap);
+
+                const actionsWrap = document.createElement('div');
+                actionsWrap.className = 'flex flex-wrap items-center gap-2 shrink-0';
+
+                const ytLink = document.createElement('a');
+                ytLink.href = ex.youtubeUrl;
+                ytLink.target = '_blank';
+                ytLink.rel = 'noopener noreferrer';
+                ytLink.className = 'px-3 py-1.5 rounded-xl bg-[#1e1e2a] hover:bg-[#282838] border border-borderSubtle text-slate-200 hover:text-white text-xs font-semibold transition-all inline-flex items-center gap-1.5';
+                ytLink.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-rose-400 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    <span>YouTube</span>
+                `;
+
+                const loadExBtn = document.createElement('button');
+                loadExBtn.type = 'button';
+                loadExBtn.className = 'px-3.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-sm active:scale-95 inline-flex items-center gap-1.5';
+                loadExBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <span>Open in The 'Nome</span>
+                `;
+                loadExBtn.addEventListener('click', () => {
+                    showMainSequencerView(true);
+                    if (setupHashInput) setupHashInput.value = ex.hash;
+                    loadSetupFromHash(ex.hash, ex.song);
+                });
+
+                actionsWrap.appendChild(ytLink);
+                actionsWrap.appendChild(loadExBtn);
+
+                topRow.appendChild(titleInfo);
+                topRow.appendChild(actionsWrap);
+
+                const hashRow = document.createElement('div');
+                hashRow.className = 'flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg bg-[#0d0d12] border border-borderSubtle/70 text-[10px] font-mono text-slate-400';
+                const hashSpan = document.createElement('span');
+                hashSpan.className = 'truncate select-all';
+                hashSpan.textContent = ex.hash;
+
+                const copyHashMiniBtn = document.createElement('button');
+                copyHashMiniBtn.type = 'button';
+                copyHashMiniBtn.className = 'px-2 py-0.5 rounded bg-[#1a1a24] hover:bg-[#252534] text-slate-300 hover:text-white font-sans font-semibold text-[10px] shrink-0 transition-colors';
+                copyHashMiniBtn.textContent = 'Copy Hash';
+                copyHashMiniBtn.addEventListener('click', () => {
+                    copyTextToClipboard(ex.hash);
+                    copyHashMiniBtn.textContent = 'Copied!';
+                    setTimeout(() => { copyHashMiniBtn.textContent = 'Copy Hash'; }, 1800);
+                });
+
+                hashRow.appendChild(hashSpan);
+                hashRow.appendChild(copyHashMiniBtn);
+
+                card.appendChild(topRow);
+                card.appendChild(hashRow);
+                examplesListContainer.appendChild(card);
+            });
+        }
+
         function showArticleView(updateUrl = true) {
             if (state.isPlaying) {
                 togglePlay();
             }
             beatEditorPopup.classList.add('hidden');
             mainContainer.classList.add('hidden');
+            if (examplesView) {
+                examplesView.classList.add('hidden');
+                examplesView.classList.remove('flex');
+            }
             articleView.classList.remove('hidden');
             articleView.classList.add('flex');
             if (updateUrl) {
@@ -4253,21 +4626,50 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function showExamplesView(updateUrl = true) {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+            mainContainer.classList.add('hidden');
+            articleView.classList.add('hidden');
+            articleView.classList.remove('flex');
+            if (examplesView) {
+                renderExamplesLibrary();
+                examplesView.classList.remove('hidden');
+                examplesView.classList.add('flex');
+            }
+            if (updateUrl) {
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('view', 'examples');
+                    window.history.pushState({ view: 'examples' }, '', url.toString());
+                } catch (e) {
+                    try { window.location.hash = 'examples'; } catch (err) {}
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function showMainSequencerView(updateUrl = true) {
             articleView.classList.add('hidden');
             articleView.classList.remove('flex');
+            if (examplesView) {
+                examplesView.classList.add('hidden');
+                examplesView.classList.remove('flex');
+            }
             mainContainer.classList.remove('hidden');
             if (updateUrl) {
                 try {
                     const url = new URL(window.location.href);
                     url.searchParams.delete('view');
-                    if (url.hash === '#learn-more' || url.hash === '#learn') {
+                    if (url.hash === '#learn-more' || url.hash === '#learn' || url.hash === '#examples') {
                         url.hash = '';
                     }
                     window.history.pushState({ view: 'main' }, '', url.toString());
                 } catch (e) {
                     try {
-                        if (window.location.hash === '#learn-more' || window.location.hash === '#learn') {
+                        if (window.location.hash === '#learn-more' || window.location.hash === '#learn' || window.location.hash === '#examples') {
                             window.location.hash = '';
                         }
                     } catch (err) {}
@@ -4276,39 +4678,51 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function isUrlRequestingLearnMore() {
+        function getRequestedUrlView() {
             try {
                 const params = new URLSearchParams(window.location.search);
                 const viewParam = (params.get('view') || params.get('page') || '').toLowerCase();
+                if (viewParam === 'examples' || viewParam === 'example' || params.has('examples')) {
+                    return 'examples';
+                }
                 if (viewParam === 'learn-more' || viewParam === 'learnmore' || viewParam === 'learn' || viewParam === 'guide' || params.has('learn-more') || params.has('learn')) {
-                    return true;
+                    return 'learn-more';
                 }
                 const hashVal = (window.location.hash || '').replace(/^#\/?/, '').toLowerCase();
+                if (hashVal === 'examples' || hashVal === 'example') {
+                    return 'examples';
+                }
                 if (hashVal === 'learn-more' || hashVal === 'learnmore' || hashVal === 'learn' || hashVal === 'guide') {
-                    return true;
+                    return 'learn-more';
                 }
             } catch (e) {}
-            return false;
+            return 'main';
         }
 
-        window.addEventListener('popstate', () => {
-            if (isUrlRequestingLearnMore()) {
-                showArticleView(false);
-            } else {
-                showMainSequencerView(false);
-            }
-        });
+        function syncViewFromUrl() {
+            const target = getRequestedUrlView();
+            if (target === 'examples') showExamplesView(false);
+            else if (target === 'learn-more') showArticleView(false);
+            else showMainSequencerView(false);
+        }
 
-        window.addEventListener('hashchange', () => {
-            if (isUrlRequestingLearnMore()) {
-                showArticleView(false);
-            } else if (!articleView.classList.contains('hidden')) {
-                showMainSequencerView(false);
-            }
-        });
+        window.addEventListener('popstate', syncViewFromUrl);
+        window.addEventListener('hashchange', syncViewFromUrl);
 
         if (learnMoreBtn) {
             learnMoreBtn.addEventListener('click', () => showArticleView(true));
+        }
+        if (examplesTabBtn) {
+            examplesTabBtn.addEventListener('click', () => showExamplesView(true));
+        }
+        if (articleToExamplesBtn) {
+            articleToExamplesBtn.addEventListener('click', () => showExamplesView(true));
+        }
+        if (articleInlineExamplesBtn) {
+            articleInlineExamplesBtn.addEventListener('click', () => showExamplesView(true));
+        }
+        if (examplesToLearnMoreBtn) {
+            examplesToLearnMoreBtn.addEventListener('click', () => showArticleView(true));
         }
         if (backToNomeTopBtn) {
             backToNomeTopBtn.addEventListener('click', () => showMainSequencerView(true));
@@ -4316,14 +4730,21 @@
         if (backToNomeBottomBtn) {
             backToNomeBottomBtn.addEventListener('click', () => showMainSequencerView(true));
         }
+        if (backFromExamplesTopBtn) {
+            backFromExamplesTopBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
+        if (backFromExamplesBottomBtn) {
+            backFromExamplesBottomBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
 
         document.querySelectorAll('.preset-hash-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const presetHash = btn.getAttribute('data-preset-hash');
+                const presetName = btn.getAttribute('data-preset-name') || null;
                 if (presetHash) {
                     showMainSequencerView(true);
                     if (setupHashInput) setupHashInput.value = presetHash;
-                    loadSetupFromHash(presetHash);
+                    loadSetupFromHash(presetHash, presetName);
                 }
             });
         });
@@ -4448,6 +4869,7 @@
             ensurePerBeatSettings();
             initSegments();
             drawStaticSequencer();
+            renderExamplesLibrary();
 
             try {
                 const params = new URLSearchParams(window.location.search);
@@ -4456,9 +4878,7 @@
                     if (setupHashInput) setupHashInput.value = sharedSetup;
                     loadSetupFromHash(sharedSetup);
                 }
-                if (isUrlRequestingLearnMore()) {
-                    showArticleView(false);
-                }
+                syncViewFromUrl();
             } catch (e) {
                 console.debug('Auto-load URL check error:', e);
             }
