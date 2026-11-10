@@ -109,14 +109,22 @@
 
     <!-- Header -->
     <header class="w-full max-w-3xl text-center py-4 flex flex-col items-center gap-2">
-        <div class="flex items-center gap-2">
-            <h1 class="text-xl md:text-2xl font-semibold tracking-wider text-slate-100">THE 'NOME</h1>
-            <span id="nerdModeBadge" class="hidden px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded-full">Ultra-Nerd</span>
+        <div class="w-full flex items-center justify-between gap-2 px-1 mb-1">
+            <div class="flex items-center gap-2">
+                <button id="headerHomeBtn" type="button" class="text-lg md:text-2xl font-semibold tracking-wider text-slate-100 hover:text-accent transition-colors">THE 'NOME</button>
+                <span id="nerdModeBadge" class="hidden px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded-full">Ultra-Nerd</span>
+            </div>
+            <!-- Compact Top Navigation Pill -->
+            <nav class="inline-flex items-center p-1 bg-[#121216] border border-borderSubtle rounded-xl shadow-md text-[11px] font-semibold">
+                <button id="topNavGuideBtn" type="button" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-sky-300 hover:bg-[#1a1a22] transition-all">User Guide</button>
+                <button id="topNavTheoryBtn" type="button" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-emerald-300 hover:bg-[#1a1a22] transition-all">Theory</button>
+                <button id="topNavExamplesBtn" type="button" class="px-2.5 py-1 rounded-lg text-slate-400 hover:text-purple-300 hover:bg-[#1a1a22] transition-all">Examples</button>
+            </nav>
         </div>
         <div class="flex items-center justify-center gap-2 flex-wrap">
             <p id="headerSubtitle" class="text-xs md:text-sm text-slate-400">Precision Beat Sequencer</p>
         </div>
-        <div class="flex flex-wrap items-center justify-center gap-2 mt-2">
+        <div id="sequencerQuickControls" class="flex flex-wrap items-center justify-center gap-2 mt-2">
             <button id="resetStandardBtn" class="px-3 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 <span id="resetBtnText">Reset 4/4</span>
@@ -494,18 +502,24 @@
         <div class="w-full bg-cardBg border border-borderSubtle rounded-2xl p-5 md:p-6 mt-6 shadow-xl flex flex-col gap-4 text-xs">
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <h2 class="text-sm font-bold tracking-wider text-slate-200 uppercase">About The 'Nome</h2>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <button id="examplesTabBtn" type="button" class="px-3.5 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 hover:text-white font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                         </svg>
                         <span>Examples</span>
                     </button>
+                    <button id="theoryTabBtn" type="button" class="px-3.5 py-1.5 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        <span>Theory</span>
+                    </button>
                     <button id="learnMoreBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 font-semibold rounded-lg transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
-                        <span>Learn More</span>
+                        <span>User Guide</span>
                     </button>
                 </div>
             </div>
@@ -702,8 +716,16 @@
                     <h2 class="text-lg md:text-xl font-bold text-purple-300 tracking-wide">Ultra-Nerd Mode:</h2>
                 </div>
                 <p class="text-slate-300">
-                    Ultra-Nerd Mode extends the functionality of The 'Nome to allow for greater polyrhythmic abilities and use of non-dyadic time signatures. If you are in this deep, I'm just assuming you know what you're doing theoretically.
+                    Ultra-Nerd Mode extends the functionality of The 'Nome to allow for greater polyrhythmic abilities and use of non-dyadic time signatures. To learn more about the theory, learn here:
                 </p>
+                <div>
+                    <button id="guideUltraNerdTheoryBtn" type="button" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        <span>Theory</span>
+                    </button>
+                </div>
                 <p class="text-slate-300">
                     You can input your rhythm block by block in the following way: Set the duration in terms of "the time it takes to play y notes as r-lets" for parameters y and r. Then choose how many notes to squeeze into that duration (equal to y by default).
                 </p>
@@ -750,36 +772,6 @@
                     <!-- Example 3: Alon Tamir -->
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
                         <div class="text-xs text-slate-200">
-                            <a href="https://youtu.be/Hmu8X0FmcHo?si=jlyM6N_SQaDwwBCh&t=166" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
-                                <span>This Groove</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                            </a>
-                            <span> in <strong>Cool 7</strong> by Sungazer:</span>
-                        </div>
-                        <button type="button" data-preset-name="Cool 7" data-preset-hash="NOME1-eyJ1IjoxLCJiIjoxMzgsInRiIjo0LCJzZSI6MCwic2MiOjEsImNlIjowLCJwZSI6MCwicGIiOjMsInBzIjp7fSwiYnNjIjp7fSwic3NjIjp7fSwiYnMiOnsiMF8wXzAiOnRydWUsIjFfMF8wIjp0cnVlLCIyXzBfMCI6dHJ1ZSwiM18wXzAiOnRydWV9LCJhZGUiOjAsInBicyI6eyIwIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMiI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIzIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjQiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6MiwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6MywibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6NCwibiI6NiwiciI6NCwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlfX0seyJpZCI6NSwibiI6MSwiciI6MSwieCI6Mywic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlfX1dLCJiY2UiOjEsImJjcyI6eyJjbGlja18wIjp0cnVlLCJjbGlja18xIjp0cnVlLCJjbGlja18yIjp0cnVlLCJjbGlja18zIjp0cnVlLCJjbGlja180Ijp0cnVlLCJjbGlja181Ijp0cnVlLCJjbGlja182Ijp0cnVlfSwiZGIiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwic2IiOnsidHlwZSI6InRyaWFuZ2xlIiwicGl0Y2giOjMzMCwidm9sdW1lIjowLjM1fSwicGwiOnsidHlwZSI6InNpbmUiLCJwaXRjaCI6NTg3LCJ2b2x1bWUiOjAuNH19" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <span>Open Cool 7 Groove</span>
-                        </button>
-                    </div>
-
-                    <!-- Example 3: Car Bomb -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
-                        <div class="text-xs text-slate-200">
-                            <a href="https://youtu.be/DqiVp0Nx5I4?si=Yh714d4mFgyzA0Jc&t=79" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
-                                <span>This groove</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                            </a>
-                            <span> in <strong>Lights Out</strong> by Car Bomb:</span>
-                        </div>
-                        <button type="button" data-preset-name="Lights Out" data-preset-hash="NOME1-eyJ1IjoxLCJiIjo4NCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjAsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnt9LCJzc2MiOnt9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZX0sImFkZSI6MCwicGJzIjp7IjAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMSI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIyIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI1Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjYiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiNyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCI4Ijp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjkiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTAiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTEiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMTMiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fX0sIm5iIjpbeyJpZCI6MSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZSwiNV8wIjp0cnVlLCI2XzAiOnRydWV9fSx7ImlkIjoyLCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOnRydWUsIjZfMCI6dHJ1ZX19LHsiaWQiOjMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6dHJ1ZSwiNl8wIjp0cnVlfX0seyJpZCI6NCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjUsIm4iOjYsInIiOjUsIngiOjYsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2UsIjVfMCI6ZmFsc2V9fSx7ImlkIjo2LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6NywibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6dHJ1ZSwiM18wIjpmYWxzZSwiNF8wIjpmYWxzZX19LHsiaWQiOjE0LCJuIjo1LCJyIjo1LCJ4Ijo1LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjp0cnVlLCIzXzAiOmZhbHNlLCI0XzAiOmZhbHNlfX0seyJpZCI6OCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjksIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOmZhbHNlLCIyXzAiOmZhbHNlLCIzXzAiOnRydWUsIjRfMCI6ZmFsc2V9fSx7ImlkIjoxMCwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6ZmFsc2UsIjJfMCI6ZmFsc2UsIjNfMCI6dHJ1ZSwiNF8wIjpmYWxzZX19LHsiaWQiOjEyLCJuIjo2LCJyIjo1LCJ4Ijo2LCJzZCI6e30sImFzIjp7IjBfMCI6dHJ1ZSwiMV8wIjpmYWxzZSwiMl8wIjpmYWxzZSwiM18wIjp0cnVlLCI0XzAiOmZhbHNlLCI1XzAiOmZhbHNlfX0seyJpZCI6MTMsIm4iOjUsInIiOjUsIngiOjUsInNkIjp7fSwiYXMiOnsiMF8wIjp0cnVlLCIxXzAiOnRydWUsIjJfMCI6dHJ1ZSwiM18wIjp0cnVlLCI0XzAiOnRydWV9fSx7ImlkIjoxNSwibiI6NSwiciI6NSwieCI6NSwic2QiOnt9LCJhcyI6eyIwXzAiOnRydWUsIjFfMCI6dHJ1ZSwiMl8wIjp0cnVlLCIzXzAiOnRydWUsIjRfMCI6dHJ1ZX19XSwiYmNlIjowLCJiY3MiOnt9LCJkYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCJzYiI6eyJ0eXBlIjoidHJpYW5nbGUiLCJwaXRjaCI6MzMwLCJ2b2x1bWUiOjAuMzV9LCJwbCI6eyJ0eXBlIjoic2luZSIsInBpdGNoIjo1ODcsInZvbHVtZSI6MC40fX0" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-400/40 text-purple-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95 shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            <span>Open Lights Out Groove</span>
-                        </button>
-                    </div>
-                    
-                    <!-- Example 4: Alon Tamir -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-[#111116] border border-borderSubtle">
-                        <div class="text-xs text-slate-200">
                             <a href="https://youtu.be/xTNVDKy98r0?si=5vFcM3bTazOZw0PN&t=165" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold inline-flex items-center gap-1">
                                 <span>This break</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
@@ -800,11 +792,21 @@
                     <strong>Saving Your Work:</strong> If you want to save your settings for future reference, use the button to generate a hash and store it on your computer. You can paste it in and regenerate your settings in a future visit.
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 my-2">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 mt-2">
                     <span class="text-purple-200 font-semibold tracking-wide">Explore various features through these examples!</span>
                     <button id="articleInlineExamplesBtn" type="button" class="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 text-purple-300 hover:text-white font-bold rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2 shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
                         <span>Examples Library</span>
+                    </button>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 mb-2">
+                    <span class="text-emerald-200 font-semibold tracking-wide">Learn more about metric rhythmic theory:</span>
+                    <button id="articleInlineTheoryBtn" type="button" class="px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-300 hover:text-white font-bold rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        <span>Theory</span>
                     </button>
                 </div>
 
@@ -835,17 +837,215 @@
         </div>
     </article>
 
+    <!-- Theory Article View -->
+    <article id="theoryView" class="hidden w-full max-w-3xl my-auto py-6 flex-col gap-6 text-slate-300">
+        <!-- Top Navigation Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-cardBg border border-borderSubtle rounded-2xl px-5 py-4 shadow-xl">
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]"></span>
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome: metric rhythmic theory</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button id="theoryToGuideBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95">
+                    <span>User Guide</span>
+                </button>
+                <button id="theoryToExamplesBtn" type="button" class="px-3.5 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/40 text-purple-300 hover:text-white text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95">
+                    <span>Examples</span>
+                </button>
+                <button id="backFromTheoryTopBtn" type="button" class="px-3.5 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to The 'Nome</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Theory Article Body -->
+        <div class="bg-cardBg border border-borderSubtle rounded-2xl p-6 md:p-8 shadow-2xl flex flex-col gap-8 text-sm leading-relaxed">
+            
+            <!-- Metric Rhythms Intro -->
+            <section class="flex flex-col gap-3">
+                <h2 class="text-lg md:text-xl font-bold text-slate-100 tracking-wide">Metric Rhythms:</h2>
+                <p class="text-slate-300">
+                    Rhythm is just the temporal dimension of music. It asks when notes are heard and when they are silent. There doesn't have to be any rhyme or reason to what happens when. Free flowing rhythms which are left up to the whims of the performers are called non-metric rhythms. Alternatively, metric rhythms are entirely based around an underlying mathematical structure. This doesn't mean they are boring and rigid however. At least they don't have to be. Check out this example of a loose, flowy, and disorienting yet perfectly metric rhythm:
+                </p>
+                <div>
+                    <button type="button" data-preset-name="The Unapologetic Yogi" data-preset-hash="N2-eyJubSI6IlRoZSBVbmFwb2xvZ2V0aWMgWW9naSIsImIiOjExNiwidSI6MSwibmIiOltbNSw1XSxbNSw1XSxbNSw1XSxbNSw1XSxbMiw1XSxbMyw1XSxbNCw1LDNdLFs0LDUsM10sWzUsNSwzXSxbNSw1LDNdLFs0LDUsM10sWzQsNSwzXSxbMyw1XSxbMyw1XSxbMyw1XSxbNSw1XSxbNSw1XSxbNSw1XSxbNSw1XV0sInNiIjpbMSwzMzAsMC4yXX0" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-400/40 text-purple-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>Open in The 'Nome: The Unapologetic Yogi</span>
+                    </button>
+                </div>
+                <p class="text-slate-300">
+                    You don't have to do any math if you don't want to. However, fluency in the following topics allows for a great range of rhythmic diversity and tools for rhythmic development which facilitate groove, coordination between performers, and add a sophisticated aesthetic flair to a composition.
+                </p>
+            </section>
+
+            <!-- Tempo and Pulse -->
+            <section class="flex flex-col gap-5 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-sky-400 tracking-wide">Tempo and Pulse</h2>
+
+                <!-- Pulse -->
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-sky-400/40">
+                    <h3 class="text-base font-semibold text-sky-300">Pulse</h3>
+                    <p class="text-slate-300">
+                        The pulse is the backbone of many rhythmic constructions. It is a (sometimes inaudible) string of equally spaced beats at a given speed. The pulse serves several important functions in metric rhythms: It often contains the strongest notes in a phrase, the space between its beats can be subdivided into any number of beats, polyrhythms can be superimposed on its structure, and for many (but not all) rhythms it is what the performer will "hear" via <a href="https://giml.org/mlt/audiation/" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold">audiation</a>.
+                    </p>
+                    <p class="text-slate-300">
+                        We can view time as a line, and the pulse selects a uniform sequence of notes along the line. To construct our rhythm, at each beat we choose either to play or to rest. Cutting a line at its start/end and glueing its ends together gives the circle notation used here.
+                    </p>
+                </div>
+
+                <!-- Tempo -->
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-sky-400/40">
+                    <h3 class="text-base font-semibold text-sky-300">Tempo</h3>
+                    <p class="text-slate-300">
+                        The tempo is the speed at which the beats occur. The faster the tempo, the shorter the distance between two beats. The rate of change is usually measured in beats per minute (BPM).
+                    </p>
+                    <div class="p-4 rounded-xl bg-[#16161e] border border-sky-500/30 flex flex-col gap-1.5 text-xs">
+                        <span class="font-bold uppercase tracking-wider text-sky-400">Terminology:</span>
+                        <p class="text-slate-300 leading-relaxed">
+                            Traditionally, the quarter note is typically the "beat" that is referred to by BPM. A quarter note is called "quarter" because it splits a measure into 4ths, when the time signature is 4/4. Because of this, the word "quarter" makes considerably less sense when working with alternative time signatures. We will simply refer to them as beats, with the exception of the beat-click pulse rate which conforms with this quarter note convention.
+                        </p>
+                    </div>
+                </div>
+
+                <p class="text-slate-300">
+                    The useful range of tempo is biologically constrained to be around 30-300 BPM, below which we can no longer predict the next beat and above which we can not recognize distinct beats. <a href="https://theperceptualpresent.wordpress.com/#:~:text=So%20then%2033%20bpm%2C%20approximately%201800ms%2C%20exists,unmute.%20Your%20browser%20can't%20play%20this%20video." target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 underline font-semibold">Read More</a>
+                </p>
+            </section>
+
+            <!-- Subdivisions -->
+            <section class="flex flex-col gap-4 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-pink-400 tracking-wide">Subdivisions</h2>
+                <p class="text-slate-300">
+                    If we think of the pulse as points spread out on a line (or circle), there is a lot of empty space between beats where we might want the onset of a note to lie, especially with slower tempos. Subdivisions allow us to fill in these gaps.
+                </p>
+                <p class="text-slate-300">
+                    In a subdivision, we split the space between a beat into equally spaced notes, beginning at the start of the beat.
+                </p>
+
+                <div class="p-4 rounded-xl bg-[#16161e] border border-pink-500/30 flex flex-col gap-2 text-xs">
+                    <span class="font-bold uppercase tracking-wider text-pink-400">Terminology:</span>
+                    <p class="text-slate-300 leading-relaxed">
+                        Tuplets describe the specific number of beats in a subdivision. Traditionally, we have whole, half, quarter, eighth, and sixteenth notes as the dyadic subdivisions. Triplets then need to be specified, whether we are considering 3 notes within the duration of a quarter, an eighth, etc.. So we have quarter note triplets and eighth note triplets as the way to differentiate between the two subdivisions. This makes considerably less sense when tuplets are compared against any other subdivision type, so we dispose of this terminology in favor of a more general notion.
+                    </p>
+                    <p class="text-slate-300 leading-relaxed">
+                        We will call a general subdivision to be an x-let where x is the number of notes in the subdivision. A beat itself is a 1-let, split in half gives us a 2-let, into thirds gives us a 3-let, and so on. So traditional sixteenth notes are 4-lets, and traditional eight-note triplets are 3-lets.
+                    </p>
+                </div>
+
+                <p class="text-slate-300">
+                    So one way we can access the space in between two beats by first fixing a subdivision, and then selecting which notes within that subdivision to play/rest.
+                </p>
+                <p class="text-slate-300">
+                    This still leaves a large area between beats unreachable by any single subdivision. To access these more foreign areas, we need nested tuplets, i.e. recursive subdivision.
+                </p>
+
+                <div class="p-4 rounded-xl bg-[#16161e] border border-emerald-500/30 flex flex-col gap-2.5 text-xs">
+                    <span class="font-bold uppercase tracking-wider text-emerald-400">Terminology:</span>
+                    <p class="text-slate-300 leading-relaxed">
+                        A nested tuplet is a tuplet within a tuplet. We can take one subdivision of the beat to be the first tuplet. Then we can split the space between any two notes in that subdivision further into some number of notes for a second layer of subdivision.
+                    </p>
+                    <p class="text-slate-300 leading-relaxed">
+                        Note that there are multiple ways to write identical rhythms. For example, we can write a 4-let as 2-lets nested inside 2-lets:
+                    </p>
+                    <div>
+                        <button type="button" data-preset-name="Nested Tuplets Comparison" data-preset-hash="NOME1-eyJ1IjowLCJiIjo3MCwidGIiOjQsInNlIjowLCJzYyI6MSwiY2UiOjEsInBlIjowLCJwYiI6MywicHMiOnt9LCJic2MiOnsiMCI6NCwiMSI6MiwiMiI6NiwiMyI6Mn0sInNzYyI6eyIxXzAiOjIsIjFfMSI6MiwiM18wIjozLCIzXzEiOjN9LCJicyI6eyIwXzBfMCI6dHJ1ZSwiMV8wXzAiOnRydWUsIjJfMF8wIjp0cnVlLCIzXzBfMCI6dHJ1ZSwiMF8xXzAiOnRydWUsIjBfMl8wIjp0cnVlLCIwXzNfMCI6dHJ1ZSwiMV8xXzAiOnRydWUsIjFfMF8xIjp0cnVlLCIxXzFfMSI6dHJ1ZSwiMl8xXzAiOnRydWUsIjJfMl8wIjp0cnVlLCIyXzNfMCI6dHJ1ZSwiMl80XzAiOnRydWUsIjJfNV8wIjp0cnVlLCIzXzFfMCI6dHJ1ZSwiM18yXzAiOnRydWUsIjNfMF8xIjp0cnVlLCIzXzBfMiI6dHJ1ZSwiM18xXzEiOnRydWUsIjNfMV8yIjp0cnVlfSwiYWRlIjowLCJwYnMiOnsiMCI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9LCIxIjp7InBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sIjIiOnsicGl0Y2giOjQ0MCwidm9sdW1lIjowLjQ1fSwiMyI6eyJwaXRjaCI6NDQwLCJ2b2x1bWUiOjAuNDV9fSwibmIiOltdLCJiY2UiOjAsImJjcyI6e30sImRiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjo0NDAsInZvbHVtZSI6MC40NX0sInNiIjp7InR5cGUiOiJ0cmlhbmdsZSIsInBpdGNoIjozMzAsInZvbHVtZSI6MC4zNX0sInBsIjp7InR5cGUiOiJzaW5lIiwicGl0Y2giOjU4Nywidm9sdW1lIjowLjR9fQ" class="preset-hash-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-200 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            <span>Open in The 'Nome: Nested Tuplets Comparison</span>
+                        </button>
+                    </div>
+                    <p class="text-slate-300 leading-relaxed">
+                        Any composite numbered tuplet can be written as a nested tuplet, while primes are distinct.
+                    </p>
+                </div>
+
+                <p class="text-slate-300">
+                    In metric rhythm, anywhere in time we want to play a note must be accessible via some short sequence of rhythmic operations: tuplets, nested tuplets, and polyrhythm. Theoretically, and for electronic compositions, there is no limit to the places we can reach with these methods. In practice, there's an upper bound to the speed of a subdivision that we can keep track of, or the precision we may achieve.
+                </p>
+                <p class="text-slate-300">
+                    One useful trick for dealing with large tuplets is to chunk them into longs and shorts. For instance, a quick 7-let can be thought of as 2+2+2+1, or long long long short.
+                </p>
+            </section>
+
+            <!-- Polyrhythm -->
+            <section class="flex flex-col gap-4 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-amber-400 tracking-wide">Polyrhythm</h2>
+                <p class="text-slate-300">
+                    A polyrhythm occurs when two or more strings of evenly spaced notes are played at the same time such that they start and end together. They are denoted by the number of notes in each string. For example, a 2-let played against a 3-let yields a 2 against 3 polyrthym, or 2:3.
+                </p>
+                <p class="text-slate-300">
+                    Polyrhythms can occur both at the level of beats and at the level of subdivision. Polyrthyms at the level of beats can be written in terms of uniform subdivision by a process of grouping. For example, we can construct a 7 against 3 polyrhythm in the following way: take 3 beats from the pulse as the 3-part, and subdivide them each into 7-lets, playing every third note to get the 7-part:
+                </p>
+                <div>
+                    <button type="button" data-preset-name="7:3 Polyrhythm via Grouping" data-preset-hash="N2-eyJiIjo5MiwidGIiOjMsInNlIjoxLCJzYyI6NywiYm8iOlsiMF8xIiwiMF8yIiwiMF80IiwiMF81IiwiMSIsIjFfMSIsIjFfMyIsIjFfNCIsIjFfNiIsIjIiLCIyXzIiLCIyXzMiLCIyXzUiLCIyXzYiXSwicGUiOjF9" class="preset-hash-btn inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 hover:text-white text-xs font-bold transition-all shadow-md active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>Open in The 'Nome: 7:3 Polyrhythm</span>
+                    </button>
+                </div>
+                <p class="text-slate-300">
+                    This process of splitting subdivision into evenly sized groups and playing the first note allows for the calculation of various polyrhythms.
+                </p>
+
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-amber-400/40 mt-1">
+                    <h3 class="text-base font-semibold text-amber-300">Polyrhythmic subdivision:</h3>
+                    <p class="text-slate-300">
+                        Polyrhythms can also be performed on the level of subdivisions. For example, we can perform a 5 against 3 polyrhythm by first splitting a beat into 3-lets, and choosing those to be the 3-part, then playing 5 evenly spaced notes against those to be the 5-part. We could also split two beats into 3-lets, and take the third note of the first beat, and the first two notes of the second beat to be the 3-part, thus extending our polyrhythms "over the beat" or "over the bar". These types of polyrhythms are used in <button type="button" data-preset-name="Monomyth" data-preset-hash="N2-eyJubSI6Ik1vbm9teXRoIiwiYiI6MTUwLCJ1IjoxLCJuYiI6W1syLDMsM10sWzMsMyw1XSxbMiwzLDNdLFsyLDMsM10sWzMsMyw1XSxbMiwzLDNdLFsyLDMsM10sWzMsMyw1XSxbMiwzLDNdLFszLDMsNV0sWzIsMywzXSxbMywzLDVdLFsyLDMsM10sWzIsMywzXSxbMywzLDVdXSwiYmNlIjoxfQ" class="preset-hash-btn text-sky-400 hover:text-sky-300 underline font-semibold">this example</button>. With these capabilities, the possibilities are vast.
+                    </p>
+                </div>
+
+                <p class="text-slate-300">
+                    In general, we can think of an x against y polyrhythm as x evenly spaced notes squeezed within the duration of y notes. The y notes can be fixed at a given tuplet rate r, I.e. y beats corresponds to r=1, y 3-lets corresponds to r=3 etc..
+                </p>
+            </section>
+
+            <!-- Time Signature -->
+            <section class="flex flex-col gap-4 pt-6 border-t border-borderSubtle/60">
+                <h2 class="text-lg md:text-xl font-bold text-purple-300 tracking-wide">Time Signature</h2>
+                <p class="text-slate-300">
+                    A time signature is an additional layer of organization on a rhythm. It determines the number of beats in a bar, where a bar can be considered some chunk of the rhythm. Most popular music is played in time signatures of 4 or 3, but we can have time signatures of 5 beats, 7 beats, or whatever we want!
+                </p>
+                <p class="text-slate-300">
+                    Mathematically, the time signature does not alter the rhythm itself, only how it is displayed to the performer. Historically, there are conventional differences between mathematically equivalent time signatures such as 4/4 and 6/8. However, the same rhythm can be represented by infinitely many different time signatures. Because The 'Nome is not a standard notation system, we do not place much emphasis on time signatures here.
+                </p>
+
+                <div class="flex flex-col gap-3 pl-3 border-l-2 border-purple-400/40 mt-1">
+                    <h3 class="text-base font-semibold text-purple-300">Non-Dyadic Time Signatures:</h3>
+                    <p class="text-slate-300">
+                        Traditionally, a time signature is represented as two numbers, where the first tells you how many beats are in a measure, and the second tells you what type of note is counted as a beat. In regards to the second number, a 4 represents a quarter note, an 8 represents an eigth note, and so on. The powers of 2 give us what are called the dyadic time signatures.
+                    </p>
+                    <p class="text-slate-300">
+                        In theory, there is nothing stopping us from considering a measure to consist of 3 quintuplet notes, but if you hand any working musician a piece composed using 3/5 time, they will more likely than not be utterly confused.
+                    </p>
+                    <p class="text-slate-300">
+                        However, these non-dyadic times are useful conceptually. if for instance, we want a phrase to be played at the rate of a 5-let, but we have an 8 note melody to play, we may write this as a bar of 8/5 times. This gives the rhythmic effect of "skipping a beat", even more so than your typical odd-time signature. The 7/4 time feels like it is skipping a beat, but the 8/5 time feels like it is skipping two fifths of a beat.
+                    </p>
+                </div>
+            </section>
+
+            <div class="flex justify-center pt-4 border-t border-borderSubtle/60">
+                <button id="backFromTheoryBottomBtn" type="button" class="px-5 py-2.5 bg-[#1a1a22] hover:bg-accent border border-borderSubtle hover:border-sky-300 text-slate-300 hover:text-slate-950 font-bold rounded-xl transition-all shadow-md active:scale-95 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Back to The 'Nome</span>
+                </button>
+            </div>
+        </div>
+    </article>
+
     <!-- Examples Library View -->
     <section id="examplesView" class="hidden w-full max-w-3xl my-auto py-6 flex-col gap-6 text-slate-300">
         <!-- Top Navigation Bar -->
         <div class="flex flex-wrap items-center justify-between gap-2 bg-cardBg border border-borderSubtle rounded-2xl px-5 py-4 shadow-xl">
             <div class="flex items-center gap-2.5">
                 <span class="w-2.5 h-2.5 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.6)]"></span>
-                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome — Examples Library</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-slate-200">The 'Nome: Examples Library</span>
             </div>
             <div class="flex items-center gap-2">
                 <button id="examplesToLearnMoreBtn" type="button" class="px-3.5 py-1.5 bg-accent/15 hover:bg-accent/25 border border-accent/40 text-accent hover:text-sky-200 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95">
-                    <span>Learn More Guide</span>
+                    <span>User Guide</span>
                 </button>
                 <button id="backFromExamplesTopBtn" type="button" class="px-3.5 py-1.5 bg-[#1a1a22] hover:bg-[#22222c] border border-borderSubtle text-sky-400 hover:text-sky-300 text-xs font-semibold rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1014,13 +1214,28 @@
 
         const mainContainer = document.getElementById('mainContainer');
         const articleView = document.getElementById('articleView');
+        const theoryView = document.getElementById('theoryView');
         const examplesView = document.getElementById('examplesView');
+        const sequencerQuickControls = document.getElementById('sequencerQuickControls');
+
+        const headerHomeBtn = document.getElementById('headerHomeBtn');
+        const topNavGuideBtn = document.getElementById('topNavGuideBtn');
+        const topNavTheoryBtn = document.getElementById('topNavTheoryBtn');
+        const topNavExamplesBtn = document.getElementById('topNavExamplesBtn');
+
         const learnMoreBtn = document.getElementById('learnMoreBtn');
+        const theoryTabBtn = document.getElementById('theoryTabBtn');
         const examplesTabBtn = document.getElementById('examplesTabBtn');
+        const guideUltraNerdTheoryBtn = document.getElementById('guideUltraNerdTheoryBtn');
+        const articleInlineTheoryBtn = document.getElementById('articleInlineTheoryBtn');
         const articleToExamplesBtn = document.getElementById('articleToExamplesBtn');
         const examplesToLearnMoreBtn = document.getElementById('examplesToLearnMoreBtn');
+        const theoryToGuideBtn = document.getElementById('theoryToGuideBtn');
+        const theoryToExamplesBtn = document.getElementById('theoryToExamplesBtn');
         const backToNomeTopBtn = document.getElementById('backToNomeTopBtn');
         const backToNomeBottomBtn = document.getElementById('backToNomeBottomBtn');
+        const backFromTheoryTopBtn = document.getElementById('backFromTheoryTopBtn');
+        const backFromTheoryBottomBtn = document.getElementById('backFromTheoryBottomBtn');
         const backFromExamplesTopBtn = document.getElementById('backFromExamplesTopBtn');
         const backFromExamplesBottomBtn = document.getElementById('backFromExamplesBottomBtn');
         const articleInlineExamplesBtn = document.getElementById('articleInlineExamplesBtn');
@@ -4602,18 +4817,45 @@
             });
         }
 
+        function updateTopNavHighlight(activeView) {
+            if (!topNavGuideBtn || !topNavTheoryBtn || !topNavExamplesBtn) return;
+            const inactiveClass = 'px-2.5 py-1 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-[#1a1a22] transition-all';
+            topNavGuideBtn.className = activeView === 'learn-more'
+                ? 'px-2.5 py-1 rounded-lg bg-accent/20 text-accent border border-accent/40 transition-all shadow-sm'
+                : inactiveClass;
+            topNavTheoryBtn.className = activeView === 'theory'
+                ? 'px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition-all shadow-sm'
+                : inactiveClass;
+            topNavExamplesBtn.className = activeView === 'examples'
+                ? 'px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40 transition-all shadow-sm'
+                : inactiveClass;
+
+            if (sequencerQuickControls) {
+                if (activeView === 'main') {
+                    sequencerQuickControls.classList.remove('hidden');
+                } else {
+                    sequencerQuickControls.classList.add('hidden');
+                }
+            }
+        }
+
         function showArticleView(updateUrl = true) {
             if (state.isPlaying) {
                 togglePlay();
             }
             beatEditorPopup.classList.add('hidden');
             mainContainer.classList.add('hidden');
+            if (theoryView) {
+                theoryView.classList.add('hidden');
+                theoryView.classList.remove('flex');
+            }
             if (examplesView) {
                 examplesView.classList.add('hidden');
                 examplesView.classList.remove('flex');
             }
             articleView.classList.remove('hidden');
             articleView.classList.add('flex');
+            updateTopNavHighlight('learn-more');
             if (updateUrl) {
                 try {
                     const url = new URL(window.location.href);
@@ -4621,6 +4863,35 @@
                     window.history.pushState({ view: 'learn-more' }, '', url.toString());
                 } catch (e) {
                     try { window.location.hash = 'learn-more'; } catch (err) {}
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showTheoryView(updateUrl = true) {
+            if (state.isPlaying) {
+                togglePlay();
+            }
+            beatEditorPopup.classList.add('hidden');
+            mainContainer.classList.add('hidden');
+            articleView.classList.add('hidden');
+            articleView.classList.remove('flex');
+            if (examplesView) {
+                examplesView.classList.add('hidden');
+                examplesView.classList.remove('flex');
+            }
+            if (theoryView) {
+                theoryView.classList.remove('hidden');
+                theoryView.classList.add('flex');
+            }
+            updateTopNavHighlight('theory');
+            if (updateUrl) {
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('view', 'theory');
+                    window.history.pushState({ view: 'theory' }, '', url.toString());
+                } catch (e) {
+                    try { window.location.hash = 'theory'; } catch (err) {}
                 }
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4634,11 +4905,16 @@
             mainContainer.classList.add('hidden');
             articleView.classList.add('hidden');
             articleView.classList.remove('flex');
+            if (theoryView) {
+                theoryView.classList.add('hidden');
+                theoryView.classList.remove('flex');
+            }
             if (examplesView) {
                 renderExamplesLibrary();
                 examplesView.classList.remove('hidden');
                 examplesView.classList.add('flex');
             }
+            updateTopNavHighlight('examples');
             if (updateUrl) {
                 try {
                     const url = new URL(window.location.href);
@@ -4654,22 +4930,27 @@
         function showMainSequencerView(updateUrl = true) {
             articleView.classList.add('hidden');
             articleView.classList.remove('flex');
+            if (theoryView) {
+                theoryView.classList.add('hidden');
+                theoryView.classList.remove('flex');
+            }
             if (examplesView) {
                 examplesView.classList.add('hidden');
                 examplesView.classList.remove('flex');
             }
             mainContainer.classList.remove('hidden');
+            updateTopNavHighlight('main');
             if (updateUrl) {
                 try {
                     const url = new URL(window.location.href);
                     url.searchParams.delete('view');
-                    if (url.hash === '#learn-more' || url.hash === '#learn' || url.hash === '#examples') {
+                    if (url.hash === '#learn-more' || url.hash === '#learn' || url.hash === '#examples' || url.hash === '#theory') {
                         url.hash = '';
                     }
                     window.history.pushState({ view: 'main' }, '', url.toString());
                 } catch (e) {
                     try {
-                        if (window.location.hash === '#learn-more' || window.location.hash === '#learn' || window.location.hash === '#examples') {
+                        if (window.location.hash === '#learn-more' || window.location.hash === '#learn' || window.location.hash === '#examples' || window.location.hash === '#theory') {
                             window.location.hash = '';
                         }
                     } catch (err) {}
@@ -4685,14 +4966,20 @@
                 if (viewParam === 'examples' || viewParam === 'example' || params.has('examples')) {
                     return 'examples';
                 }
-                if (viewParam === 'learn-more' || viewParam === 'learnmore' || viewParam === 'learn' || viewParam === 'guide' || params.has('learn-more') || params.has('learn')) {
+                if (viewParam === 'theory' || params.has('theory')) {
+                    return 'theory';
+                }
+                if (viewParam === 'learn-more' || viewParam === 'learnmore' || viewParam === 'learn' || viewParam === 'guide' || viewParam === 'user-guide' || params.has('learn-more') || params.has('learn')) {
                     return 'learn-more';
                 }
                 const hashVal = (window.location.hash || '').replace(/^#\/?/, '').toLowerCase();
                 if (hashVal === 'examples' || hashVal === 'example') {
                     return 'examples';
                 }
-                if (hashVal === 'learn-more' || hashVal === 'learnmore' || hashVal === 'learn' || hashVal === 'guide') {
+                if (hashVal === 'theory') {
+                    return 'theory';
+                }
+                if (hashVal === 'learn-more' || hashVal === 'learnmore' || hashVal === 'learn' || hashVal === 'guide' || hashVal === 'user-guide') {
                     return 'learn-more';
                 }
             } catch (e) {}
@@ -4702,6 +4989,7 @@
         function syncViewFromUrl() {
             const target = getRequestedUrlView();
             if (target === 'examples') showExamplesView(false);
+            else if (target === 'theory') showTheoryView(false);
             else if (target === 'learn-more') showArticleView(false);
             else showMainSequencerView(false);
         }
@@ -4709,11 +4997,32 @@
         window.addEventListener('popstate', syncViewFromUrl);
         window.addEventListener('hashchange', syncViewFromUrl);
 
+        if (headerHomeBtn) {
+            headerHomeBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
+        if (topNavGuideBtn) {
+            topNavGuideBtn.addEventListener('click', () => showArticleView(true));
+        }
+        if (topNavTheoryBtn) {
+            topNavTheoryBtn.addEventListener('click', () => showTheoryView(true));
+        }
+        if (topNavExamplesBtn) {
+            topNavExamplesBtn.addEventListener('click', () => showExamplesView(true));
+        }
         if (learnMoreBtn) {
             learnMoreBtn.addEventListener('click', () => showArticleView(true));
         }
+        if (theoryTabBtn) {
+            theoryTabBtn.addEventListener('click', () => showTheoryView(true));
+        }
         if (examplesTabBtn) {
             examplesTabBtn.addEventListener('click', () => showExamplesView(true));
+        }
+        if (guideUltraNerdTheoryBtn) {
+            guideUltraNerdTheoryBtn.addEventListener('click', () => showTheoryView(true));
+        }
+        if (articleInlineTheoryBtn) {
+            articleInlineTheoryBtn.addEventListener('click', () => showTheoryView(true));
         }
         if (articleToExamplesBtn) {
             articleToExamplesBtn.addEventListener('click', () => showExamplesView(true));
@@ -4724,11 +5033,23 @@
         if (examplesToLearnMoreBtn) {
             examplesToLearnMoreBtn.addEventListener('click', () => showArticleView(true));
         }
+        if (theoryToGuideBtn) {
+            theoryToGuideBtn.addEventListener('click', () => showArticleView(true));
+        }
+        if (theoryToExamplesBtn) {
+            theoryToExamplesBtn.addEventListener('click', () => showExamplesView(true));
+        }
         if (backToNomeTopBtn) {
             backToNomeTopBtn.addEventListener('click', () => showMainSequencerView(true));
         }
         if (backToNomeBottomBtn) {
             backToNomeBottomBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
+        if (backFromTheoryTopBtn) {
+            backFromTheoryTopBtn.addEventListener('click', () => showMainSequencerView(true));
+        }
+        if (backFromTheoryBottomBtn) {
+            backFromTheoryBottomBtn.addEventListener('click', () => showMainSequencerView(true));
         }
         if (backFromExamplesTopBtn) {
             backFromExamplesTopBtn.addEventListener('click', () => showMainSequencerView(true));
